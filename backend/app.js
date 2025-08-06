@@ -3,10 +3,17 @@ const ErrorHandler = require("./utils/errorHandler");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const user = require("./controllers/userController");
+const cors = require("cors");
 const app = express();
 
 app.use(express.json());
-app.use(cookieParser);
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // your frontend
+    credentials: true,
+  })
+);
 app.use("/", express.static("uploads"));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
@@ -19,6 +26,9 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 
 // import routes
 app.use("/api/v2/user", user);
+
+app.get('/ping', (req, res) => res.send('pong'));
+
 
 // it's for errorHandler
 app.use(ErrorHandler);
