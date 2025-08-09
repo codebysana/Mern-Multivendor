@@ -1,5 +1,5 @@
 const express = require("express");
-const ErrorHandler = require("./utils/errorHandler");
+const ErrorHandler = require("./middleware/catchAsyncErrors");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const user = require("./controllers/userController");
@@ -27,8 +27,7 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 // import routes
 app.use("/api/v2/user", user);
 
-app.get('/ping', (req, res) => res.send('pong'));
-
+app.get("/ping", (req, res) => res.send("pong"));
 
 // it's for errorHandler
 app.use(ErrorHandler);

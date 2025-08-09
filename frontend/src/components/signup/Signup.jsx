@@ -5,6 +5,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
 import axios from "axios";
 import { server } from "../../server";
+import { toast } from "react-toastify";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -28,12 +29,19 @@ const Signup = () => {
     formData.append("email", email);
     formData.append("password", password);
 
-    const response = await axios.post(
-      `${server}/user/create-user`,
-      formData,
-      config
-    );
-    console.log(response);
+    const response = await axios
+      .post(`${server}/user/create-user`, formData, config)
+      .then((res) => {
+        toast.success(res.data.message);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setAvatar();
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+    // console.log(response);
   };
 
   return (
