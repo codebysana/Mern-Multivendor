@@ -3,7 +3,7 @@ const catchAsyncErrors = require("./catchAsyncErrors");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
-exports.isAuthenticated = catchAsyncErrors(async (req, res, next) => {
+const isAuthenticated = catchAsyncErrors(async (req, res, next) => {
   const { token } = req.cookies;
   if (!token) {
     return next(new ErrorHandler("Please login to continue", 401));
@@ -13,3 +13,5 @@ exports.isAuthenticated = catchAsyncErrors(async (req, res, next) => {
 
   next();
 });
+
+module.exports = isAuthenticated;
