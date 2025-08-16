@@ -11,7 +11,7 @@ import {
 } from "react-icons/ai";
 import ProductCardDetails from "../productCardDetails/ProductCardDetails";
 
-const productCard = ({ data }) => {
+const ProductCard = ({ data }) => {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
   const dataVal = data.name;
@@ -116,4 +116,4 @@ const productCard = ({ data }) => {
   );
 };
 
-export default productCard;
+export default ProductCard;
