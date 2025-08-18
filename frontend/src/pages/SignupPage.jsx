@@ -1,11 +1,21 @@
-import React from 'react'
-import Signup from "../components/signup/Signup"
+import React, { useEffect } from "react";
+import Signup from "../components/signup/Signup";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const SignupPage = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (isAuthenticated === true) {
+      navigate("/");
+    }
+  }, []);
   return (
     <div>
-      <Signup/>
+      <Signup />
     </div>
-  )
-}
+  );
+};
 
-export default SignupPage
+export default SignupPage;

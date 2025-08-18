@@ -14,6 +14,7 @@ const ProductCardDetails = ({ data, setOpen }) => {
   const [select, setSelect] = useState(false);
 
   const handleMessageSubmit = () => {};
+  
   const incrementCount = () => {
     setCount(count + 1);
   };
