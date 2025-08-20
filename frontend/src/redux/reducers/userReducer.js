@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-expressions */
 import { createReducer } from "@reduxjs/toolkit";
-import { isAuthenticated } from "../../../../backend/middleware/auth";
 
 const initialState = {
   isAuthenticated: false,

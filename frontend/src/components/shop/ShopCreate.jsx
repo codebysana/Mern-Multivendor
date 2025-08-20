@@ -1,23 +1,23 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import styles from "../../styles/style";
-import { Link } from "react-router-dom";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { RxAvatar } from "react-icons/rx";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { RxAvatar } from "react-icons/rx";
 
-const Signup = () => {
-  const [name, setName] = useState("");
+const ShopCreate = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
-  const [avatar, setAvatar] = useState(null);
-
-  const handleFileInputChange = (e) => {
-    const file = e.target.files[0];
-    setAvatar(file);
-  };
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,44 +28,53 @@ const Signup = () => {
     formData.append("name", name);
     formData.append("email", email);
     formData.append("password", password);
+    formData.append("address", address);
+    formData.append("zipCode", zipCode);
+    formData.append("phoneNumber", phoneNumber);
 
     const response = await axios
-      .post(`${server}/user/create-user`, formData, config)
+      .post(`${server}/shop/create-shop`, formData, config)
       .then((res) => {
         toast.success(res.data.message);
         setName("");
         setEmail("");
         setPassword("");
         setAvatar();
+        setAddress("");
+        setZipCode();
+        setPhoneNumber();
       })
       .catch((error) => {
         toast.error(error.response.data.message);
       });
-    // console.log(response);
+  };
+
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+    setAvatar(file);
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-6">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Register to a new user
+          Register as a Seller
         </h2>
       </div>
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-[35rem]">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
-                htmlFor="name"
+                htmlFor="email"
                 className="black text-sm font-medium text-gray-700"
               >
-                Full Name
+                Shop Name
               </label>
               <div className="mt-1 ">
                 <input
-                  type="text"
-                  name="text"
-                  autoComplete="name"
+                  type="name"
+                  name="name"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -73,6 +82,26 @@ const Signup = () => {
                 />
               </div>
             </div>
+
+            <div>
+              <label
+                htmlFor="phone"
+                className="black text-sm font-medium text-gray-700"
+              >
+                Phone Number
+              </label>
+              <div className="mt-1 ">
+                <input
+                  type="number"
+                  name="phone-number"
+                  required
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
             <div>
               <label
                 htmlFor="email"
@@ -92,6 +121,45 @@ const Signup = () => {
                 />
               </div>
             </div>
+
+            <div>
+              <label
+                htmlFor="phone"
+                className="black text-sm font-medium text-gray-700"
+              >
+                Address
+              </label>
+              <div className="mt-1 ">
+                <input
+                  type="address"
+                  name="address"
+                  required
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="phone"
+                className="black text-sm font-medium text-gray-700"
+              >
+                Zip Code
+              </label>
+              <div className="mt-1 ">
+                <input
+                  type="number"
+                  name="zip-code"
+                  required
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value)}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
             <div>
               <label
                 htmlFor="password"
@@ -125,6 +193,30 @@ const Signup = () => {
                 )}
               </div>
             </div>
+            {/* <div className={`${styles.normalFlex} justify-between`}>
+              <div className={`${styles.normalFlex}`}>
+                <input
+                  type="checkbox"
+                  name="remember-me"
+                  id="remember-me"
+                  className="h-4 w-4 text-blue-400 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <label
+                  htmlFor="remember-me"
+                  className="ml-2 block text-sm text-gray-900"
+                >
+                  Remember Me
+                </label>
+              </div>
+              <div className="text-sm">
+                <a
+                  href=".forgot-password"
+                  className="font-medium text-blue-600 hover:text-blue-500"
+                >
+                  Forgot your password?
+                </a>
+              </div>
+            </div> */}
             <div>
               <label
                 htmlFor="avatar"
@@ -166,11 +258,10 @@ const Signup = () => {
                 Submit
               </button>
             </div>
-            
             <div className={`${styles.normalFlex} w-full`}>
               <h4>Already have an account?</h4>
-              <Link to="/login" className="text-blue-600 pl-2">
-                Login
+              <Link to="/shop-login" className="text-blue-600 pl-2">
+                Sign In
               </Link>
             </div>
           </form>
@@ -180,4 +271,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default ShopCreate;
