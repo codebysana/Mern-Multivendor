@@ -8,8 +8,8 @@ import {
 } from "react-icons/ai";
 import styles from "../../styles/style";
 import { Link } from "react-router-dom";
-import { DataGrid } from "@material-ui/data-grid";
-import { Button } from "@material-ui/core";
+import { DataGrid } from "@mui/x-data-grid";
+import { Button } from "@mui/material";
 import { MdOutlineTrackChanges } from "react-icons/md";
 
 const ProfileContent = ({ active }) => {
@@ -20,6 +20,7 @@ const ProfileContent = ({ active }) => {
   const [zipCode, setZipCode] = useState();
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -166,9 +167,9 @@ const AllOrders = () => {
   const { orders } = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getAllOrdersOfUser(user._id));
-  }, [dispatch, user._id]);
+  // useEffect(() => {
+  //   dispatch(getAllOrdersOfUser(user._id));
+  // }, [dispatch, user._id]);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -211,7 +212,7 @@ const AllOrders = () => {
         return (
           <>
             <Link to={`/order/${params.id}`}>
-              <Button>
+              <Button variant="contained">
                 <AiOutlineArrowRight size={20} />
               </Button>
             </Link>
@@ -251,9 +252,9 @@ const AllRefundOrders = () => {
   const { orders } = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getAllOrdersOfUser(user._id));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getAllOrdersOfUser(user._id));
+  // }, []);
 
   const eligibleOrders =
     orders && orders.filter((item) => item.status === "Processing refund");
@@ -339,9 +340,9 @@ const TrackOrder = () => {
   const { orders } = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getAllOrdersOfUser(user._id));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getAllOrdersOfUser(user._id));
+  // }, []);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },

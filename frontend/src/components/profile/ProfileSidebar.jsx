@@ -7,7 +7,7 @@ import {
 import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from "react-icons/hi";
 import { RxPerson } from "react-icons/rx";
 import { TbAddressBook } from "react-icons/tb";
-import MdOutlineTrackChanges from "react-icons/md";
+import { MdOutlineTrackChanges } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { server } from "../../server";

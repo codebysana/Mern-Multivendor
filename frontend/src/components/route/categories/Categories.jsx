@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../../../styles/style";
-import useNavigate from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { brandingData, categoriesData } from "../../../static/data";
 
 const Categories = () => {

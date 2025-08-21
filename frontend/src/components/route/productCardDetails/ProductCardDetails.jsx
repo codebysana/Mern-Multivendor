@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import RxCross1 from "react-icons/rx";
+import { RxCross1 } from "react-icons/rx";
 import styles from "../../../styles/style";
 import {
   AiFillHeart,
@@ -14,7 +14,7 @@ const ProductCardDetails = ({ data, setOpen }) => {
   const [select, setSelect] = useState(false);
 
   const handleMessageSubmit = () => {};
-  
+
   const incrementCount = () => {
     setCount(count + 1);
   };

@@ -21,7 +21,14 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
+    // const config = { headers: { "Content-Type": "multipart/form-data" } };
+
+    if (!avatar) {
+      toast.error("Please upload an avatar");
+      return;
+    }
+
+    const config = {};
 
     const formData = new FormData();
     formData.append("file", avatar);
@@ -29,17 +36,17 @@ const Signup = () => {
     formData.append("email", email);
     formData.append("password", password);
 
-    const response = await axios
+    await axios
       .post(`${server}/user/create-user`, formData, config)
       .then((res) => {
         toast.success(res.data.message);
         setName("");
         setEmail("");
         setPassword("");
-        setAvatar();
+        setAvatar(null);
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message || "Something went wrong");
       });
     // console.log(response);
   };
@@ -166,7 +173,7 @@ const Signup = () => {
                 Submit
               </button>
             </div>
-            
+
             <div className={`${styles.normalFlex} w-full`}>
               <h4>Already have an account?</h4>
               <Link to="/login" className="text-blue-600 pl-2">

@@ -9,7 +9,6 @@ const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const { isAuthenticated } = require("../middleware/auth");
-const { upload } = require("../multer");
 
 // router.post("/create-user", upload.single("file"), async (req, res, next) => {
 //   try {
@@ -94,7 +93,10 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
           }
         });
       }
-      return next(new ErrorHandler("User already exists", 400));
+       return res.status(400).json({
+        success: false,
+        message: "User already exists",
+      });
     }
 
     if (!req.file) {

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import styles from "../../styles/style";
-import IoBagHandleOutline from "react-icons/io5";
-import HiPlus, { HiOutlineMinus } from "react-icons/hi";
+import { IoBagHandleOutline } from "react-icons/io5";
+import { HiOutlineMinus, HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
 
 const Cart = ({ setOpenCart }) => {
