@@ -1,12 +1,9 @@
 const { default: axios } = require("axios");
 const { server } = require("../../server");
 
-// load user
 export const loadUser = () => async (dispatch) => {
   try {
-    dispatch({
-      type: "LoadUserRequest",
-    });
+    dispatch({ type: "LoadUserRequest" });
     const { data } = await axios.get(`${server}/user/get-user`, {
       withCredentials: true,
     });
@@ -17,17 +14,14 @@ export const loadUser = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "LoadUserFail",
-      payload: error.response.data.message,
+      payload: error.response?.data?.message || "Unable to load user",
     });
   }
 };
 
-// load user
 export const loadSeller = () => async (dispatch) => {
   try {
-    dispatch({
-      type: "LoadSellerRequest",
-    });
+    dispatch({ type: "LoadSellerRequest" });
     const { data } = await axios.get(`${server}/shop/get-seller`, {
       withCredentials: true,
     });
@@ -38,7 +32,7 @@ export const loadSeller = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "LoadSellerFail",
-      payload: error.response.data.message,
+      payload: error.response?.data?.message || "Unable to load seller",
     });
   }
 };
