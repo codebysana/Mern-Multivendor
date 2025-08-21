@@ -7,6 +7,7 @@ const Store = configureStore({
     user: userReducer,
     seller: sellerReducer,
   },
+  
 });
 
 export default Store;
