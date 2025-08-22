@@ -93,7 +93,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
           }
         });
       }
-       return res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "User already exists",
       });

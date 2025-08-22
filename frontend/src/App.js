@@ -34,6 +34,8 @@ import {
   ShopHomePage,
   ShopDashboardPage,
   ShopCreateProductPage,
+  ShopAllProducts,
+  ShopCreateEventsPage,
 } from "./routes/ShopRoutes.js";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
 
@@ -104,6 +106,33 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopCreateProductPage />
+            </SellerProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard-products"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllProducts />
+            </SellerProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard-create-event"
+          element={
+            <SellerProtectedRoute>
+              <ShopCreateEventsPage />
+            </SellerProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard-events"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllEventsPage />
             </SellerProtectedRoute>
           }
         />

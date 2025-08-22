@@ -5,7 +5,10 @@ const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const { isAuthenticated, isSellerAuthenticated } = require("../middleware/auth");
+const {
+  isAuthenticated,
+  isSellerAuthenticated,
+} = require("../middleware/auth");
 const ErrorHandler = require("../utils/errorHandler");
 const Shop = require("../models/shopModel");
 const { upload } = require("../multer");
@@ -144,6 +147,26 @@ router.get(
       res.status(200).json({
         success: true,
         seller,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// logout shop
+
+router.get(
+  "/logout",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      res.cookie("seller_token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      });
+      res.status(201).json({
+        success: true,
+        message: "Logout Successfully",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

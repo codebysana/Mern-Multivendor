@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { categoriesData } from "../../static/data";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-
+import { createProduct } from "../../redux/actions/productAction";
+import { toast } from "react-toastify";
 const CreateProduct = () => {
+  const { seller } = useSelector((state) => state.seller);
+  const { success, error } = useSelector((state) => state.products);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [name, setName] = useState("");
@@ -15,7 +18,17 @@ const CreateProduct = () => {
   const [originalPrice, setOriginalPrice] = useState();
   const [discountPrice, setDiscountPrice] = useState();
   const [stock, setStock] = useState();
-  const { seller } = useSelector((state) => state.seller);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+    if (success) {
+      toast.success("Product Created Successfully!");
+      navigate("/dashboard");
+      window.location.reload();
+    }
+  }, [error, dispatch, success]);
 
   const handleImageChange = (e) => {
     e.preventDefault();
@@ -25,6 +38,19 @@ const CreateProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    images.forEach((image) => {
+      formData.append("images", image);
+    });
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("category", category);
+    formData.append("tags", tags);
+    formData.append("originalPrice", originalPrice);
+    formData.append("discountPrice", discountPrice);
+    formData.append("stock", stock);
+    formData.append("shopId", seller._id);
+    dispatch(createProduct(formData));
   };
 
   return (
@@ -51,14 +77,17 @@ const CreateProduct = () => {
           <label className="pb-2 ">
             Description <span className="text-red-500">*</span>
           </label>
-          <input
+          <textarea
+            rows={8}
+            cols={30}
+            required
             type="text"
             name="description"
             value={description}
-            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
+            className="mt-2 appearance-none block w-full pt-2 px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter Description"
-          />
+          ></textarea>
         </div>
         <br />
         <div>
