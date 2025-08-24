@@ -4,7 +4,7 @@ import ProductCard from "../productCard/ProductCard";
 import { useSelector } from "react-redux";
 
 const FeaturedProduct = () => {
-  const { allProducts } = useSelector((state) => state.allProducts);
+  const { allProducts } = useSelector((state) => state.products);
   return (
     <div>
       <div className={`${styles.section}`}>

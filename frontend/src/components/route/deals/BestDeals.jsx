@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 const BestDeals = () => {
   const [data, setData] = useState([]);
-  const { allProducts } = useSelector((state) => state.allProducts);
+  const { allProducts } = useSelector((state) => state.products);
 
   useEffect(() => {
     const firstFive = allProducts.slice(0, 5);
