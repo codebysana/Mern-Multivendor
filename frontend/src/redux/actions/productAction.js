@@ -21,7 +21,7 @@ export const createProduct = (formData) => async (dispatch) => {
   }
 };
 
-// get all products
+// get all products of a shop
 export const getAllProductsShop = (id) => async (dispatch) => {
   try {
     dispatch({

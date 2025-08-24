@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { productsData } from "../../static/data";
 import ProductCard from "../route/productCard/ProductCard";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styles from "../../styles/style";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProductsShop } from "../../redux/actions/productAction";
 
 const ShopProfileData = ({ isOwner }) => {
+  const dispatch = useDispatch();
+  const { id } = useParams();
   const [active, setActive] = useState(1);
+  const { products } = useSelector((state) => state.products);
+  
+  useEffect(() => {
+    dispatch(getAllProductsShop(id));
+  }, [dispatch]);
+
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">

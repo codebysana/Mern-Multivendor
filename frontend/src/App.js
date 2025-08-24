@@ -1,12 +1,6 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   LoginPage,
   SignupPage,
@@ -24,6 +18,7 @@ import {
   ShopPage,
   SellerActivationPage,
   ShopLoginPage,
+  ShopAllEventsPage,
 } from "./routes/Routes.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -35,7 +30,7 @@ import {
   ShopDashboardPage,
   ShopCreateProductPage,
   ShopAllProducts,
-  ShopCreateEventsPage,
+  ShopCreateEventsPage,ShopAllCouponsPage
 } from "./routes/ShopRoutes.js";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
 
@@ -133,6 +128,15 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllEventsPage />
+            </SellerProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard-coupons"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllCouponsPage />
             </SellerProtectedRoute>
           }
         />
