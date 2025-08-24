@@ -21,15 +21,13 @@ export const createEvent = (formData) => async (dispatch) => {
   }
 };
 
-// get all Events
+// get all Events of a shop
 export const getAllEventsShop = (id) => async (dispatch) => {
   try {
     dispatch({
       type: "getAllEventsShopRequest",
     });
-    const { data } = await axios.get(
-      `${server}/event/get-all-events/${id}`
-    );
+    const { data } = await axios.get(`${server}/event/get-all-events/${id}`);
     dispatch({
       type: "getAllEventsShopSuccess",
       payload: data.events,
@@ -61,6 +59,25 @@ export const deleteEvent = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "deleteEventFail",
+      payload: error.response?.data?.message || "Unable to load user",
+    });
+  }
+};
+
+// get all events
+export const getAllEvents = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllEventsRequest",
+    });
+    const { data } = await axios.get(`${server}/event/get-all-events`);
+    dispatch({
+      type: "getAllEventsSuccess",
+      payload: data.events,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllEventsFail",
       payload: error.response?.data?.message || "Unable to load user",
     });
   }

@@ -3,7 +3,9 @@ const Event = require("../models/eventModel");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/errorHandler");
 const Shop = require("../models/shopModel");
+import { isSellerAuthenticated } from "../middleware/auth";
 import { upload } from "../multer";
+const fs = require("fs");
 const router = express.Router();
 
 // create event
@@ -29,6 +31,71 @@ router.post(
           event,
         });
       }
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// get all events
+router.get("/get-all-events", async (req, res, next) => {
+  try {
+    const events = await Event.find();
+    res.status(201).json({
+      success: true,
+      events,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 400));
+  }
+});
+
+// get all events of a shop
+router.get(
+  "/get-all-events/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const events = await Event.find({ shopId: req.params.id });
+      res.status(201).json({
+        success: true,
+        events,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// delete event of a shop
+router.delete(
+  "/delete-shop-event/:id",
+  isSellerAuthenticated,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const eventId = req.params.id;
+      const eventData = await Event.findById(eventId);
+
+      eventData.images.forEach((imageUrl) => {
+        const filename = imageUrl;
+        const filePath = `uploads/${filename}`;
+
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      });
+
+      const event = await Event.findByIdAndDelete(eventId);
+
+      if (!event) {
+        return next(new ErrorHandler("Event not found with this id", 500));
+      }
+
+      res.status(201).json({
+        success: true,
+        message: "Event deleted successfully",
+      });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
     }

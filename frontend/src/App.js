@@ -30,14 +30,19 @@ import {
   ShopDashboardPage,
   ShopCreateProductPage,
   ShopAllProducts,
-  ShopCreateEventsPage,ShopAllCouponsPage
+  ShopCreateEventsPage,
+  ShopAllCouponsPage,
 } from "./routes/ShopRoutes.js";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
+import { getAllProducts } from "./redux/actions/productAction.js";
+import { getAllEvents } from "./redux/actions/eventAction.js";
 
 const App = () => {
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
+    Store.dispatch(getAllProducts());
+    Store.dispatch(getAllEvents());
   }, []);
 
   return (
