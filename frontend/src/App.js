@@ -31,7 +31,7 @@ import {
   ShopCreateProductPage,
   ShopAllProducts,
   ShopCreateEventsPage,
-  ShopAllCouponsPage,
+  ShopAllCouponsPage,ShopPreviewPage
 } from "./routes/ShopRoutes.js";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
 import { getAllProducts } from "./redux/actions/productAction.js";
@@ -60,7 +60,7 @@ const App = () => {
           element={<SellerActivationPage />}
         />
         <Route path="/products" element={<ProductsPage />} />
-        <Route path="/product/:name" element={<ProductDetailsPage />} />
+        <Route path="/product/:id" element={<ProductDetailsPage />} />
         <Route path="/best-selling" element={<BestSellingPage />} />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/faqs" element={<FAQPage />} />
@@ -142,6 +142,15 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllCouponsPage />
+            </SellerProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard-coupons"
+          element={
+            <SellerProtectedRoute>
+              <ShopPreviewPage />
             </SellerProtectedRoute>
           }
         />

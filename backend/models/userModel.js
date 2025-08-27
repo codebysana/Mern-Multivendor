@@ -17,20 +17,20 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "Please enter your password"],
-    minLength: [4, "Password should be greater than 4 characters"],
+    minLength: [6, "Password should be greater than 4 characters"],
     select: false,
   },
   phoneNumber: {
     type: Number,
     trim: true,
   },
-  addresses: [
+  address: [
     {
       country: { type: String },
       city: { type: String },
       address1: { type: String },
       address2: { type: String },
-      zipCode: { type: String },
+      zipCode: { type: Number },
       addressType: { type: String },
     },
   ],

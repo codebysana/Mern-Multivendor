@@ -8,15 +8,14 @@ import SuggestedProduct from "../components/products/SuggestedProduct";
 import { useSelector } from "react-redux";
 
 const ProductDetailsPage = () => {
-  const { name } = useParams();
+  const { id } = useParams();
   const [data, setData] = useState(null);
-  const productName = name.replace(/-/g, " ");
-  const {allProducts} = useSelector((state) => state.allProducts);
+  const { allProducts } = useSelector((state) => state.products);
 
   useEffect(() => {
-    const data = allProducts.find((item) => item.name === productName);
+    const data = allProducts.find((item) => item._id === id);
     setData(data);
-  }, []);
+  }, [data, allProducts]);
 
   return (
     <div>

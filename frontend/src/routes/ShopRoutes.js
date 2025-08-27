@@ -5,6 +5,7 @@ import ShopAllProducts from "../pages/shop/ShopAllProducts";
 import ShopCreateEventsPage from "../pages/shop/ShopCreateEventsPage";
 import ShopAllEventsPage from "../pages/shop/ShopAllEventsPage";
 import ShopAllCouponsPage from "../pages/shop/ShopAllCouponsPage";
+import ShopPreviewPage from "../pages/shop/ShopPreviewPage.jsx"
 export {
   ShopHomePage,
   ShopDashboardPage,
@@ -13,4 +14,5 @@ export {
   ShopCreateEventsPage,
   ShopAllEventsPage,
   ShopAllCouponsPage,
+  ShopPreviewPage
 };
