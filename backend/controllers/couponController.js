@@ -40,4 +40,20 @@ router.get("/get-coupon/:id", async (req, res, next) => {
   }
 });
 
+// get coupon code value bu its name
+router.get(
+  "/get-coupon-value/:name",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const couponCode = await Coupon.findOne({ name: req.params.name });
+      req.status(200).json({
+        success: true,
+        couponCode,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
 module.exports = router;

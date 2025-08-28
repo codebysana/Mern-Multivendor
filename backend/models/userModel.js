@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     type: Number,
     trim: true,
   },
-  address: [
+  addresses: [
     {
       country: { type: String },
       city: { type: String },
