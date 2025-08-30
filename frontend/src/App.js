@@ -19,6 +19,7 @@ import {
   SellerActivationPage,
   ShopLoginPage,
   ShopAllEventsPage,
+  OrderDetailsPage,
 } from "./routes/Routes.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,6 +34,8 @@ import {
   ShopCreateEventsPage,
   ShopAllCouponsPage,
   ShopPreviewPage,
+  ShopAllOrders,
+  ShopOrderDetails,
 } from "./routes/ShopRoutes.js";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
 import { getAllProducts } from "./redux/actions/productAction.js";
@@ -99,12 +102,20 @@ const App = () => {
           }
         />
 
-        <Route path="/order/success/:id" element={<OrderSuccessPage />} />
+        <Route path="/order/success" element={<OrderSuccessPage />} />
         <Route
           path="/profile"
           element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/order/:id"
+          element={
+            <ProtectedRoute>
+              <OrderDetailsPage />
             </ProtectedRoute>
           }
         />
@@ -141,6 +152,24 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllProducts />
+            </SellerProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard-orders"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllOrders />
+            </SellerProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/order/:id"
+          element={
+            <SellerProtectedRoute>
+              <ShopOrderDetails />
             </SellerProtectedRoute>
           }
         />

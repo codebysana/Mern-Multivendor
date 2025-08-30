@@ -20,6 +20,7 @@ import {
 } from "../../redux/actions/userAction";
 import { toast } from "react-toastify";
 import { axios } from "axios";
+import { getAllOrdersOfUser } from "../../redux/actions/orderAction";
 
 const ProfileContent = ({ active }) => {
   const { user, error, successMessage } = useSelector((state) => state.user);
@@ -196,9 +197,9 @@ const AllOrders = () => {
   const { orders } = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(getAllOrdersOfUser(user._id));
-  // }, [dispatch, user._id]);
+  useEffect(() => {
+    dispatch(getAllOrdersOfUser(user._id));
+  }, [dispatch, user._id]);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -240,7 +241,7 @@ const AllOrders = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/order/${params.id}`}>
+            <Link to={`/user/order/${params.id}`}>
               <Button variant="contained">
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -257,9 +258,9 @@ const AllOrders = () => {
     orders.forEach((item) => {
       row.push({
         id: item._id,
-        itemsQty: item.orderItems.length,
+        itemsQty: item.cart.length,
         total: "US$ " + item.totalPrice,
-        status: item.orderStatus,
+        status: item.status,
       });
     });
 

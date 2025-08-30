@@ -16,6 +16,7 @@ import {
 } from "../../redux/actions/wishlistAction";
 import { toast } from "react-toastify";
 import { addToCart } from "../../redux/actions/cartAction";
+import Ratings from "./Ratings";
 
 const ProductDetails = ({ data }) => {
   const { cart } = useSelector((state) => state.cart);
@@ -74,6 +75,20 @@ const ProductDetails = ({ data }) => {
       }
     }
   };
+
+  const totalReviewsLength =
+    products &&
+    products.reduce((acc, product) => acc + product.reviews.length, 0);
+
+  const totalRatings =
+    products &&
+    products.reduce(
+      (acc, product) =>
+        acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
+      0
+    );
+
+  const averageRating = totalRatings / totalReviewsLength || 0;
 
   return (
     <div className="bg-white ">
@@ -178,7 +193,9 @@ const ProductDetails = ({ data }) => {
                         {data.shop.name}
                       </h3>
                     </Link>
-                    <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
+                    <h5 className="pb-3 text-[15px]">
+                      ({averageRating}/5) Ratings
+                    </h5>
                   </div>
                   <div
                     className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11`}
@@ -192,7 +209,12 @@ const ProductDetails = ({ data }) => {
               </div>
             </div>
           </div>
-          <ProductDetailsInfo data={data} products={products} />
+          <ProductDetailsInfo
+            data={data}
+            products={products}
+            averageRating={averageRating}
+            totalReviewsLength={totalReviewsLength}
+          />
           <br />
           <br />
         </div>
@@ -201,7 +223,12 @@ const ProductDetails = ({ data }) => {
   );
 };
 
-const ProductDetailsInfo = ({ data, products }) => {
+const ProductDetailsInfo = ({
+  data,
+  products,
+  averageRating,
+  totalReviewsLength,
+}) => {
   const [active, setActive] = useState(1);
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded">
@@ -249,8 +276,27 @@ const ProductDetailsInfo = ({ data, products }) => {
       ) : null}
 
       {active === 2 ? (
-        <div className="w-full justify-center min-h-[40vh] flex items-center">
-          <p>No Reviews Yet!</p>
+        <div className="w-full min-h-[40vh] flex flex-col items-center py-3 overflow-y-scroll">
+          {data &&
+            data.reviews.map((item, index) => (
+              <div className="w-full flex my-2">
+                <img
+                  src={`${backend_url}/${item.user.avatar}`}
+                  alt=""
+                  className="w-[50px] h-[50px] rounded-full "
+                />
+                <div className="pl-2">
+                  <h1 className="font-[500] mb-1">{item.user.name}</h1>
+                  <Ratings rating={data?.ratings} className="mb-1" />
+                  <p>{item.comment}</p>
+                </div>
+              </div>
+            ))}
+          <div className="w-full flex justify-center">
+            {data && data.reviews.length === 0 && (
+              <h5>No Review have for this product!</h5>
+            )}
+          </div>
         </div>
       ) : null}
 
@@ -266,7 +312,9 @@ const ProductDetailsInfo = ({ data, products }) => {
                 />
                 <div className="pl-3">
                   <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                  <h5 className="pb-2 text-[15px] ">(4/5) Ratings</h5>
+                  <h5 className="pb-2 text-[15px] ">
+                    (averageRating/5) Ratings
+                  </h5>
                 </div>
               </div>
             </Link>
@@ -287,7 +335,8 @@ const ProductDetailsInfo = ({ data, products }) => {
                 </span>
               </h5>
               <h5 className="font-[600] pt-3">
-                Total Reviews: <span className="font-[500]">324</span>
+                Total Reviews:{" "}
+                <span className="font-[500]">{totalReviewsLength}</span>
               </h5>
               <Link to="/">
                 <div

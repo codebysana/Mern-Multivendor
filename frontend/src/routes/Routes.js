@@ -13,8 +13,8 @@ import OrderSuccessPage from "../pages/OrderSuccessPage.jsx";
 import ProfilePage from "../pages/ProfilePage.jsx";
 import ShopPage from "../pages/ShopPage.jsx";
 import SellerActivationPage from "../pages/SellerActivationPage.jsx";
-import ShopLoginPage from "../pages/ShopLoginPage.jsx";
-
+import ShopLoginPage from "../pages/ShopLoginPage";
+import OrderDetailsPage from "../pages/OrderDetailsPage"
 export {
   LoginPage,
   SignupPage,
@@ -32,4 +32,5 @@ export {
   ShopPage,
   SellerActivationPage,
   ShopLoginPage,
+  OrderDetailsPage,
 };

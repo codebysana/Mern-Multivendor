@@ -17,6 +17,7 @@ import {
 } from "../../../redux/actions/wishlistAction";
 import { toast } from "react-toastify";
 import { addToCart } from "../../../redux/actions/cartAction";
+import Ratings from "../../products/Ratings";
 
 const ProductCard = ({ data }) => {
   const { cart } = useSelector((state) => state.cart);
@@ -76,44 +77,23 @@ const ProductCard = ({ data }) => {
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>
           <div className="flex">
-            <AiFillStar
-              className="mr-2 cursor-pointer"
-              color="#f6ba00"
-              size={20}
-            />
-            <AiFillStar
-              className="mr-2 cursor-pointer"
-              color="#f6ba00"
-              size={20}
-            />
-            <AiFillStar
-              className="mr-2 cursor-pointer"
-              color="#f6ba00"
-              size={20}
-            />
-            <AiFillStar
-              className="mr-2 cursor-pointer"
-              color="#f6ba00"
-              size={20}
-            />
-            <AiOutlineStar
-              className="mr-2 cursor-pointer"
-              color="#f6ba00"
-              size={20}
-            />
+            <Ratings rating={data?.ratings} />
           </div>
 
-          <div className="py-0 flex items-center justify-between">
+          <div className="py-2 flex items-center justify-between">
             <div className="flex">
               <h5 className={`${styles.productDiscountPrice}`}>
-                {data.price === 0 ? data.price : data.discount_price}${}
+                {data.originalPrice === 0
+                  ? data.originalPrice
+                  : data.discount_price}
+                $
               </h5>
               <h4 className={`${styles.price}`}>
                 {data.price ? data.price + " $" : null}
               </h4>
             </div>
             <span className="font-[400] text-[17px] text-[#68d284]">
-              {data.total_sell} sold
+              {data?.soldOut} sold
             </span>
           </div>
         </Link>

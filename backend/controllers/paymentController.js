@@ -4,7 +4,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const router = express.Router();
 router.post(
-  "/payment/process",
+  "/process",
   catchAsyncErrors(async (req, res, next) => {
     const stripePayment = await stripe.paymentIntents.create({
       amount: req.body.amount,

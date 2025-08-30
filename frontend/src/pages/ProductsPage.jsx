@@ -9,7 +9,7 @@ const ProductsPage = () => {
   const [searchParams] = useSearchParams();
   const categoryData = searchParams.get("category");
   const [data, setData] = useState([]);
-  const { allProducts } = useSelector((state) => state.allProducts);
+  const { allProducts } = useSelector((state) => state.products);
 
   useEffect(() => {
     if (categoryData === null) {

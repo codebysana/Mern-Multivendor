@@ -8,6 +8,7 @@ const product = require("./controllers/productController");
 const event = require("./controllers/eventController");
 const coupon = require("./controllers/couponController");
 const payment = require("./controllers/paymentController");
+const order = require("./controllers/orderController");
 
 const cors = require("cors");
 const app = express();
@@ -32,6 +33,7 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 
 // import routes
 app.use("/api/v2/user", user);
+app.use("/api/v2/order", order);
 app.use("/api/v2/shop", shop);
 app.use("/api/v2/product", product);
 app.use("/api/v2/event", event);
