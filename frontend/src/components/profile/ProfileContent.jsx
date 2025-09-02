@@ -12,7 +12,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { RxCross1 } from "react-icons/rx";
 import { Country, State } from "country-state-city";
-import { MdOutlineTrackChanges } from "react-icons/md";
+import { MdOutlineTrackChanges, MdTrackChanges } from "react-icons/md";
 import {
   deleteUserAddress,
   updateUserAddress,
@@ -282,12 +282,12 @@ const AllRefundOrders = () => {
   const { orders } = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(getAllOrdersOfUser(user._id));
-  // }, []);
+  useEffect(() => {
+    dispatch(getAllOrdersOfUser(user._id));
+  }, [dispatch, user._id]);
 
   const eligibleOrders =
-    orders && orders.filter((item) => item.status === "Processing refund");
+    orders && orders.filter((item) => item.status === "Processing Refund");
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -329,8 +329,8 @@ const AllRefundOrders = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/order/${params.id}`}>
-              <Button>
+            <Link to={`/user/order/${params.id}`}>
+              <Button variant="contained">
                 <AiOutlineArrowRight size={20} />
               </Button>
             </Link>
@@ -342,13 +342,13 @@ const AllRefundOrders = () => {
 
   const row = [];
 
-  orders &&
-    orders.forEach((item) => {
+  eligibleOrders &&
+    eligibleOrders.forEach((item) => {
       row.push({
         id: item._id,
-        itemsQty: item.orderItems.length,
+        itemsQty: item.cart.length,
         total: "US$ " + item.totalPrice,
-        status: item.orderStatus,
+        status: item.status,
       });
     });
 
@@ -370,9 +370,9 @@ const TrackOrder = () => {
   const { orders } = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(getAllOrdersOfUser(user._id));
-  // }, []);
+  useEffect(() => {
+    dispatch(getAllOrdersOfUser(user._id));
+  }, [dispatch, user._id]);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -407,16 +407,16 @@ const TrackOrder = () => {
     {
       field: " ",
       flex: 1,
-      minWidth: 130,
+      minWidth: 150,
       headerName: "",
       type: "number",
       sortable: false,
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/order/${params.id}`}>
-              <Button>
-                <MdOutlineTrackChanges size={20} />
+            <Link to={`/user/track/order/${params.id}`}>
+              <Button variant="contained">
+                <MdTrackChanges size={20} />
               </Button>
             </Link>
           </>
@@ -431,9 +431,9 @@ const TrackOrder = () => {
     orders.forEach((item) => {
       row.push({
         id: item._id,
-        itemsQty: item.orderItems.length,
+        itemsQty: item.cart.length,
         total: "US$ " + item.totalPrice,
-        status: item.orderStatus,
+        status: item.status,
       });
     });
 

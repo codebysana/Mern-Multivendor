@@ -20,6 +20,7 @@ import {
   ShopLoginPage,
   ShopAllEventsPage,
   OrderDetailsPage,
+  TrackOrderPage,
 } from "./routes/Routes.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,6 +37,7 @@ import {
   ShopPreviewPage,
   ShopAllOrders,
   ShopOrderDetails,
+  ShopAllRefunds,
 } from "./routes/ShopRoutes.js";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
 import { getAllProducts } from "./redux/actions/productAction.js";
@@ -111,6 +113,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/user/order/:id"
           element={
@@ -119,6 +122,17 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/user/track/order/:id"
+          element={
+            <ProtectedRoute>
+              <TrackOrderPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/shop/preview/:id" element={ShopPreviewPage} />
         {/* shop routes */}
         <Route path="/create-shop" element={<ShopPage />} />
         <Route path="/login-shop" element={<ShopLoginPage />} />
@@ -166,6 +180,15 @@ const App = () => {
         />
 
         <Route
+          path="/dashboard-refunds"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllRefunds />
+            </SellerProtectedRoute>
+          }
+        />
+
+        <Route
           path="/order/:id"
           element={
             <SellerProtectedRoute>
@@ -197,15 +220,6 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllCouponsPage />
-            </SellerProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/dashboard-coupons"
-          element={
-            <SellerProtectedRoute>
-              <ShopPreviewPage />
             </SellerProtectedRoute>
           }
         />
