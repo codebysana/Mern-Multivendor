@@ -15,6 +15,7 @@ import { Country, State } from "country-state-city";
 import { MdOutlineTrackChanges, MdTrackChanges } from "react-icons/md";
 import {
   deleteUserAddress,
+  loadUser,
   updateUserAddress,
   updateUserInformation,
 } from "../../redux/actions/userAction";
@@ -62,7 +63,8 @@ const ProfileContent = ({ active }) => {
         withCredentials: true,
       })
       .then((res) => {
-        window.location.reload();
+        dispatch(loadUser());
+        toast.success("Avatar updated successfully!")
       })
       .catch((error) => {
         toast.error(error);
@@ -83,7 +85,7 @@ const ProfileContent = ({ active }) => {
               />
               <div className="w-[30px] h-[30px] bg-[#e3e9ee] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]">
                 <input
-                  type="text"
+                  type="file"
                   id="image"
                   className="hidden"
                   onChange={handleImage}
