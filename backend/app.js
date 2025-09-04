@@ -9,6 +9,8 @@ const event = require("./controllers/eventController");
 const coupon = require("./controllers/couponController");
 const payment = require("./controllers/paymentController");
 const order = require("./controllers/orderController");
+const conversation = require("./controllers/conversationController");
+
 
 const cors = require("cors");
 const app = express();
@@ -39,6 +41,7 @@ app.use("/api/v2/product", product);
 app.use("/api/v2/event", event);
 app.use("/api/v2/coupon", coupon);
 app.use("/api/v2/payment", payment);
+app.use("/api/v2/conversation", conversation);
 
 app.get("/ping", (req, res) => res.send("pong"));
 
