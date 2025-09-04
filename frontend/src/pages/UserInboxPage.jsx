@@ -1,20 +1,15 @@
-import axios from "axios";
-import React from "react";
-import { useEffect } from "react";
-import { backend_url, server } from "../../server";
+import React, { useEffect, useState } from "react";
+import Header from "../components/layout/Header";
+import { backend_url, server } from "../server";
 import { useSelector } from "react-redux";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
-import styles from "../../styles/style";
 import { format } from "timeago.js";
-import { RiGalleryFill } from "react-icons/ri";
 import socketIO from "socket.io-client";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const ENDPOINT = "http://localhost:4000/";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
-const DashboardMessages = () => {
-  const { seller } = useSelector((state) => state.seller);
+const UserInboxPage = () => {
   const { user } = useSelector((state) => state.user);
   const [conversations, setConversations] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
@@ -45,33 +40,33 @@ const DashboardMessages = () => {
   useEffect(() => {
     const getConversation = async () => {
       try {
-        const resonse = await axios.get(
-          `${server}/conversation/get-all-seller-conversation/${seller?._id}`,
+        const response = await axios.get(
+          `${server}/conversation/get-all-user-conversation/${user._id}`,
           {
             withCredentials: true,
           }
         );
 
-        setConversations(resonse.data.conversations);
+        setConversations(response.data.conversations);
       } catch (error) {
-        // console.log(error);
+        console.log(error);
       }
     };
     getConversation();
-  }, [seller, messages]);
+  }, [user]);
 
   useEffect(() => {
-    if (seller) {
-      const userId = seller?._id;
+    if (user) {
+      const userId = user?._id;
       socketId.emit("addUser", userId);
       socketId.on("getUsers", (data) => {
         setOnlineUsers(data);
       });
     }
-  }, [seller]);
+  }, [user]);
 
   const onlineCheck = (chat) => {
-    const chatMembers = chat.members.find((member) => member !== seller?._id);
+    const chatMembers = chat.members.find((member) => member !== user?._id);
     const online = onlineUsers.find((user) => user.userId === chatMembers);
 
     return online ? true : false;
@@ -96,15 +91,15 @@ const DashboardMessages = () => {
     e.preventDefault();
 
     const message = {
-      sender: seller._id,
+      sender: user._id,
       text: newMessage,
       conversationId: currentChat._id,
     };
     const receiverId = currentChat.members.find(
-      (member) => member.id !== seller._id
+      (member) => member !== user?._id
     );
     socketId.emit("sendMessage", {
-      senderId: seller._id,
+      senderId: user?._id,
       receiverId,
       text: newMessage,
     });
@@ -128,12 +123,12 @@ const DashboardMessages = () => {
   const updateLastMessage = async () => {
     socketId.emit("updateLastMessage", {
       lastMessage: newMessage,
-      lastMessageId: seller._id,
+      lastMessageId: user._id,
     });
     await axios
       .put(`${server}/conversation/update-last-message/${currentChat._id}`, {
         lastMessage: newMessage,
-        lastMessageId: seller._id,
+        lastMessageId: user._id,
       })
       .then((res) => {
         console.log(res.data.conversation);
@@ -145,7 +140,8 @@ const DashboardMessages = () => {
   };
 
   return (
-    <div className="w-[90%] bg-white m-5 h-[85vh] overflow-y-scroll rounded">
+    <div className="w-full">
+      <Header />
       {!open && (
         <>
           <h1 className="text-center text-[30px] py-3 font-Poppins">
@@ -160,7 +156,7 @@ const DashboardMessages = () => {
                 index={index}
                 setOpen={setOpen}
                 setCurrentChat={setCurrentChat}
-                me={seller._id}
+                me={user._id}
                 userData={userData}
                 setUserData={setUserData}
                 online={onlineCheck(item)}
@@ -168,18 +164,6 @@ const DashboardMessages = () => {
               />
             ))}
         </>
-      )}
-      {open && (
-        <SellerInbox
-          setOpen={setOpen}
-          newMessage={newMessage}
-          messages={messages}
-          setNewMessage={setNewMessage}
-          sendMessageHandler={sendMessageHandler}
-          sellerId={seller._id}
-          userData={userData}
-          activeStatus={activeStatus}
-        />
       )}
     </div>
   );
@@ -196,20 +180,21 @@ const MessageList = ({
   online,
   setActiveStatus,
 }) => {
-  const [user, setUser] = useState([]);
   const [active, setActive] = useState(0);
+  const [user, setUser] = useState([]);
   const navigate = useNavigate();
   const handleClick = (id) => {
-    navigate(`/dashboard-messages?${id}`);
+    navigate(`/inbox?${id}`);
     setOpen(true);
   };
 
   useEffect(() => {
+    setActiveStatus(online);
     const userId = data.members.find((user) => user != me);
     const getUser = async () => {
       try {
         const res = await axios.get(`${server}/user/user-info/${userId}`);
-        setUserData(res.data.user);
+        setUser(res.data.user);
       } catch (error) {
         console.log(error);
       }
@@ -231,7 +216,7 @@ const MessageList = ({
     >
       <div className="relative">
         <img
-          src={`${backend_url}${user?.avatar}`}
+          src={`${backend_url}${userData?.avatar}`}
           alt=""
           className="w-[50px] h-[50px] rounded-full"
         />
@@ -242,9 +227,11 @@ const MessageList = ({
         )}
       </div>
       <div className="pl-3">
-        <h1 className="pl-3 text-[18px]">{user.name}</h1>
+        <h1 className="pl-3 text-[18px]">{userData.name}</h1>
         <p className="text-[16px] text-[#000c]">
-          {data.lastMessageId !== user._id ? "You: " : user.name.split(" ")[0]}{" "}
+          {data.lastMessageId !== userData._id
+            ? "You: "
+            : userData.name.split(" ")[0]}{" "}
           + ": "{data.lastMessage}
         </p>
       </div>
@@ -252,94 +239,4 @@ const MessageList = ({
   );
 };
 
-const SellerInbox = ({
-  setOpen,
-  newMessage,
-  messages,
-  setNewMessage,
-  sendMessageHandler,
-  sellerId,
-  userData,
-  activeStatus,
-}) => {
-  return (
-    <div className="w-full min-h-full flex flex-col">
-      {/* Message header */}
-      <div className="w-full flex p-3 justify-center items-between bg-slate-200">
-        <div className="flex">
-          <img
-            src={`${backend_url}${userData?.avatar}`}
-            alt=""
-            className="w-[60px] h-[60px] rounded-full"
-          />
-          <div className="pl-3">
-            <h1 className="text-[18px] font-[600]">{userData?.name}</h1>
-            <h1>{activeStatus ? "Active Now" : ""}</h1>
-          </div>
-        </div>
-        <AiOutlineArrowRight
-          size={20}
-          className="cursor-pointer"
-          onClick={() => setOpen(false)}
-        />
-      </div>
-      {/* messages */}
-      <div className="px-3 h-[65vh] py-3 overflow-y-scroll">
-        {messages &&
-          messages.map((item, index) => (
-            <div
-              className={`w-full flex my-2 ${
-                item.sender === sellerId ? "justify-end" : "justify-start"
-              }`}
-            >
-              {item.sender !== sellerId && (
-                <img
-                  src="../../../public/avatar-pic.jpg"
-                  alt=""
-                  className="w-[40px] h-[40px] rounded-full mr-3"
-                />
-              )}
-              <div>
-                <div className="w-max rounded bg-[#38c776] text-white h-min p-2">
-                  <p>{item.text}</p>
-                </div>
-                <p className="text-[12px] text-[#000000d3] pt-1">
-                  {format(item.createdAt)}
-                </p>
-              </div>
-            </div>
-          ))}
-      </div>
-
-      {/* send message input */}
-      <form
-        aria-required={true}
-        className="p-3 relative w-full flex items-center justify-between"
-        onSubmit={sendMessageHandler}
-      >
-        <div className="w-[3%]">
-          <RiGalleryFill className="cursor-pointer" size={20} />
-        </div>
-        <div className="w-[97%]">
-          <input
-            type="text"
-            required
-            placeholder="Enter your message..."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            className={`${styles.input}`}
-          />
-          <input type="submit" value="Send" className="hidden" id="send" />
-          <label htmlFor="send">
-            <AiOutlineSend
-              size={20}
-              className="absolute right-4 top-5 cursor-pointer"
-            />
-          </label>
-        </div>
-      </form>
-    </div>
-  );
-};
-
-export default DashboardMessages;
+export default UserInboxPage;

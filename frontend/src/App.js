@@ -21,6 +21,7 @@ import {
   ShopAllEventsPage,
   OrderDetailsPage,
   TrackOrderPage,
+  UserInboxPage,
 } from "./routes/Routes.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -113,6 +114,15 @@ const App = () => {
           element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/inbox"
+          element={
+            <ProtectedRoute>
+              <UserInboxPage />
             </ProtectedRoute>
           }
         />
