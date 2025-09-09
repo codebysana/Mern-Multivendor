@@ -2,8 +2,8 @@ const express = require("express");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/errorHandler");
 const Shop = require("../models/shopModel");
-import { isSellerAuthenticated } from "../middleware/auth";
-import Coupon from "../models/couponModel";
+const { isSellerAuthenticated } = require("../middleware/auth");
+const Coupon = require("../models/couponModel");
 const router = express.Router();
 
 // create coupon code

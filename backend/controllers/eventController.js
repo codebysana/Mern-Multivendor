@@ -3,8 +3,8 @@ const Event = require("../models/eventModel");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/errorHandler");
 const Shop = require("../models/shopModel");
-import { isSellerAuthenticated } from "../middleware/auth";
-import { upload } from "../multer";
+const { isSellerAuthenticated, isAdmin, isAuthenticated } = require("../middleware/auth");
+const { upload } = require("../multer");
 const fs = require("fs");
 const router = express.Router();
 
@@ -98,6 +98,26 @@ router.delete(
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// all events -- admin
+router.get(
+  "/admin-all-events",
+  isAuthenticated,
+  isAdmin("admin"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const events = await Event.find().sort({
+        createdAt: -1,
+      });
+      res.status(201).json({
+        success: true,
+        events,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
