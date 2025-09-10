@@ -10,20 +10,33 @@ const initialState = {
 
 export const sellerReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase('LoadSellerRequest', (state) => {
+    .addCase("LoadSellerRequest", (state) => {
       state.isLoading = true;
     })
-    .addCase('LoadSellerSuccess', (state, action) => {
+    .addCase("LoadSellerSuccess", (state, action) => {
       state.isSeller = true;
       state.isLoading = false;
       state.seller = action?.payload;
     })
-    .addCase('LoadSellerFail', (state, action) => {
+    .addCase("LoadSellerFail", (state, action) => {
       state.isLoading = false;
       state.error = action?.payload || "An error occurred";
       state.isSeller = false;
     })
-    .addCase('clearErrors', (state) => {
+    // get all sellers -- admin
+    .addCase("getAllSellersRequest", (state) => {
+      state.isLoading = true;
+    })
+    .addCase("getAllSellersSuccess", (state, action) => {
+      state.isLoading = false;
+      state.sellers = action?.payload;
+    })
+    .addCase("getAllSellersFail", (state, action) => {
+      state.isLoading = false;
+      state.error = action?.payload || "An error occurred";
+      
+    })
+    .addCase("clearErrors", (state) => {
       state.error = null;
     });
 });
