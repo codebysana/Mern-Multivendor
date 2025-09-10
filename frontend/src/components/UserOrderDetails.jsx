@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../styles/style";
 import { BsFillBagFill } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { backend_url } from "../../server";
 import { getAllOrdersOfUser } from "../redux/actions/orderAction";
 import { RxCross1 } from "react-icons/rx";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
-import { server } from "../server";
 import axios from "axios";
 import { toast } from "react-toastify";
+import styles from "../styles/style";
+import { backend_url, server } from "../server";
 
 const UserOrderDetails = () => {
   const { orders } = useSelector((state) => state.order);
@@ -100,7 +99,7 @@ const UserOrderDetails = () => {
                 US${item.discountPrice} x {item.qty}
               </h5>
             </div>
-            {item?.isReviewed || item.status !== "delivered" ? null : (
+            {!item?.isReviewed && data?.status !== "delivered" ? null : (
               <div
                 className={`${styles.button} text-[#fff]`}
                 onClick={() => setOpen(true) || setSelectedItem(item)}
