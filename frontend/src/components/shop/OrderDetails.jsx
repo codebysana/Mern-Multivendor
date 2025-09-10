@@ -129,7 +129,7 @@ const OrderDetails = () => {
       <br />
       <h4 className="pt-3 text-[20px] font-[600]">Order Status</h4>
       {data?.status !== "Processing Refund" &&
-        (data?.status !== "Refund Success" && (
+        data?.status !== "Refund Success" && (
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
@@ -159,20 +159,25 @@ const OrderDetails = () => {
                 </option>
               ))}
           </select>
-        ))}
-      <select
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-        className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
-      >
-        {["Processing Refund", "Refund Success"]
-          .slice(["Processing Refund", "Refund Success"].indexOf(data?.status))
-          .map((option, index) => (
-            <option value={option} key={index}>
-              {option}
-            </option>
-          ))}
-      </select>
+        )}
+      {data?.status === "Processing Refund" ||
+      data?.status === "Refund Success" ? (
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
+        >
+          {["Processing Refund", "Refund Success"]
+            .slice(
+              ["Processing Refund", "Refund Success"].indexOf(data?.status)
+            )
+            .map((option, index) => (
+              <option value={option} key={index}>
+                {option}
+              </option>
+            ))}
+        </select>
+      ) : null}
       <div
         className={`${styles.button} mt-5 !bg-[#fce1e6] !rounded-[4px] text-[#e94560] font-[600] !h-[45px] text-[18px]`}
         onClick={
