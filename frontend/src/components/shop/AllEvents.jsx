@@ -87,7 +87,7 @@ const AllEvents = () => {
         name: item.name,
         price: "US$ " + item.discountPrice,
         stock: item.stock,
-        sold: 10,
+        sold: item?.soldOut,
       });
     });
   return (

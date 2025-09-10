@@ -8,31 +8,19 @@ import { useEffect } from "react";
 import { getAllOrdersOfShop } from "../../redux/actions/orderAction";
 import { getAllProductsShop } from "../../redux/actions/productAction";
 import { Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 
 const DashboardHero = () => {
   const dispatch = useDispatch();
   const { orders } = useSelector((state) => state.order);
   const { seller } = useSelector((state) => state.seller);
   const { products } = useSelector((state) => state.products);
-  const [deliveredOrder, setDeliveredOrder] = useState(null);
-
   useEffect(() => {
     dispatch(getAllOrdersOfShop(seller._id));
     dispatch(getAllProductsShop(seller._id));
-
-    const orderData =
-      orders && orders.filter((item) => item.status === "Delivered");
-    setDeliveredOrder(orderData);
   }, [dispatch]);
 
-  const totalEarningWithoutTax = deliveredOrder
-    ? deliveredOrder.reduce((acc, item) => acc + item.totalPrice, 0)
-    : 0;
-
-  const serviceCharge = totalEarningWithoutTax * 0.1 || 0;
-
-  const availableBalance =
-    (totalEarningWithoutTax - serviceCharge).toFixed(2) || 0;
+  const availableBalance = seller.availableBalance.toFixed(2);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -163,7 +151,15 @@ const DashboardHero = () => {
       </div>
       <br />
       <h3 className="text-[22px] font-Poppins pb-2">Latest Orders</h3>
-      <div className="w-full min-h-[45vh] bg-white rounded "></div>
+      <div className="w-full min-h-[45vh] bg-white rounded ">
+        <DataGrid
+          rows={row}
+          columns={columns}
+          pageSizeOptions={10}
+          disableRowSelectionOnClick
+          autoHeight
+        />
+      </div>
     </div>
   );
 };
