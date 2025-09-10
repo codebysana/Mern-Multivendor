@@ -108,7 +108,7 @@ const AdminSidebar = ({ active }) => {
       {/* withdraw  money*/}
       <div className="w-full flex items-center p-4">
         <Link
-          to="/dashboard-withdraw-money"
+          to="/admin-withdraw-request"
           className="w-full flex items-center"
         >
           <CiMoneyBill

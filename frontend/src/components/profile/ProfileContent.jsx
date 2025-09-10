@@ -20,8 +20,8 @@ import {
   updateUserInformation,
 } from "../../redux/actions/userAction";
 import { toast } from "react-toastify";
-import { axios } from "axios";
 import { getAllOrdersOfUser } from "../../redux/actions/orderAction";
+import axios from "axios";
 
 const ProfileContent = ({ active }) => {
   const { user, error, successMessage } = useSelector((state) => state.user);
@@ -64,7 +64,7 @@ const ProfileContent = ({ active }) => {
       })
       .then((res) => {
         dispatch(loadUser());
-        toast.success("Avatar updated successfully!")
+        toast.success("Avatar updated successfully!");
       })
       .catch((error) => {
         toast.error(error);
