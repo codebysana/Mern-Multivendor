@@ -1,5 +1,5 @@
 import axios from "axios";
-import server from "../../server";
+import { server } from "../../server";
 
 // get all orders of user
 export const getAllOrdersOfUser = (userId) => async (dispatch) => {
@@ -38,6 +38,28 @@ export const getAllOrdersOfShop = (shopId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "getAllShopOrdersFail",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// get all orders of admin
+export const getAllOrdersOfAdmin = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "adminAllOrdersRequest",
+    });
+    const { data } = await axios.get(
+      `${server}/order/admin-all-orders`,
+      { withCredentials: true }
+    );
+    dispatch({
+      type: "adminAllOrdersSuccess",
+      payload: data.orders,
+    });
+  } catch (error) {
+    dispatch({
+      type: "adminAllOrdersFail",
       payload: error.response.data.message,
     });
   }
