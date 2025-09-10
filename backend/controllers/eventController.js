@@ -3,7 +3,11 @@ const Event = require("../models/eventModel");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/errorHandler");
 const Shop = require("../models/shopModel");
-const { isSellerAuthenticated, isAdmin, isAuthenticated } = require("../middleware/auth");
+const {
+  isSellerAuthenticated,
+  isAdmin,
+  isAuthenticated,
+} = require("../middleware/auth");
 const { upload } = require("../multer");
 const fs = require("fs");
 const router = express.Router();
@@ -69,7 +73,6 @@ router.get(
 // delete event of a shop
 router.delete(
   "/delete-shop-event/:id",
-  isSellerAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
     try {
       const eventId = req.params.id;

@@ -9,6 +9,7 @@ const {
 } = require("../middleware/auth");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
+const Shop = require("../models/shopModel");
 
 // create a order
 router.post(
@@ -102,6 +103,8 @@ router.put(
       if (req.body.status === "Delivered") {
         order.deliveredAt = Date.now();
         order.paymentInfo.status = "Succeeded";
+        const serviceCharge = order.totalPrice * 0.1;
+        await updateSellerInfo(order.totalPrice - serviceCharge);
       }
       await order.save({ validateBeforeSave: false });
       res.status(200).json({
@@ -114,6 +117,11 @@ router.put(
         product.soldOut += qty;
 
         await product.save({ validateBeforeSave: false });
+      }
+      async function updateSellerInfo(amount) {
+        const seller = await Shop.findById(req.seller.id);
+        seller.availableBalance = amount;
+        await seller.save();
       }
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

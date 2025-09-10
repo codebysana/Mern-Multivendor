@@ -13,6 +13,7 @@ const coupon = require("./controllers/couponController");
 const order = require("./controllers/orderController");
 const conversation = require("./controllers/conversationController");
 const message = require("./controllers/messageController");
+const withdraw = require("./controllers/withdrawController");
 
 const app = express();
 
@@ -25,12 +26,15 @@ app.use(
   })
 );
 app.use("/", express.static("uploads"));
+app.use("/", (req, res) => {
+  res.send("Hello World!");
+});
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
 // config
 if (process.env.NODE_ENV !== "PRODUCTION") {
   require("dotenv").config({
-    path: "backend/config/.env",
+    path: "config/.env",
   });
 }
 
@@ -44,6 +48,7 @@ app.use("/api/v2/coupon", coupon);
 // app.use("/api/v2/payment", payment);
 app.use("/api/v2/conversation", conversation);
 app.use("/api/v2/message", message);
+app.use("/api/v2/withdraw", withdraw);
 
 app.get("/ping", (req, res) => res.send("pong"));
 
