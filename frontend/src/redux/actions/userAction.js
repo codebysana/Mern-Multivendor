@@ -118,3 +118,18 @@ export const deleteUserAddress = (id) => async (dispatch) => {
     });
   }
 };
+
+// get all users -- admin
+export const getAllUsers = () => async (dispatch) => {
+  try {
+    dispatch({ type: "getAllUsersRequest" });
+    const { data } = await axios.get(`${server}/user/admin-all-users`, {
+      withCredentials: true,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllUsersFail",
+      payload: error.response?.data?.message || "Unable to delete user",
+    });
+  }
+};
