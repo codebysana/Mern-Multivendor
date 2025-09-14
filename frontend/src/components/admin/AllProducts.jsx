@@ -67,7 +67,7 @@ const AllProducts = () => {
   const row = [];
 
   data &&
-    data.forEach((item) => {
+    data?.forEach((item) => {
       row.push({
         id: item._id,
         name: item.name,

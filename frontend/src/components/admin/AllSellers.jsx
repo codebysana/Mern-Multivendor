@@ -25,7 +25,7 @@ const AllSellers = () => {
     await axios
       .delete(`${server}/shop/delete-seller/${id}`, { withCredentials: true })
       .then((res) => {
-        toast.success(res.data.message);
+        toast.success(res.data?.message);
       });
     dispatch(getAllSellers());
   };

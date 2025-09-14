@@ -39,7 +39,7 @@ const Signup = () => {
     await axios
       .post(`${server}/user/create-user`, formData, config)
       .then((res) => {
-        toast.success(res.data.message);
+        toast.success(res.data?.message);
         setName("");
         setEmail("");
         setPassword("");

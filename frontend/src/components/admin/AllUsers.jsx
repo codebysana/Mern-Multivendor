@@ -24,7 +24,7 @@ const AllUsers = () => {
     await axios
       .delete(`${server}/user/delete-user/${id}`, { withCredentials: true })
       .then((res) => {
-        toast.success(res.data.message);
+        toast.success(res.data?.message);
       });
     dispatch(getAllUsers());
   };

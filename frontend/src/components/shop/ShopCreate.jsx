@@ -35,7 +35,7 @@ const ShopCreate = () => {
     const response = await axios
       .post(`${server}/shop/create-shop`, formData, config)
       .then((res) => {
-        toast.success(res.data.message);
+        toast.success(res.data?.message);
         setName("");
         setEmail("");
         setPassword("");
@@ -45,7 +45,7 @@ const ShopCreate = () => {
         setPhoneNumber();
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message);
       });
   };
 

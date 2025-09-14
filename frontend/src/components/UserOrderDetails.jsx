@@ -41,7 +41,7 @@ const UserOrderDetails = () => {
         { withCredentials: true }
       )
       .then((res) => {
-        toast.success(res.data.message);
+        toast.success(res.data?.message);
         dispatch(getAllOrdersOfUser(user._id));
         setComment("");
         setRating(null);
@@ -58,10 +58,10 @@ const UserOrderDetails = () => {
         status: "Processing Refund",
       })
       .then((res) => {
-        toast.success(res.data.success);
+        toast.success(res.data?.success);
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data?.message);
       });
   };
 

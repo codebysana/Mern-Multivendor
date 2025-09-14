@@ -48,7 +48,7 @@ const AllEvents = () => {
       sortable: false,
       renderCell: (params) => {
         const data = params.row.name;
-        const product_name = data.replace(/\s+/g, "-");
+        const product_name = data?.replace(/\s+/g, "-");
         return (
           <>
             <Link to={`/product/${product_name}`}>

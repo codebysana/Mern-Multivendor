@@ -22,10 +22,10 @@ const AllWithdraw = () => {
         withCredentials: true,
       })
       .then((res) => {
-        setData(res.data.withdraws);
+        setData(res.data?.withdraws);
       })
       .catch((error) => {
-        console.log(error.response.data.message);
+        console.log(error.response.data?.message);
       });
   }, []);
 
@@ -72,7 +72,7 @@ const AllWithdraw = () => {
   const row = [];
 
   data &&
-    data.forEach((item) => {
+    data?.forEach((item) => {
       row.push({
         id: item._id,
         shopId: item.seller._id,
@@ -86,15 +86,15 @@ const AllWithdraw = () => {
   const handleSubmit = async () => {
     await axios
       .put(
-        `${server}/withdraw/update-withdraw-request/${withdrawData.id}`,
+        `${server}/withdraw/update-withdraw-request/${withdrawData?.id}`,
         {
-          sellerId: withdrawData.shopId,
+          sellerId: withdrawData?.shopId,
         },
         { withCredentials: true }
       )
       .then((res) => {
         toast.success("Withdraw request updated successfully");
-        setData(res.data.withdraws);
+        setData(res.data?.withdraws);
         setOpen(false);
       });
   };

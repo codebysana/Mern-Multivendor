@@ -92,7 +92,7 @@ const WishlistSingle = ({
   removeFromWishlistHandler,
 }) => {
   const [value, setValue] = useState(1);
-  const totalPrice = data.discountPrice * value;
+  const totalPrice = data?.discountPrice * value;
   return (
     <div className="border-b p-4">
       <div className="w-full 800px:flex items-center">
@@ -107,7 +107,7 @@ const WishlistSingle = ({
         />
 
         <div className="pl-[5px] ">
-          <h1>{data.name}</h1>
+          <h1>{data?.name}</h1>
           <h4 className="font-[600] pt-3 800px:pt-[3px] text-[17px] text-[#d02222] font-Roboto">
             US${totalPrice}
           </h4>

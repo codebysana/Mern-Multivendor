@@ -11,7 +11,7 @@ export const createEvent = (formData) => async (dispatch) => {
     });
     dispatch({
       type: "EventCreationSuccess",
-      payload: data.event,
+      payload: data?.event,
     });
   } catch (error) {
     dispatch({
@@ -30,7 +30,7 @@ export const getAllEventsShop = (id) => async (dispatch) => {
     const { data } = await axios.get(`${server}/event/get-all-events/${id}`);
     dispatch({
       type: "getAllEventsShopSuccess",
-      payload: data.events,
+      payload: data?.events,
     });
   } catch (error) {
     dispatch({
@@ -54,7 +54,7 @@ export const deleteEvent = (id) => async (dispatch) => {
     );
     dispatch({
       type: "deleteEventSuccess",
-      payload: data.message,
+      payload: data?.message,
     });
   } catch (error) {
     dispatch({
@@ -73,7 +73,7 @@ export const getAllEvents = () => async (dispatch) => {
     const { data } = await axios.get(`${server}/event/get-all-events`);
     dispatch({
       type: "getAllEventsSuccess",
-      payload: data.events,
+      payload: data?.events,
     });
   } catch (error) {
     dispatch({

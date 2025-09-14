@@ -90,11 +90,11 @@ const Cart = ({ setOpenCart }) => {
 };
 
 const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
-  const [value, setValue] = useState(data.qty);
-  const totalPrice = data.discountPrice * value;
+  const [value, setValue] = useState(data?.qty);
+  const totalPrice = data?.discountPrice * value;
 
   const increment = (data) => {
-    if (data.stock < value) {
+    if (data?.stock < value) {
       toast.error("Product stock limited!");
     } else {
       setValue(value + 1);
@@ -118,7 +118,7 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
           >
             <HiPlus size={18} color="#fff" />
           </div>
-          <span className="pl-[18px]">{data.qty}</span>
+          <span className="pl-[18px]">{data?.qty}</span>
           <div
             className="bg-[#a7abb14f] rounded-full w-[25px] h-[25px] flex items-center justify-center cursor-pointer"
             onClick={() => decrement(data)}
@@ -132,9 +132,9 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
         />
         <div className="pl-[5px] ">
-          <h1>{data.name}</h1>
+          <h1>{data?.name}</h1>
           <h4 className="font-[400] text-[15px] text-[#00000082]">
-            ${data.discountPrice} * {value}
+            ${data?.discountPrice} * {value}
           </h4>
           <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-Roboto">
             US${totalPrice}

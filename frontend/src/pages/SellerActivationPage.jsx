@@ -15,9 +15,9 @@ function SellerActivationPage() {
           const res = await axios.post(`${server}/shop/activation`, {
             activationToken,
           });
-          console.log(res.data.message);
+          console.log(res.data?.message);
         } catch (error) {
-          console.log(error.response.data.message);
+          console.log(error.response.data?.message);
           setError(true);
         }
       };

@@ -101,7 +101,7 @@ const CreateProduct = () => {
           >
             <option value="Choose a Category">Choose a Category</option>
             {categoriesData &&
-              categoriesData.map((item) => (
+              categoriesData?.map((item) => (
                 <option value={item.title} key={item.title}>
                   {item.title}
                 </option>

@@ -13,12 +13,12 @@ export const getAllSellers = (userId) => async (dispatch) => {
     });
     dispatch({
       type: "getAllSellersSuccess",
-      payload: data.sellers,
+      payload: data?.sellers,
     });
   } catch (error) {
     dispatch({
       type: "getAllSellersFail",
-      payload: error.response.data.message,
+      payload: error.response.data?.message,
     });
   }
 };

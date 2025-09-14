@@ -196,7 +196,7 @@ const DashboardMessages = () => {
         lastMessageId: seller._id,
       })
       .then((res) => {
-        console.log(res.data.conversation);
+        console.log(res.data?.conversation);
         setNewMessage("");
       });
   };
@@ -266,11 +266,11 @@ const MessageList = ({
   };
 
   useEffect(() => {
-    const userId = data.members.find((user) => user != me);
+    const userId = data?.members.find((user) => user != me);
     const getUser = async () => {
       try {
         const res = await axios.get(`${server}/user/user-info/${userId}`);
-        setUserData(res.data.user);
+        setUserData(res.data?.user);
       } catch (error) {
         console.log(error);
       }
@@ -284,7 +284,7 @@ const MessageList = ({
       }  cursor-pointer`}
       onClick={() =>
         setActive(index) ||
-        handleClick(data._id) ||
+        handleClick(data?._id) ||
         setCurrentChat(data) ||
         setUserData(user) ||
         setActiveStatus(online)
@@ -305,8 +305,8 @@ const MessageList = ({
       <div className="pl-3">
         <h1 className="pl-3 text-[18px]">{user.name}</h1>
         <p className="text-[16px] text-[#000c]">
-          {data.lastMessageId !== user._id ? "You: " : user.name.split(" ")[0]}{" "}
-          + ": "{data.lastMessage}
+          {data?.lastMessageId !== user._id ? "You: " : user.name.split(" ")[0]}{" "}
+          + ": "{data?.lastMessage}
         </p>
       </div>
     </div>

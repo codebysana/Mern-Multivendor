@@ -37,7 +37,7 @@ const OrderDetails = () => {
         navigate("/dashboard-orders");
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data?.message);
       });
   };
 
@@ -55,7 +55,7 @@ const OrderDetails = () => {
         dispatch(getAllOrdersOfShop(seller._id));
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data?.message);
       });
   };
 

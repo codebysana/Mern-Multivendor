@@ -12,12 +12,12 @@ export const getAllOrdersOfUser = (userId) => async (dispatch) => {
     );
     dispatch({
       type: "getAllUserOrdersSuccess",
-      payload: data.orders,
+      payload: data?.orders,
     });
   } catch (error) {
     dispatch({
       type: "getAllUserOrdersFail",
-      payload: error.response.data.message,
+      payload: error.response.data?.message,
     });
   }
 };
@@ -33,12 +33,12 @@ export const getAllOrdersOfShop = (shopId) => async (dispatch) => {
     );
     dispatch({
       type: "getAllShopOrdersSuccess",
-      payload: data.orders,
+      payload: data?.orders,
     });
   } catch (error) {
     dispatch({
       type: "getAllShopOrdersFail",
-      payload: error.response.data.message,
+      payload: error.response.data?.message,
     });
   }
 };
@@ -55,12 +55,12 @@ export const getAllOrdersOfAdmin = () => async (dispatch) => {
     );
     dispatch({
       type: "adminAllOrdersSuccess",
-      payload: data.orders,
+      payload: data?.orders,
     });
   } catch (error) {
     dispatch({
       type: "adminAllOrdersFail",
-      payload: error.response.data.message,
+      payload: error.response.data?.message,
     });
   }
 };

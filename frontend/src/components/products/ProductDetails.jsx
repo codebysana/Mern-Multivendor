@@ -51,9 +51,9 @@ const ProductDetails = ({ data }) => {
 
   const handleMessageSubmit = async () => {
     if (isAuthenticated) {
-      const groupTitle = data._id + user._id;
+      const groupTitle = data?._id + user._id;
       const userId = user._id;
-      const sellerId = data.shop._id;
+      const sellerId = data?.shop._id;
 
       await axios
         .post(`${server}/conversation/create-new-conversation`, {
@@ -62,9 +62,9 @@ const ProductDetails = ({ data }) => {
           sellerId,
         })
         .then((res) => {
-          navigate(`/conversation/${res.data.conversation._id}`);
+          navigate(`/conversation/${res.data?.conversation._id}`);
         }).catch((error)=>{
-          toast.error(error.response.data.message)
+          toast.error(error.response.data?.message)
         })
     } else {
       toast.error("Please login to create a conversation");
@@ -86,7 +86,7 @@ const ProductDetails = ({ data }) => {
     if (isItemExists) {
       toast.error("Item already in cart!");
     } else {
-      if (data.stock < count) {
+      if (data?.stock < count) {
         toast.error("Product already in cart!");
       } else {
         const cartData = { ...data, qty: count };
@@ -118,13 +118,13 @@ const ProductDetails = ({ data }) => {
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
                 <img
-                  src={`${backend_url}${data && data.images[select]}`}
+                  src={`${backend_url}${data && data?.images[select]}`}
                   alt=""
                   className="w-[80%]"
                 />
                 <div className="w-full flex">
                   {data &&
-                    data.images.map((item, index) => (
+                    data?.images.map((item, index) => (
                       <div
                         className={`${
                           select === 0 ? "border" : "null"
@@ -142,14 +142,14 @@ const ProductDetails = ({ data }) => {
               </div>
               <div className="w-full 800px:w-[50%]">
                 <div className="w-full 800px:w-[50%] pt-5">
-                  <h1 className={`${styles.productTitle}`}>{data.name}</h1>
-                  <p>{data.description}</p>
+                  <h1 className={`${styles.productTitle}`}>{data?.name}</h1>
+                  <p>{data?.description}</p>
                   <div className="flex pt-3">
                     <h4 className={`${styles.productDiscountPrice}`}>
-                      {data.discountPrice}$
+                      {data?.discountPrice}$
                     </h4>
                     <h3 className={`${styles.price}`}>
-                      {data.originalPrice ? data.originalPrice + "$" : null}
+                      {data?.originalPrice ? data?.originalPrice + "$" : null}
                     </h3>
                   </div>
                   <div className="flex items-center mt-12 justify-between pr-3 ">
@@ -193,7 +193,7 @@ const ProductDetails = ({ data }) => {
                 </div>
                 <div
                   className={`${styles.button} !mt-6 !rounded !h-11 flex items-center`}
-                  onClick={() => addToCartHandler(data._id)}
+                  onClick={() => addToCartHandler(data?._id)}
                 >
                   <span className="text-white flex items-center">
                     Add to cart <AiOutlineShoppingCart className="ml-1" />
@@ -210,7 +210,7 @@ const ProductDetails = ({ data }) => {
                   <div className="pr-8">
                     <Link to={`/shop/preview/${data?.shop._id}`}>
                       <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                        {data.shop.name}
+                        {data?.shop.name}
                       </h3>
                     </Link>
                     <h5 className="pb-3 text-[15px]">
@@ -290,7 +290,7 @@ const ProductDetailsInfo = ({
       {active === 1 ? (
         <>
           <p className="py-2 text-[18px] leading-5 pb-10 whitespace-pre-line">
-            {data.description}
+            {data?.description}
           </p>
         </>
       ) : null}
@@ -298,7 +298,7 @@ const ProductDetailsInfo = ({
       {active === 2 ? (
         <div className="w-full min-h-[40vh] flex flex-col items-center py-3 overflow-y-scroll">
           {data &&
-            data.reviews.map((item, index) => (
+            data?.reviews.map((item, index) => (
               <div className="w-full flex my-2">
                 <img
                   src={`${backend_url}/${item.user.avatar}`}
@@ -313,7 +313,7 @@ const ProductDetailsInfo = ({
               </div>
             ))}
           <div className="w-full flex justify-center">
-            {data && data.reviews.length === 0 && (
+            {data && data?.reviews.length === 0 && (
               <h5>No Review have for this product!</h5>
             )}
           </div>
@@ -323,7 +323,7 @@ const ProductDetailsInfo = ({
       {active === 3 && (
         <div className="w-full block 800px:flex p-5">
           <div className="w-full 800px:w-[50%]">
-            <Link to={`/shop/preview/${data.shop._id}`}>
+            <Link to={`/shop/preview/${data?.shop._id}`}>
               <div className="flex items-center">
                 <img
                   src={`${backend_url}${data?.shop?.avatar}`}
@@ -331,21 +331,21 @@ const ProductDetailsInfo = ({
                   alt=""
                 />
                 <div className="pl-3">
-                  <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
+                  <h3 className={`${styles.shop_name}`}>{data?.shop.name}</h3>
                   <h5 className="pb-2 text-[15px] ">
                     (averageRating/5) Ratings
                   </h5>
                 </div>
               </div>
             </Link>
-            <p className="pt-2">{data.shop.description}</p>
+            <p className="pt-2">{data?.shop.description}</p>
           </div>
           <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
             <div className="text-left">
               <h5 className="font-[600]">
                 Joined On:{" "}
                 <span className="font-[500]">
-                  {data.shop?.createdAt?.slice(0, 10)}
+                  {data?.shop?.createdAt?.slice(0, 10)}
                 </span>
               </h5>
               <h5 className="font-[600] pt-3">

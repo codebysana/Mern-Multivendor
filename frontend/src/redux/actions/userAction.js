@@ -9,7 +9,7 @@ export const loadUser = () => async (dispatch) => {
     });
     dispatch({
       type: "LoadUserSuccess",
-      payload: data.user,
+      payload: data?.user,
     });
   } catch (error) {
     dispatch({
@@ -27,7 +27,7 @@ export const loadSeller = () => async (dispatch) => {
     });
     dispatch({
       type: "LoadSellerSuccess",
-      payload: data.user,
+      payload: data?.user,
     });
   } catch (error) {
     dispatch({
@@ -108,7 +108,7 @@ export const deleteUserAddress = (id) => async (dispatch) => {
       type: "deleteUserAddressSuccess",
       payload: {
         successMessage: "Address deleted successfully!",
-        user: data.user,
+        user: data?.user,
       },
     });
   } catch (error) {

@@ -37,8 +37,8 @@ const AllCoupons = () => {
       })
       .then((res) => {
         setIsLoading(false);
-        console.log(res.data);
-        setCoupons(res.data);
+        console.log(res?.data);
+        setCoupons(res?.data);
       })
       .catch((error) => {
         setIsLoading(false);
@@ -71,7 +71,7 @@ const AllCoupons = () => {
         window.location.reload();
       })
       .catch((error) => {
-        toast.error(error.res.data.message);
+        toast.error(error.res.data?.message);
       });
   };
 

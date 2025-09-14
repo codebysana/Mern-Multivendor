@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersOfShop } from "../../redux/actions/orderAction";
-import { getAllProductsShop } from "../../redux/actions/productAction";
 import styles from "../../styles/style";
 import { RxCross1 } from "react-icons/rx";
 import { server } from "../../server";
 import axios from "axios";
-import toast from "react-toastify";
+import { toast } from "react-toastify";
 import { loadSeller } from "../../redux/actions/userAction";
 import { AiOutlineDelete } from "react-icons/ai";
 
@@ -65,7 +64,7 @@ const WithdrawMoney = () => {
         });
       })
       .catch((error) => {
-        console.log(error.response.data.message);
+        console.log(error.response.data?.message);
       });
   };
   const deleteHandler = async () => {

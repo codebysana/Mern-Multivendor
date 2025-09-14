@@ -73,10 +73,10 @@ const Header = ({ activeHeading }) => {
               size={30}
               className="absolute right-2 top-1.5 cursor-pointer"
             />
-            {searchData && searchData.length !== 0 ? (
+            {searchData && searchData?.length !== 0 ? (
               <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
                 {searchData &&
-                  searchData.map((i, index) => {
+                  searchData?.map((i, index) => {
                     return (
                       <Link to={`/product/${i._id}`}>
                         <div
@@ -272,9 +272,9 @@ const Header = ({ activeHeading }) => {
                 />
                 {searchData && (
                   <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
-                    {searchData.map((i, index) => {
+                    {searchData?.map((i, index) => {
                       const data = i.name;
-                      const productName = data.replace(/\s+/g, "-");
+                      const productName = data?.replace(/\s+/g, "-");
                       return (
                         <Link to={`/product/${productName}`}>
                           <div className="w-full flex items-start py-3">

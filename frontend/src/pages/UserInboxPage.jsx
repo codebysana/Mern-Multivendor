@@ -29,8 +29,8 @@ const UserInboxPage = () => {
   useEffect(() => {
     socketId.on("getMessage", (data) => {
       setArrivalMessage({
-        sender: data.senderId,
-        text: data.text,
+        sender: data?.senderId,
+        text: data?.text,
         createdAt: Date.now(),
       });
     });
@@ -52,7 +52,7 @@ const UserInboxPage = () => {
           }
         );
 
-        setConversations(response.data.conversations);
+        setConversations(response.data?.conversations);
       } catch (error) {
         console.log(error);
       }
@@ -84,7 +84,7 @@ const UserInboxPage = () => {
         const response = await axios.get(
           `${server}/message/get-all-messages/${currentChat?._id}`
         );
-        setMessages(response.data.messages);
+        setMessages(response.data?.messages);
       } catch (error) {
         console.log(error);
       }
@@ -114,7 +114,7 @@ const UserInboxPage = () => {
         await axios
           .post(`${server}/message/create-new-message`, message)
           .then((res) => {
-            setMessages([...messages, res.data.message]);
+            setMessages([...messages, res.data?.message]);
             updateLastMessage();
           })
           .catch((error) => {
@@ -137,7 +137,7 @@ const UserInboxPage = () => {
         lastMessageId: user._id,
       })
       .then((res) => {
-        console.log(res.data.conversation);
+        console.log(res.data?.conversation);
         setNewMessage("");
       })
       .catch((error) => {
@@ -177,7 +177,7 @@ const UserInboxPage = () => {
         })
         .then((res) => {
           setImages();
-          setMessages([...messages, res.data.message]);
+          setMessages([...messages, res.data?.message]);
           updateLastMessageForImage();
         });
     } catch (error) {
@@ -192,7 +192,7 @@ const UserInboxPage = () => {
         lastMessageId: user._id,
       })
       .then((res) => {
-        console.log(res.data.conversation);
+        console.log(res.data?.conversation);
         setNewMessage("");
       });
   };
@@ -268,11 +268,11 @@ const MessageList = ({
 
   useEffect(() => {
     setActiveStatus(online);
-    const userId = data.members.find((user) => user !== me);
+    const userId = data?.members.find((user) => user !== me);
     const getUser = async () => {
       try {
         const res = await axios.get(`${server}/shop/get-shop-info/${userId}`);
-        setUser(res.data.shop);
+        setUser(res.data?.shop);
       } catch (error) {
         console.log(error);
       }
@@ -286,7 +286,7 @@ const MessageList = ({
       }  cursor-pointer`}
       onClick={() =>
         setActive(index) ||
-        handleClick(data._id) ||
+        handleClick(data?._id) ||
         setCurrentChat(data) ||
         setUserData(user) ||
         setActiveStatus(online)

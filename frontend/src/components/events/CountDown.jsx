@@ -4,7 +4,7 @@ import { server } from "../../server";
 
 const CountDown = ({ data }) => {
   const calculateTimeLeft = () => {
-    const difference = +new Date(data.end_date) - +new Date();
+    const difference = +new Date(data?.end_date) - +new Date();
     let timeLeft = {};
 
     if (difference > 0) {
@@ -18,11 +18,11 @@ const CountDown = ({ data }) => {
     return timeLeft;
   };
 
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(data));
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
+      setTimeLeft(calculateTimeLeft(data));
     }, 1000);
     if (
       typeof timeLeft.days === "undefined" &&
@@ -30,7 +30,7 @@ const CountDown = ({ data }) => {
       typeof timeLeft.minutes === "undefined" &&
       typeof timeLeft.seconds === "undefined"
     ) {
-      axios.delete(`${server}/delete-shop-event/${data._id}`);
+      axios.delete(`${server}/delete-shop-event/${data?._id}`);
     }
     return () => clearTimeout(timer);
   }, []);
