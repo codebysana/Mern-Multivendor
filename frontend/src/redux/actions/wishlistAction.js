@@ -1,9 +1,11 @@
+import { createAction } from "@reduxjs/toolkit";
+
+export const addToWishlist = createAction("addToWishlist");
+export const removeFromWishlist = createAction("removeFromWishlist");
+
 // add to wishlist
-export const addToWishlist = (data) => async (dispatchEvent, getState) => {
-  dispatchEvent({
-    type: "addToWishlist",
-    payload: data,
-  });
+export const addToWishlistAsync = (data) => async (dispatch, getState) => {
+  dispatch(addToWishlist(data));
   localStorage.setItem(
     "wishlistItems",
     JSON.stringify(getState().wishlist.wishlist)
@@ -12,11 +14,8 @@ export const addToWishlist = (data) => async (dispatchEvent, getState) => {
 };
 
 // remove from wishlist
-export const removeFromWishlist = (data) => async (dispatchEvent, getState) => {
-  dispatchEvent({
-    type: "removeFromWishlist",
-    payload: data?._id,
-  });
+export const removeFromWishlistAsync = (data) => async (dispatch, getState) => {
+  dispatch(removeFromWishlist(data?._id));
   localStorage.setItem(
     "wishlistItems",
     JSON.stringify(getState().wishlist.wishlist)
