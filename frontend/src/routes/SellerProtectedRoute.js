@@ -3,14 +3,14 @@ import { Navigate } from "react-router-dom";
 import Loader from "../components/layout/Loader";
 
 const SellerProtectedRoute = ({ children }) => {
-  const { isLoading, isSellerAuthenticated } = useSelector(
+  const { isLoading, isSeller } = useSelector(
     (state) => state.seller
   );
   if (isLoading === true) {
     return <Loader />;
   } else {
-    if (!isSellerAuthenticated) {
-      return <Navigate to={`/shop-login`} replace />;
+    if (!isSeller) {
+      return <Navigate to={`/login-shop`} replace />;
     }
     return children;
   }
