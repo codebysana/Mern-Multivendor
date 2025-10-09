@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const shopSchema = new mongoose.Schema({
-  name: {
+  shopName: {
     type: String,
     required: [true, "Please enter your shop name!"],
   },
@@ -20,10 +20,12 @@ const shopSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  address: {
-    type: String,
-    required: true,
-  },
+  address: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
   role: {
     type: String,
     default: "Seller",

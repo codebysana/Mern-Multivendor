@@ -16,7 +16,7 @@ const couponSchema = new mongoose.Schema({
   maxAmount: {
     type: Number,
   },
-  shop: {
+  shopId: {
     type: Object,
     required: true,
   },
