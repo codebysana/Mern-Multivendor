@@ -425,6 +425,90 @@ export const productData = [
   },
 ];
 
+export const eventDataStatic = [
+  {
+    id: "evt1",
+    name: "50% Off Electronics Sale",
+    description:
+      "Get massive discounts on top-selling electronics this weekend!",
+    category: "Electronics",
+    tags: "sale, discount, electronics",
+    originalPrice: 500,
+    discountPrice: 250,
+    stock: 50,
+    images: [
+      {
+        public_id: "event_electronics",
+        url: "https://via.placeholder.com/400x300.png?text=Electronics+Sale",
+      },
+    ],
+    soldOut: 20,
+    ratings: 4.5,
+    shopId: "shop1",
+    shop: {
+      name: "Best Electronics",
+      shop_avatar: {
+        url: "https://via.placeholder.com/100x100.png?text=Shop+Logo",
+      },
+    },
+    // createdAt: Date.now(),
+    createdAt: new Date().toISOString(),
+    end_date: new Date(Date.now() + 150 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  // {
+  //   id: "evt2",
+  //   name: "Mega Fashion Fest",
+  //   description: "Trendy outfits at half the price. Limited stock available!",
+  //   category: "Fashion",
+  //   tags: "clothes, discount, fashion",
+  //   originalPrice: 120,
+  //   discountPrice: 60,
+  //   stock: 100,
+  //   images: [
+  //     {
+  //       public_id: "event_fashion",
+  //       url: "https://via.placeholder.com/400x300.png?text=Fashion+Fest",
+  //     },
+  //   ],
+  //   soldOut: 45,
+  //   ratings: 4.8,
+  //   shopId: "shop2",
+  //   shop: {
+  //     name: "Trendy Wear",
+  //     shop_avatar: {
+  //       url: "https://via.placeholder.com/100x100.png?text=Shop+Logo",
+  //     },
+  //   },
+  //   createdAt: Date.now(),
+  // },
+  // {
+  //   id: "evt3",
+  //   name: "Home Essentials Bonanza",
+  //   description: "Exclusive deals on home & kitchen essentials.",
+  //   category: "Home",
+  //   tags: "home, kitchen, sale",
+  //   originalPrice: 80,
+  //   discountPrice: 40,
+  //   stock: 200,
+  //   images: [
+  //     {
+  //       public_id: "event_home",
+  //       url: "https://via.placeholder.com/400x300.png?text=Home+Sale",
+  //     },
+  //   ],
+  //   soldOut: 70,
+  //   ratings: 4.3,
+  //   shopId: "shop3",
+  //   shop: {
+  //     name: "Home Store",
+  //     shop_avatar: {
+  //       url: "https://via.placeholder.com/100x100.png?text=Shop+Logo",
+  //     },
+  //   },
+  //   createdAt: Date.now(),
+  // },
+];
+
 export const footerProductLinks = [
   {
     name: "About us",
