@@ -32,22 +32,22 @@ const AllCoupons = () => {
   useEffect(() => {
     setIsLoading(true);
     axios
-      .get(`${server}/coupon/get-coupon/${seller._id}`, {
+      .get(`${server}/coupon/get-coupon/${seller?._id}`, {
         withCredentials: true,
       })
       .then((res) => {
+        setCoupons(res?.data.coupons);
         setIsLoading(false);
         console.log(res?.data);
-        setCoupons(res?.data);
       })
       .catch((error) => {
         setIsLoading(false);
       });
-  }, [dispatch]);
+  }, [dispatch, seller?._id]);
 
   const handleDelete = (id) => {
     dispatch(deleteProduct(id));
-    window.location.reload();
+    // window.location.reload();
   };
 
   const handleSubmit = async (e) => {
@@ -61,13 +61,20 @@ const AllCoupons = () => {
           maxAmount,
           selectedProduct,
           value,
-          shop: seller,
+          shopId: seller._id,
         },
         { withCredentials: true }
       )
       .then((res) => {
         toast.success("Coupon code created successfully!");
         setOpen(false);
+        setCoupons([...coupons, res.data.coupon]);
+        // reset fields
+        setName("");
+        setMinAmount("");
+        setMaxAmount("");
+        setSelectedProduct("");
+        setValue("");
         window.location.reload();
       })
       .catch((error) => {
@@ -125,7 +132,7 @@ const AllCoupons = () => {
           <DataGrid
             rows={row}
             columns={columns}
-            pageSizeOptions={10}
+            pageSizeOptions={[10]}
             disableRowSelectionOnClick
           />
           {open && (
@@ -210,9 +217,9 @@ const AllCoupons = () => {
                         Choose a Selected Product
                       </option>
                       {products &&
-                        products.map((item) => (
-                          <option value={item.name} key={item.name}>
-                            {item.name}
+                        products.map((i) => (
+                          <option value={i.name} key={i.name}>
+                            {i.name}
                           </option>
                         ))}
                     </select>
@@ -224,6 +231,7 @@ const AllCoupons = () => {
                       value="Create"
                       className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
                     />
+                    Create Coupon
                   </div>
                 </form>
               </div>

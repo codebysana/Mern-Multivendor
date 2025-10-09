@@ -24,8 +24,10 @@ const WithdrawMoney = () => {
   });
   const { seller } = useSelector((state) => state.seller);
   useEffect(() => {
-    dispatch(getAllOrdersOfShop(seller._id));
-  }, [dispatch]);
+    if (seller && seller?._id) {
+      dispatch(getAllOrdersOfShop(seller._id));
+    }
+  }, [dispatch, seller]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -74,6 +76,7 @@ const WithdrawMoney = () => {
       })
       .then((res) => {
         toast.success("Withdraw method deleted successfully");
+        dispatch(loadSeller());
       });
   };
   const error = () => {
@@ -98,7 +101,7 @@ const WithdrawMoney = () => {
   };
   const availableBalance = seller?.availableBalance.toFixed(2);
   return (
-    <div className="w-full h-[90vh] p-8">
+    <div className="w-full h-[90vh] p-8 m-5">
       <div className="w-full bg-white h-full rounded flex items-center justify-center flex-col">
         <h5 className="text-[20px] pb-4">
           Available Balance: ${availableBalance}
@@ -111,7 +114,7 @@ const WithdrawMoney = () => {
         </div>
       </div>
       {open && (
-        <div className="w-full fixed z-[9999] top-0 left-0 flex items-center justify-center bg-[#0000004e]">
+        <div className="w-full fixed z-[9999] top-0 left-0 flex items-center justify-center bg-[#0000004e] p-5">
           <div
             className={`w-[95%] 800px:w-[50%] bg-white shadow rounded ${
               paymentMethod ? "h-[80vh] overflow-y-scroll" : "h-[unset]"

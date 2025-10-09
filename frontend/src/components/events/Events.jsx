@@ -5,10 +5,13 @@ import { useSelector } from "react-redux";
 
 const Events = () => {
   const { allEvents, isLoading } = useSelector((state) => state.events);
+  const event = allEvents?.[0];
+
   // useEffect(() => {
   //   const data = allEvents && allEvents.find((a, b) => a.soldOut - b.soldOut);
   //   console.log(data);
   // }, [allEvents]);
+
   return (
     <div>
       {!isLoading && (
@@ -17,10 +20,13 @@ const Events = () => {
             <h1>Popular Events</h1>
           </div>
           <div className="w-full grid">
-            {allEvents?.length !== 0 && (
-              <EventCard data={allEvents && allEvents[0]} />
+            {allEvents && allEvents.length > 0 ? (
+              allEvents.map((event) => (
+                <EventCard key={event._id} active={true} data={event} />
+              ))
+            ) : (
+              <h4>No Events have!</h4>
             )}
-            <h4>{allEvents?.length === 0 && "No Events have!"}</h4>
           </div>
         </div>
       )}

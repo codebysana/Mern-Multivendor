@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import styles from "../../styles/style";
-import { IoBagHandleOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { BsCartPlus } from "react-icons/bs";
 import { AiOutlineHeart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromWishlist } from "../../redux/actions/wishlistAction";
-import { backend_url } from "../../server";
+import { removeFromWishlistAsync } from "../../redux/actions/wishlistAction";
 import { addToCart } from "../../redux/actions/cartAction";
 
 const Wishlist = ({ setOpenWishlist }) => {
@@ -15,7 +13,7 @@ const Wishlist = ({ setOpenWishlist }) => {
   const dispatch = useDispatch();
 
   const removeFromWishlistHandler = (data) => {
-    dispatch(removeFromWishlist(data));
+    dispatch(removeFromWishlistAsync(data));
   };
 
   const addToCartHandler = (data) => {
@@ -58,14 +56,14 @@ const Wishlist = ({ setOpenWishlist }) => {
               <br />
               <div className="w-full border-t ">
                 {wishlist &&
-                  wishlist.map((item, index) => {
+                  wishlist.map((i, index) => (
                     <WishlistSingle
                       key={index}
-                      data={item}
+                      data={i}
                       addToCartHandler={addToCartHandler}
                       removeFromWishlistHandler={removeFromWishlistHandler}
-                    />;
-                  })}
+                    />
+                  ))}
               </div>
             </div>
             <div className="px-5 mb-3">
@@ -92,7 +90,7 @@ const WishlistSingle = ({
   removeFromWishlistHandler,
 }) => {
   const [value, setValue] = useState(1);
-  const totalPrice = data?.discountPrice * value;
+  const totalPrice = data?.discountPrice ;
   return (
     <div className="border-b p-4">
       <div className="w-full 800px:flex items-center">
@@ -101,7 +99,7 @@ const WishlistSingle = ({
           onClick={() => removeFromWishlistHandler(data)}
         />
         <img
-          src={`${backend_url}${data?.images[0]}`}
+          src={`${data?.imageUrl[0]?.url}`}
           alt=""
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
         />

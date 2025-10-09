@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "../../styles/style";
 import CountDown from "./CountDown";
-import { backend_url } from "../../server";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -11,8 +10,15 @@ const EventCard = ({ active, data }) => {
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
+  console.log("EventCard rendered, props:", { active, data });
+
+  if (!data) {
+    return <div>No event data available</div>;
+  }
+
   const addToCartHandler = (data) => {
-    const isItemExists = cart && cart.find((i) => i._id === data?._id);
+    const isItemExists =
+      cart && cart.find((i) => (i._id || i.id) === (data?._id || data?.id));
     if (isItemExists) {
       toast.error("Item already in cart!");
     } else {
@@ -26,14 +32,18 @@ const EventCard = ({ active, data }) => {
     }
   };
 
+  console.log(data);
+
   return (
     <div
-      className={`w-full block bg-white rounded-lg ${
-        active ? "unset" : "mb-12"
-      } lg:flex p-2`}
+      className={`w-full block bg-white rounded-lg px-16 py-16 ${active ? "" : "mb-12"}
+       lg:flex p-2`}
     >
       <div className="w-full lg:w-[50%] m-auto">
-        <img src={`${backend_url}${data?.images[0]?.url}`} alt="" />
+        <img
+          src={data?.images?.[0]?.url || "/placeholder.png"}
+          alt={data?.name || "Event"}
+        />
       </div>
       <div className="w-full lg:w-[50%] flex flex-col justify-center">
         <h2 className={`${styles.productTitle}`}>{data?.name}</h2>
@@ -48,13 +58,13 @@ const EventCard = ({ active, data }) => {
             </h5>
           </div>
           <span className="pr-3 font-[400] text-[17px] text-[#44a55e]">
-            120 Sold
+            {data?.soldOut} Sold
           </span>
         </div>
-        <CountDown data={data || { end_date: null }} />
+        <CountDown data={data} />
         <br />
         <div className="flex items-center">
-          <Link to={`/product/${data?._id}?isEvent=true`}>
+          <Link to={`/product/${data?._id || data?.id}?isEvent=true`}>
             <div className={`${styles.button} text-[#fff]`}>See Details</div>
           </Link>
           <div

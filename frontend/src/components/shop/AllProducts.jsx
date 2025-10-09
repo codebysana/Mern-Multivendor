@@ -16,12 +16,14 @@ const AllProducts = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllProductsShop(seller._id));
-  }, [dispatch]);
+    if (seller && seller?._id) {
+      dispatch(getAllProductsShop(seller._id));
+    }
+  }, [dispatch, seller]);
 
-  const handleDelete = (id) => {
-    dispatch(deleteProduct(id));
-    window.location.reload();
+  const handleDelete = async (id) => {
+    await dispatch(deleteProduct(id));
+    dispatch(getAllProductsShop(seller._id));
   };
 
   const columns = [
@@ -88,7 +90,7 @@ const AllProducts = () => {
         name: item.name,
         price: "US$ " + item.discountPrice,
         stock: item.stock,
-        sold: 10,
+        sold: item?.soldOut,
       });
     });
   return (
@@ -100,7 +102,7 @@ const AllProducts = () => {
           <DataGrid
             rows={row}
             columns={columns}
-            pageSizeOptions={10}
+            pageSizeOptions={[10]}
             disableRowSelectionOnClick
           />
         </div>

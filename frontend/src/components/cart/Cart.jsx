@@ -5,9 +5,9 @@ import { IoBagHandleOutline } from "react-icons/io5";
 import { HiOutlineMinus, HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { backend_url } from "../../server";
 import { addToCart, removeFromCart } from "../../redux/actions/cartAction";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const Cart = ({ setOpenCart }) => {
   const { cart } = useSelector((state) => state.cart);
@@ -54,21 +54,20 @@ const Cart = ({ setOpenCart }) => {
               <div className={`${styles.normalFlex} p-4`}>
                 <IoBagHandleOutline size={25} />
                 <h5 className="pl-2 text-[20px] font-[500]">
-                  {cart && cart.length} Items
+                  {cart.length} Items
                 </h5>
               </div>
               {/* cart single items */}
               <br />
-              <div className="w-full border-t ">
-                {cart &&
-                  cart.map((item, index) => {
-                    <CartSingle
-                      key={index}
-                      data={item}
-                      quantityChangeHandler={quantityChangeHandler}
-                      removeFromCartHandler={removeFromCartHandler}
-                    />;
-                  })}
+              <div className="w-full border-t">
+                {cart.map((i, index) => (
+                  <CartSingle
+                    key={index}
+                    data={i}
+                    quantityChangeHandler={quantityChangeHandler}
+                    removeFromCartHandler={removeFromCartHandler}
+                  />
+                ))}
               </div>
             </div>
             <div className="px-5 mb-3">
@@ -77,7 +76,7 @@ const Cart = ({ setOpenCart }) => {
                   className={`h-[45px] flex items-center justify-center w-[100%] bg-[#e44343] rounded-[5px]`}
                 >
                   <h1 className="text-[#fff] text-[18px] font-[600]">
-                    Checkout Now (USD${totalPrice})
+                    Checkout Now (USD ${totalPrice})
                   </h1>
                 </div>
               </Link>
@@ -90,22 +89,28 @@ const Cart = ({ setOpenCart }) => {
 };
 
 const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
-  const [value, setValue] = useState(data?.qty);
+  const [value, setValue] = useState(Number(data?.qty) || 1);
   const totalPrice = data?.discountPrice * value;
 
+  useEffect(() => {
+    setValue(Number(data?.qty) || 1);
+  }, [data?.qty]);
+
   const increment = (data) => {
-    if (data?.stock < value) {
+    const newQty = value + 1;
+    if (data?.stock < newQty) {
       toast.error("Product stock limited!");
     } else {
-      setValue(value + 1);
-      const updateCartData = { ...data, qty: value + 1 };
+      setValue(newQty);
+      const updateCartData = { ...data, qty: newQty, forceUpdate: true };
       quantityChangeHandler(updateCartData);
     }
   };
 
   const decrement = (data) => {
-    setValue(value === 1 ? 1 : value - 1);
-    const updateCartData = { ...data, qty: value === 1 ? 1 : value - 1 };
+    const newQty = value === 1 ? 1 : value - 1;
+    setValue(newQty);
+    const updateCartData = { ...data, qty: newQty, forceUpdate: true };
     quantityChangeHandler(updateCartData);
   };
   return (
@@ -127,7 +132,7 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
           </div>
         </div>
         <img
-          src={`${backend_url}${data?.images[0]}`}
+          src={`${data?.imageUrl[0]?.url}`}
           alt=""
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
         />

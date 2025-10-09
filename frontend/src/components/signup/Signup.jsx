@@ -16,38 +16,49 @@ const Signup = () => {
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
-    setAvatar(file);
+    if (file) {
+      setAvatar(file);
+    }
+  };
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // const config = { headers: { "Content-Type": "multipart/form-data" } };
+    try {
+      if (!avatar) {
+        toast.error("Please upload an avatar");
+        return;
+      }
 
-    if (!avatar) {
-      toast.error("Please upload an avatar");
-      return;
-    }
+      const avatarBase64 = await convertToBase64(avatar);
 
-    const config = {};
+      const data = {
+        name,
+        email,
+        password,
+        avatar: avatarBase64,
+      };
 
-    const formData = new FormData();
-    formData.append("file", avatar);
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("password", password);
-
-    await axios
-      .post(`${server}/user/create-user`, formData, config)
-      .then((res) => {
-        toast.success(res.data?.message);
-        setName("");
-        setEmail("");
-        setPassword("");
-        setAvatar(null);
-      })
-      .catch((error) => {
-        toast.error(error.response?.data?.message || "Something went wrong");
+      const response = await axios.post(`${server}/user/create-user`, data, {
+        withCredentials: true,
       });
+      toast.success(response.data?.message);
+      setName("");
+      setEmail("");
+      setPassword("");
+      setAvatar(null);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong");
+    }
     // console.log(response);
   };
 
@@ -136,12 +147,14 @@ const Signup = () => {
               <label
                 htmlFor="avatar"
                 className="block text-sm font-medium text-gray-700"
-              ></label>
+              >
+                Avatar
+              </label>
               <div className="mt-2 flex items-center">
                 <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
                   {avatar ? (
                     <img
-                      src={URL.createObjectURL(avatar)}
+                      src={avatar}
                       alt="avatar"
                       className="h-full w-full object-cover rounded-full"
                     />

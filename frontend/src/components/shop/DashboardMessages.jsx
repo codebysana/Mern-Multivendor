@@ -98,7 +98,7 @@ const DashboardMessages = () => {
     e.preventDefault();
 
     const message = {
-      sender: seller._id,
+      sender: seller?._id,
       text: newMessage,
       images: 0,
       conversationId: currentChat._id,
@@ -330,7 +330,7 @@ const SellerInbox = ({
       <div className="w-full flex p-3 justify-center items-between bg-slate-200">
         <div className="flex">
           <img
-            src={`${backend_url}${userData?.avatar}`}
+            src={`${backend_url}${userData?.avatar?.url}`}
             alt=""
             className="w-[60px] h-[60px] rounded-full"
           />
@@ -364,7 +364,7 @@ const SellerInbox = ({
                 )}
                 {item.images && (
                   <img
-                    src={`${backend_url}${item.images}`}
+                    src={`${backend_url}${item.images.url}`}
                     alt=""
                     className="w-[300px] h-[300px] object-cover rounded-[10px] mr-2"
                   />

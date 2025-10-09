@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/style";
 import {
   AiFillHeart,
@@ -62,10 +62,11 @@ const ProductDetails = ({ data }) => {
           sellerId,
         })
         .then((res) => {
-          navigate(`/conversation/${res.data?.conversation._id}`);
-        }).catch((error)=>{
-          toast.error(error.response.data?.message)
+          navigate(`/inbox?${res.data?.conversation._id}`);
         })
+        .catch((error) => {
+          toast.error(error.response.data?.message);
+        });
     } else {
       toast.error("Please login to create a conversation");
     }
@@ -86,8 +87,8 @@ const ProductDetails = ({ data }) => {
     if (isItemExists) {
       toast.error("Item already in cart!");
     } else {
-      if (data?.stock < count) {
-        toast.error("Product already in cart!");
+      if (data?.stock < 1) {
+        toast.error("Product stock limited!");
       } else {
         const cartData = { ...data, qty: count };
         dispatch(addToCart(cartData));
@@ -110,38 +111,60 @@ const ProductDetails = ({ data }) => {
 
   const averageRating = totalRatings / totalReviewsLength || 0;
 
+  const images = data?.images?.length
+    ? data.images
+    : data?.imageUrl?.length
+    ? data.imageUrl
+    : [];
+
   return (
     <div className="bg-white ">
-      {data ? (
+      {data && (
         <div className={`${styles.section} w-[90%] 80px:w-[80%]`}>
           <div className="w-full py-5">
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
-                <img
-                  src={`${backend_url}${data && data?.images[select]}`}
-                  alt=""
-                  className="w-[80%]"
-                />
+                {/* main image */}
+                {images.length > 0 ? (
+                  <img
+                    src={
+                      typeof images[select] === "string"
+                        ? images[select]
+                        : images[select]?.url
+                    }
+                    alt={data?.name || "Product"}
+                    className="w-[60%] mx-auto"
+                  />
+                ) : (
+                  <p>No Image Available!</p>
+                )}
                 <div className="w-full flex">
-                  {data &&
-                    data?.images.map((item, index) => (
-                      <div
-                        className={`${
-                          select === 0 ? "border" : "null"
-                        } cursor-pointer`}
-                      >
-                        <img
-                          src={`${backend_url}${item}`}
-                          alt=""
-                          className="h-[200px] mr-3 mt-3"
-                          onClick={() => setSelect(index + 1)}
-                        />
-                      </div>
-                    ))}
+                  {images.length > 0 ? (
+                    images.map((img, index) => {
+                      const thumb = typeof img === "string" ? img : img?.url;
+                      return (
+                        <div
+                          className={`${
+                            select === index ? "border" : ""
+                          } cursor-pointer`}
+                          onClick={() => setSelect(index)}
+                          key={index}
+                        >
+                          <img
+                            src={thumb}
+                            alt={data?.name || "product"}
+                            className="h-[200px] mr-3 mt-3"
+                          />
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p>No Thumbnail Available!</p>
+                  )}
                 </div>
               </div>
-              <div className="w-full 800px:w-[50%]">
-                <div className="w-full 800px:w-[50%] pt-5">
+              <div className="800px:w-[75%]">
+                <div className="w-full 800px:w-[75%] pt-5 text-left">
                   <h1 className={`${styles.productTitle}`}>{data?.name}</h1>
                   <p>{data?.description}</p>
                   <div className="flex pt-3">
@@ -202,8 +225,8 @@ const ProductDetails = ({ data }) => {
                 <div className="flex items-center pt-8">
                   <Link to={`/shop/preview/${data?.shop._id}`}>
                     <img
-                      src={`${backend_url}${data?.shop?.avatar}`}
-                      alt=""
+                      src={`${data?.shop?.avatar?.url}`}
+                      alt="Shop Avatar"
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
                   </Link>
@@ -238,7 +261,7 @@ const ProductDetails = ({ data }) => {
           <br />
           <br />
         </div>
-      ) : null}
+      )}
     </div>
   );
 };
@@ -301,7 +324,7 @@ const ProductDetailsInfo = ({
             data?.reviews.map((item, index) => (
               <div className="w-full flex my-2">
                 <img
-                  src={`${backend_url}/${item.user.avatar}`}
+                  src={`${item.user?.avatar?.url}`}
                   alt=""
                   className="w-[50px] h-[50px] rounded-full "
                 />
@@ -326,14 +349,14 @@ const ProductDetailsInfo = ({
             <Link to={`/shop/preview/${data?.shop._id}`}>
               <div className="flex items-center">
                 <img
-                  src={`${backend_url}${data?.shop?.avatar}`}
+                  src={`${data?.shop?.avatar?.url}`}
                   className="w-[50px] h-[50px] rounded-full"
                   alt=""
                 />
                 <div className="pl-3">
                   <h3 className={`${styles.shop_name}`}>{data?.shop.name}</h3>
                   <h5 className="pb-2 text-[15px] ">
-                    (averageRating/5) Ratings
+                    ({averageRating}/5) Ratings
                   </h5>
                 </div>
               </div>

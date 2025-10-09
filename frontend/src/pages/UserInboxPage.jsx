@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/layout/Header";
 import { backend_url, server } from "../server";
@@ -32,6 +33,7 @@ const UserInboxPage = () => {
         sender: data?.senderId,
         text: data?.text,
         createdAt: Date.now(),
+        images: data?.images || null,
       });
     });
   }, []);
@@ -82,7 +84,8 @@ const UserInboxPage = () => {
     const getMessage = async () => {
       try {
         const response = await axios.get(
-          `${server}/message/get-all-messages/${currentChat?._id}`
+          `${server}/message/get-all-messages/${currentChat?._id}`,
+          { withCredentials: true }
         );
         setMessages(response.data?.messages);
       } catch (error) {
@@ -111,15 +114,13 @@ const UserInboxPage = () => {
     });
     try {
       if (newMessage !== "") {
-        await axios
-          .post(`${server}/message/create-new-message`, message)
-          .then((res) => {
-            setMessages([...messages, res.data?.message]);
-            updateLastMessage();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        const response = await axios.post(
+          `${server}/message/create-new-message`,
+          message
+        );
+
+        setMessages([...messages, response.data?.message]);
+        updateLastMessage();
       }
     } catch (error) {
       console.log(error);
@@ -131,18 +132,15 @@ const UserInboxPage = () => {
       lastMessage: newMessage,
       lastMessageId: user._id,
     });
-    await axios
-      .put(`${server}/conversation/update-last-message/${currentChat._id}`, {
+    await axios.put(
+      `${server}/conversation/update-last-message/${currentChat._id}`,
+      {
         lastMessage: newMessage,
         lastMessageId: user._id,
-      })
-      .then((res) => {
-        console.log(res.data?.conversation);
-        setNewMessage("");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      }
+    );
+
+    setNewMessage("");
   };
 
   const handleImageUpload = async (e) => {
@@ -151,13 +149,13 @@ const UserInboxPage = () => {
     reader.onload = () => {
       if (reader.readyState === 2) {
         setImages(reader.result);
-        imageSendingHandler(reader.res);
+        imageSendingHandler(reader.result);
       }
     };
     reader.readAsDataURL(e.target.files[0]);
   };
 
-  const imageSendingHandler = async (e) => {
+  const imageSendingHandler = async (imageData) => {
     const receiverId = currentChat.members.find(
       (member) => member !== user._id
     );
@@ -165,21 +163,22 @@ const UserInboxPage = () => {
     socketId.emit("sendMessage", {
       senderId: user._id,
       receiverId,
-      images: e,
+      images: imageData,
     });
     try {
-      await axios
-        .post(`${server}/message/create-new-message`, {
-          images: e,
+      const response = await axios.post(
+        `${server}/message/create-new-message`,
+        {
+          images: imageData,
           sender: user._id,
           text: newMessage,
           conversationId: currentChat._id,
-        })
-        .then((res) => {
-          setImages();
-          setMessages([...messages, res.data?.message]);
-          updateLastMessageForImage();
-        });
+        }
+      );
+
+      setImages();
+      setMessages([...messages, response.data?.message]);
+      updateLastMessageForImage();
     } catch (error) {
       console.log(error);
     }
@@ -261,6 +260,7 @@ const MessageList = ({
   const [active, setActive] = useState(0);
   const [user, setUser] = useState([]);
   const navigate = useNavigate();
+
   const handleClick = (id) => {
     navigate(`/inbox?${id}`);
     setOpen(true);
@@ -279,6 +279,7 @@ const MessageList = ({
     };
     getUser();
   }, [data, me]);
+
   return (
     <div
       className={`w-full flex p-3 px-3 ${
@@ -309,7 +310,7 @@ const MessageList = ({
         <p className="text-[16px] text-[#000c]">
           {!loading && data?.lastMessageId !== userData?._id
             ? "You: "
-            : userData?.name.split(" ")[0]}{" "}
+            : userData?.name.split(" ")[0] + ":"}{" "}
           {data?.lastMessage}
         </p>
       </div>
@@ -370,7 +371,7 @@ const SellerInbox = ({
               )}
               {item.images && (
                 <img
-                  src={`${item.images?.url}`}
+                  src={item.images}
                   className="w-[300px] h-[300px] object-cover rounded-[10px] ml-2 mb-2"
                 />
               )}
@@ -395,7 +396,6 @@ const SellerInbox = ({
 
       {/* send message input */}
       <form
-        aria-required={true}
         className="p-3 relative w-full flex justify-between items-center"
         onSubmit={sendMessageHandler}
       >

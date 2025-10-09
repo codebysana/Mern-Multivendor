@@ -13,8 +13,10 @@ const AllRefundOrders = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllOrdersOfShop(seller._id));
-  }, [dispatch]);
+    if (seller && seller?._id) {
+      dispatch(getAllOrdersOfShop(seller._id));
+    }
+  }, [dispatch, seller]);
 
   const refundOrders =
     orders &&
@@ -76,8 +78,8 @@ const AllRefundOrders = () => {
 
   const row = [];
 
-  orders &&
-    orders.forEach((item) => {
+  refundOrders &&
+    refundOrders.forEach((item) => {
       row.push({
         id: item._id,
         itemsQty: item.cart.length,
@@ -95,7 +97,7 @@ const AllRefundOrders = () => {
           <DataGrid
             rows={row}
             columns={columns}
-            pageSizeOptions={10}
+            pageSizeOptions={[10]}
             disableRowSelectionOnClick
           />
         </div>

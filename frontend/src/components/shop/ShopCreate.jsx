@@ -39,10 +39,10 @@ const ShopCreate = () => {
         setName("");
         setEmail("");
         setPassword("");
-        setAvatar();
+        setAvatar(null);
         setAddress("");
-        setZipCode();
-        setPhoneNumber();
+        setZipCode("");
+        setPhoneNumber("");
       })
       .catch((error) => {
         toast.error(error.response?.data?.message);
@@ -76,7 +76,7 @@ const ShopCreate = () => {
                   type="name"
                   name="name"
                   required
-                  value={name}
+                  value={name ?? ""}
                   onChange={(e) => setName(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
@@ -95,7 +95,7 @@ const ShopCreate = () => {
                   type="number"
                   name="phone-number"
                   required
-                  value={phoneNumber}
+                  value={phoneNumber ?? ""}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
@@ -153,7 +153,7 @@ const ShopCreate = () => {
                   type="number"
                   name="zip-code"
                   required
-                  value={zipCode}
+                  value={zipCode ?? ""}
                   onChange={(e) => setZipCode(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
@@ -260,7 +260,7 @@ const ShopCreate = () => {
             </div>
             <div className={`${styles.normalFlex} w-full`}>
               <h4>Already have an account?</h4>
-              <Link to="/shop-login" className="text-blue-600 pl-2">
+              <Link to="/login-shop" className="text-blue-600 pl-2">
                 Sign In
               </Link>
             </div>

@@ -8,20 +8,21 @@ import { Link } from "react-router-dom";
 import { backend_url } from "../../../server";
 
 const DashboardHeader = () => {
-  const seller = useSelector((state) => state.seller);
+  const { seller, isLoading } = useSelector((state) => state.seller);
+
+  if (isLoading || !seller) {
+    return null; // or show a loader
+  }
   return (
     <div className="w-full h-[80px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
       <div>
-        <Link to="/dashboard">
-          <img
-            src="https://shopo.quomodothemes.website/assets/images/logo.svg"
-            alt=""
-          />
+        <Link to="/">
+          <h1>OmniMart</h1>
         </Link>
       </div>
       <div className="flex items-center">
         <div className="flex items-center mr-4">
-          <Link to="/dashboard/coupons" className="800px:block hidden">
+          <Link to="/dashboard-coupons" className="800px:block hidden">
             <AiOutlineGift
               color="#555"
               size={30}
@@ -60,9 +61,9 @@ const DashboardHeader = () => {
               className="mx-5 cursor-pointer "
             />
           </Link>
-          <Link to={`/shop/${seller._id}`}>
+          <Link to={`/shop/${seller?._id}`}>
             <img
-              src={`${backend_url}${seller.avatar}`}
+              src={seller.avatar?.url}
               className="w-[50px] h-[50px] rounded-full object-cover"
               alt=""
             />

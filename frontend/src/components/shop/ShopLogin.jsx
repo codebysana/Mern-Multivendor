@@ -6,6 +6,7 @@ import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useDispatch } from "react-redux";
 
 const ShopLogin = () => {
   const navigate = useNavigate();
@@ -13,27 +14,49 @@ const ShopLogin = () => {
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios
-      .post(
+    // await axios
+    //   .post(
+    //     `${server}/shop/login-shop`,
+    //     {
+    //       email,
+    //       password,
+    //     },
+    //     { withCredentials: true }
+    //   )
+    //   .then((res) => {
+    //     toast.success("Login Successfully");
+    //     navigate("/dashboard");
+    //     // window.location.reload(true);
+    //   })
+    //   .catch((err) => {
+    //     toast.error(err.response?.data?.message);
+    //     // console.log(err);
+    //   });
+
+    try {
+      const res = await axios.post(
         `${server}/shop/login-shop`,
-        {
-          email,
-          password,
-        },
+        { email, password },
         { withCredentials: true }
-      )
-      .then((res) => {
-        toast.success("Login Successfully");
-        navigate("/dashboard");
-        window.location.reload(true);
-      })
-      .catch((err) => {
-        toast.error(err.response.data?.message);
-        // console.log(err);
+      );
+
+      toast.success("Login Successfully");
+
+      // ✅ update redux
+      dispatch({
+        type: "LoadSellerSuccess",
+        payload: res.data.seller, // adjust based on backend response
       });
+
+      // no need to manually navigate here, ShopLoginPage useEffect will do it
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Login failed");
+    }
   };
 
   return (

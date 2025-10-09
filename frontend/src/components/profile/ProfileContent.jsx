@@ -25,10 +25,10 @@ import axios from "axios";
 
 const ProfileContent = ({ active }) => {
   const { user, error, successMessage } = useSelector((state) => state.user);
-  const [name, setName] = useState(user && user.name);
-  const [email, setEmail] = useState(user && user.email);
+  const [name, setName] = useState(user?.name || "");
+  const [email, setEmail] = useState(user?.email || "");
   const [avatar, setAvatar] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState(user && user.phoneNumber);
+  const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber || "");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
@@ -79,7 +79,7 @@ const ProfileContent = ({ active }) => {
           <div className="flex justify-center w-full">
             <div className="relative">
               <img
-                src={`${backend_url}${user?.avatar}`}
+                src={user?.avatar?.url || "/placeholder.png"}
                 className="w-[150px] h-[150px] rounded-full objec-cover border-[3px] border-[#3ad132]"
                 alt=""
               />
@@ -107,7 +107,7 @@ const ProfileContent = ({ active }) => {
                     type="text"
                     className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
                     required
-                    value={name}
+                    value={name || ""}
                     onChange={(e) => setName(e.target.value)}
                   />
                 </div>
@@ -117,7 +117,7 @@ const ProfileContent = ({ active }) => {
                     type="email"
                     className={`${styles.input} !w-[95%] mb-1 800px:mb-0`}
                     required
-                    value={email}
+                    value={email || ""}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
@@ -130,7 +130,7 @@ const ProfileContent = ({ active }) => {
                     type="number"
                     className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
                     required
-                    value={phoneNumber}
+                    value={phoneNumber || ""}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                   />
                 </div>
@@ -140,7 +140,7 @@ const ProfileContent = ({ active }) => {
                     type="password"
                     className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
                     required
-                    value={password}
+                    value={password || ""}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
@@ -149,7 +149,7 @@ const ProfileContent = ({ active }) => {
                 type="submit"
                 value="Update"
                 required
-                className={`w-[250px] h-[40px] border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
+                className={`w-[250px] h-[40px] border-[#3a24db] border text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
               />
             </form>
           </div>
@@ -547,7 +547,7 @@ const Address = () => {
       name: "Home",
     },
     {
-      name: "Offive",
+      name: "Office",
     },
   ];
 
@@ -717,8 +717,11 @@ const Address = () => {
         <h1 className="text-[25px] font-[600] text-[#000000ba] pb-2">
           Addresses
         </h1>
-        <div className={`${styles.buttons} !rounded-md`}>
-          <div className="text-[#fff]">Add New</div>
+        <div
+          className={`${styles.button} !rounded-md`}
+          onClick={() => setOpen(true)}
+        >
+          <span className="text-[#fff]">Add New</span>
         </div>
       </div>
       <br />

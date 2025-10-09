@@ -3,11 +3,9 @@ import { Link } from "react-router-dom";
 import styles from "../../../styles/style";
 import {
   AiFillHeart,
-  AiFillStar,
   AiOutlineEye,
   AiOutlineHeart,
   AiOutlineShoppingCart,
-  AiOutlineStar,
 } from "react-icons/ai";
 import ProductCardDetails from "../productCardDetails/ProductCardDetails";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,8 +24,13 @@ const ProductCard = ({ data, isEvent }) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
+  console.log(data);
+
   useEffect(() => {
-    if (wishlist && wishlist.find((i) => i._id === data?._id)) {
+    if (
+      wishlist &&
+      wishlist.find((i) => i._id === data?._id || i.id === data.id)
+    ) {
       setClick(true);
     } else {
       setClick(false);
@@ -35,12 +38,12 @@ const ProductCard = ({ data, isEvent }) => {
   }, [wishlist]);
 
   const removeFromWishlistHandler = (data) => {
-    setClick(!click);
+    setClick(false);
     dispatch(removeFromWishlist(data));
   };
 
   const addToWishlistHandler = (data) => {
-    setClick(!click);
+    setClick(true);
     dispatch(addToWishlist(data));
   };
 
@@ -50,7 +53,7 @@ const ProductCard = ({ data, isEvent }) => {
       toast.error("Item already in cart!");
     } else {
       if (data?.stock < 1) {
-        toast.error("Product already in cart!");
+        toast.error("Product stock limited!");
       } else {
         const cartData = { ...data, qty: 1 };
         dispatch(addToCart(cartData));
@@ -65,13 +68,13 @@ const ProductCard = ({ data, isEvent }) => {
         <Link
           to={`${
             isEvent === true
-              ? `/product/${data?._id}?isEvent=true`
-              : `/product/${data?._id}`
+              ? `/product/${data?._id || data?.id}?isEvent=true`
+              : `/product/${data?._id || data?.id}`
           }`}
         >
           <img
-            src={data?.imageUrl[0].url}
-            alt=""
+            src={data?.imageUrl[0]?.url}
+            alt={data.name}
             className="w-full h-[170px] object-contain "
           />
         </Link>
@@ -81,12 +84,14 @@ const ProductCard = ({ data, isEvent }) => {
         <Link
           to={`${
             isEvent === true
-              ? `/product/${data?._id}?isEvent=true`
-              : `/product/${data?._id}`
+              ? `/product/${data?._id || data?.id}?isEvent=true`
+              : `/product/${data?._id || data?.id}`
           }`}
         >
           <h4 className="pb-3 font-[500]">
-            {data?.name.length > 40 ? data?.name.slice(0, 40) + "..." : data?.name}
+            {data?.name.length > 40
+              ? data?.name.slice(0, 40) + "..."
+              : data?.name}
           </h4>
           <div className="flex">
             <Ratings rating={data?.ratings} />
@@ -97,11 +102,11 @@ const ProductCard = ({ data, isEvent }) => {
               <h5 className={`${styles.productDiscountPrice}`}>
                 {data?.originalPrice === 0
                   ? data?.originalPrice
-                  : data?.discount_price}
+                  : data?.discountPrice}
                 $
               </h5>
               <h4 className={`${styles.price}`}>
-                {data?.price ? data?.price + " $" : null}
+                {data?.originalPrice ? data?.originalPrice + " $" : null}
               </h4>
             </div>
             <span className="font-[400] text-[17px] text-[#68d284]">
@@ -131,18 +136,18 @@ const ProductCard = ({ data, isEvent }) => {
           <AiOutlineEye
             size={22}
             className="cursor-pointer absolute right-2 top-14"
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpen(true)}
             color="#333"
             title="Quick View"
           />
           <AiOutlineShoppingCart
             size={25}
             className="cursor-pointer absolute right-2 top-24"
-            onClick={() => addToCartHandler(data?._id)}
+            onClick={() => addToCartHandler(data?._id || data?.id)}
             color="#444"
             title="Add to cart"
           />
-          {open ? <ProductCardDetails setOpen={setOpen} data={data} /> : ""}
+          {open && <ProductCardDetails setOpen={setOpen} data={data} />}
         </div>
       </div>
     </>

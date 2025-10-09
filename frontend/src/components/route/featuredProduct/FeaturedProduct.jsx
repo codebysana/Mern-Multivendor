@@ -15,8 +15,8 @@ const FeaturedProduct = () => {
           {allProducts && allProducts.length !== 0 && (
             <>
               {allProducts &&
-                allProducts.map((item, index) => {
-                  <ProductCard data={item} key={index} />;
+                allProducts.map((i, index) => {
+                  <ProductCard data={i} key={index} />;
                 })}
             </>
           )}

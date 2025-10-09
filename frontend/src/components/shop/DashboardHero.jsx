@@ -15,12 +15,17 @@ const DashboardHero = () => {
   const { orders } = useSelector((state) => state.order);
   const { seller } = useSelector((state) => state.seller);
   const { products } = useSelector((state) => state.products);
-  useEffect(() => {
-    dispatch(getAllOrdersOfShop(seller._id));
-    dispatch(getAllProductsShop(seller._id));
-  }, [dispatch]);
 
-  const availableBalance = seller.availableBalance.toFixed(2);
+  useEffect(() => {
+    if (seller?._id) {
+      dispatch(getAllOrdersOfShop(seller._id));
+      dispatch(getAllProductsShop(seller._id));
+    }
+  }, [dispatch, seller]);
+
+  const availableBalance = seller?.availableBalance
+    ? seller.availableBalance.toFixed(2)
+    : "0.00";
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -62,7 +67,7 @@ const DashboardHero = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/order/${params.id}`}>
+            <Link to={`/dashboard/order/${params.id}`}>
               <Button variant="contained">
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -155,7 +160,7 @@ const DashboardHero = () => {
         <DataGrid
           rows={row}
           columns={columns}
-          pageSizeOptions={10}
+          pageSizeOptions={[10]}
           disableRowSelectionOnClick
           autoHeight
         />

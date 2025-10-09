@@ -5,11 +5,15 @@ import { categoriesData } from "../../static/data";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { createProduct } from "../../redux/actions/productAction";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { server } from "../../server";
+
 const CreateProduct = () => {
   const { seller } = useSelector((state) => state.seller);
   const { success, error } = useSelector((state) => state.products);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [name, setName] = useState("");
   const [images, setImages] = useState([]);
   const [description, setDescription] = useState("");
@@ -26,31 +30,80 @@ const CreateProduct = () => {
     if (success) {
       toast.success("Product Created Successfully!");
       navigate("/dashboard");
-      window.location.reload();
+      // window.location.reload();
     }
   }, [error, dispatch, success]);
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     e.preventDefault();
-    let files = Array.from(e.target.files);
-    setImages((prevImages) => [...prevImages, ...files]);
+    const files = Array.from(e.target.files);
+
+    const uploadedImages = [];
+
+    for (let file of files) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "your_upload_preset"); // replace with Cloudinary preset
+      formData.append("cloud_name", "your_cloud_name"); // replace with Cloudinary cloud name
+
+      try {
+        const res = await fetch(
+          "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const data = await res.json();
+        uploadedImages.push({
+          public_id: data.public_id,
+          url: data.secure_url,
+        });
+      } catch (err) {
+        console.error("Cloudinary Upload Error:", err);
+      }
+    }
+
+    setImages(uploadedImages);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    images.forEach((image) => {
-      formData.append("images", image);
+    // const formData = new FormData();
+    // images.forEach((image) => {
+    //   formData.append("images", image);
+    // });
+    // formData.append("name", name);
+    // formData.append("description", description);
+    // formData.append("category", category);
+    // formData.append("tags", tags);
+    // formData.append("originalPrice", originalPrice);
+    // formData.append("discountPrice", discountPrice);
+    // formData.append("stock", stock);
+    // formData.append("shopId", seller._id);
+    // dispatch(createProduct(formData));
+
+    if (!seller?._id) {
+      toast.error("Seller not authenticated!");
+      return;
+    }
+
+    const productData = {
+      name,
+      description,
+      category,
+      tags,
+      originalPrice,
+      discountPrice,
+      stock,
+      shopId: seller._id,
+      images, // base64 array
+    };
+    await axios.post(`${server}/product/create-product`, productData, {
+      withCredentials: true,
     });
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("category", category);
-    formData.append("tags", tags);
-    formData.append("originalPrice", originalPrice);
-    formData.append("discountPrice", discountPrice);
-    formData.append("stock", stock);
-    formData.append("shopId", seller._id);
-    dispatch(createProduct(formData));
+   
   };
 
   return (
@@ -101,9 +154,9 @@ const CreateProduct = () => {
           >
             <option value="Choose a Category">Choose a Category</option>
             {categoriesData &&
-              categoriesData?.map((item) => (
-                <option value={item.title} key={item.title}>
-                  {item.title}
+              categoriesData?.map((i) => (
+                <option value={i.title} key={i.title}>
+                  {i.title}
                 </option>
               ))}
           </select>
@@ -178,10 +231,10 @@ const CreateProduct = () => {
               <AiOutlinePlusCircle size={30} className="mt-3" color="#555" />
             </label>
             {images &&
-              images.map((item) => (
+              images.map((i) => (
                 <img
-                  src={URL.createObjectURL(item)}
-                  key={item}
+                  src={i}
+                  key={i}
                   alt=""
                   className="h-[120px] w-[120px] object-cover m-2 "
                 />
@@ -194,6 +247,7 @@ const CreateProduct = () => {
               value="Create"
               className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
             />
+            Create Product
           </div>
         </div>
         <br />

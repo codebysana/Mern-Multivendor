@@ -13,8 +13,10 @@ const AllOrders = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllOrdersOfShop(seller._id));
-  }, [dispatch]);
+    if (seller && seller._id) {
+      dispatch(getAllOrdersOfShop(seller._id));
+    }
+  }, [dispatch, seller]);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -88,7 +90,7 @@ const AllOrders = () => {
           <DataGrid
             rows={row}
             columns={columns}
-            pageSizeOptions={10}
+            pageSizeOptions={[10]}
             disableRowSelectionOnClick
           />
         </div>

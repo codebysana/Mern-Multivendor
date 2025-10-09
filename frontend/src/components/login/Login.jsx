@@ -6,34 +6,45 @@ import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useDispatch } from "react-redux";
+import { loadUser } from "../../redux/actions/userAction";
+import { useEffect } from "react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios
-      .post(
+    try {
+      const response = await axios.post(
         `${server}/user/login-user`,
         {
           email,
           password,
         },
         { withCredentials: true }
-      )
-      .then((res) => {
-        toast.success("Login Successfully");
-        navigate("/");
-        window.location.reload(true);
-      })
-      .catch((err) => {
-        toast.error(err.response.data?.message);
-        // console.log(err);
+      );
+
+      toast.success("Login Successfully");
+      // save user in redux
+      dispatch({
+        type: "LoadUserSuccess",
+        payload: response.data?.user,
       });
+      navigate("/");
+      // window.location.reload(true);
+    } catch (error) {
+      toast.error(error.response?.data?.message);
+    }
   };
 
   return (
@@ -132,7 +143,7 @@ const Login = () => {
             </div>
             <div className={`${styles.normalFlex} w-full`}>
               <h4>Not have any account?</h4>
-              <Link to="/sign-up" className="text-blue-600 pl-2">
+              <Link to="/signup" className="text-blue-600 pl-2">
                 Sign Up
               </Link>
             </div>

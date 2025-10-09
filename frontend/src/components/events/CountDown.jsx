@@ -22,18 +22,21 @@ const CountDown = ({ data }) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft(data));
+      setTimeLeft(calculateTimeLeft());
     }, 1000);
     if (
+      data?._id &&
       typeof timeLeft.days === "undefined" &&
       typeof timeLeft.hours === "undefined" &&
       typeof timeLeft.minutes === "undefined" &&
       typeof timeLeft.seconds === "undefined"
     ) {
-      axios.delete(`${server}/delete-shop-event/${data?._id}`);
+      axios.delete(
+        `${server}/event/delete-shop-event/${data?._id || data?.id}`
+      );
     }
     return () => clearTimeout(timer);
-  }, []);
+  }, [timeLeft, data?._id]);
 
   const timerComponents = Object.keys(timeLeft).map((interval) => {
     if (!timeLeft[interval]) {
@@ -41,17 +44,16 @@ const CountDown = ({ data }) => {
     }
     return (
       <span className="text-[25px] text-[#475ad2]">
-        {timeLeft[interval]}
-        {interval}{" "}
+        {timeLeft[interval]} {interval}{" "}
       </span>
     );
   });
   return (
-    <div>
+    <div className="">
       {timerComponents.length ? (
         timerComponents
       ) : (
-        <span className="text-[red] text-[25px] ">Time's Up</span>
+        <span className="text-[red] text-[25px] pl-3">Time's Up</span>
       )}
     </div>
   );

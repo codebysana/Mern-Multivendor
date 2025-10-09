@@ -49,7 +49,7 @@ const ShopSettings = () => {
       .put(
         `${server}/shop/update-seller-info`,
         {
-          name,
+          shopName: name,
           description,
           address,
           phoneNumber,
@@ -72,11 +72,7 @@ const ShopSettings = () => {
         <div className="w-full flex items-center justify-center ">
           <div className="relative">
             <img
-              src={
-                avatar
-                  ? URL.createObjectURL(avatar)
-                  : `${backend_url}/${seller.avatar}`
-              }
+              src={seller?.avatar?.url || "/default-avatar.png"}
               alt=""
               className="w-[200px] h-[200px] rounded-full cursor-pointer"
             />
@@ -105,7 +101,7 @@ const ShopSettings = () => {
             </div>
             <input
               type="name"
-              placeholder={`${seller.name}`}
+              placeholder={`${seller?.name}`}
               value={name}
               onChange={(e) => setName(e.target.value)}
               className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}

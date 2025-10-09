@@ -15,6 +15,7 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../../../redux/actions/wishlistAction";
+import { Link } from "react-router-dom";
 
 const ProductCardDetails = ({ data, setOpen }) => {
   const { cart } = useSelector((state) => state.cart);
@@ -22,6 +23,7 @@ const ProductCardDetails = ({ data, setOpen }) => {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(false);
+
   const dispatch = useDispatch();
 
   const handleMessageSubmit = () => {};
@@ -37,14 +39,14 @@ const ProductCardDetails = ({ data, setOpen }) => {
   };
 
   const addToCartHandler = (id) => {
-    const isItemExists = cart && cart.find((i) => i._id === id);
+    const isItemExists = cart.find((i) => (i._id || i.id) === id);
     if (isItemExists) {
       toast.error("Item already in cart!");
     } else {
       if (data?.stock < count) {
-        toast.error("Product already in cart!");
+        toast.error("Product stock limited!");
       } else {
-        const cartData = { ...data, qty: count };
+        const cartData = { ...data, qty: count, _id: data?._id || data?.id };
         dispatch(addToCart(cartData));
         toast.success("Item added to cart successfully!");
       }
@@ -52,25 +54,26 @@ const ProductCardDetails = ({ data, setOpen }) => {
   };
 
   useEffect(() => {
-    if (wishlist && wishlist.find((i) => i._id === data?._id)) {
+    if (wishlist.find((i) => (i._id || i.id) === (data?._id || data?.id))) {
       setClick(true);
     } else {
       setClick(false);
     }
   }, [wishlist]);
 
-  const removeFromWishlistHandler = (data) => {
-    setClick(!click);
+  const removeFromWishlistHandler = () => {
+    setClick(false);
     dispatch(removeFromWishlist(data));
   };
 
-  const addToWishlistHandler = (data) => {
-    setClick(!click);
+  const addToWishlistHandler = () => {
+    setClick(true);
     dispatch(addToWishlist(data));
   };
+
   return (
     <div className="bg-[#fff]">
-      {data ? (
+      {data && (
         <div className="fixed w-full h-screen top-0 left-0 bg-[#00000030] z-40 flex items-center justify-center">
           <div className="w-[90%] 800px:w-[60%] h-[90vh] overflow-scroll 800px:h-[75vh] bg-white rounded-md shadow-sm relative p-4">
             <RxCross1
@@ -79,20 +82,27 @@ const ProductCardDetails = ({ data, setOpen }) => {
               onClick={() => setOpen(false)}
             />
             <div className="block w-full 800px:flex">
-              <div className="w-full 800px:w-[50%]">
-                <img src={data?.imageUrl[0].url} alt="" />
+              <div className="w-full 800px:w-[50%] p-3">
+                <img src={data?.imageUrl[0]?.url} alt="" />
                 <div className="flex">
-                  <img
-                    src={data?.shop.shop_avatar.url}
-                    alt=""
-                    className="w-[50px] h-[50px] rounded-full mr-2"
-                  />
-                  <div className="">
-                    <h3 className={`${styles.shop_name}`}>{data?.shop_name}</h3>
-                    <h5 className="pb-3 text-[15px] ">
-                      ({data?.shop.ratings}) Ratings
-                    </h5>
-                  </div>
+                  <Link
+                    to={`/shop/preview/${data.shop._id}`}
+                    className="flex items-center"
+                  >
+                    <img
+                      src={data?.imageUrl[0]?.url}
+                      alt={data.name}
+                      className="w-[50px] h-[50px] rounded-full mr-2"
+                    />
+                    <div className="">
+                      <h3 className={`${styles.shop_name}`}>
+                        {data?.shop.name}
+                      </h3>
+                      <h5 className="pb-3 text-[15px] ">
+                        ({data?.shop.ratings}) Ratings
+                      </h5>
+                    </div>
+                  </Link>
                 </div>
                 <div
                   className={`${styles.button} bg-[#000] mt-4 rounded-[4px] h-11`}
@@ -103,20 +113,20 @@ const ProductCardDetails = ({ data, setOpen }) => {
                   </span>
                 </div>
                 <h5 className="text-[16px] text-[red] mt-5">
-                  ({data?.total_sell}) Sold Out
+                  ({data?.soldOut || 0}) Sold Out
                 </h5>
               </div>
               <div className="w-full 800px:w-[50%] pt-5 pl-[5px] pr-[5px]">
                 <h1 className={`${styles.productTitle} text-[20px]`}>
                   {data?.name}
                 </h1>
-                <p>{data?.description}</p>
+                <p className="mt-2 mx-2">{data?.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    {data?.discount_price}$
+                    {data?.discountPrice}$
                   </h4>
                   <h3 className={`${styles.price}`}>
-                    {data?.price ? data?.price + "$" : null}
+                    {data?.originalPrice ? data?.originalPrice + "$" : null}
                   </h3>
                 </div>
                 <div className="flex items-center mt-12 justify-between pr-3 ">
@@ -142,7 +152,7 @@ const ProductCardDetails = ({ data, setOpen }) => {
                       <AiFillHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={() => removeFromWishlistHandler(data)}
+                        onClick={removeFromWishlistHandler}
                         color={click ? "red" : "#333"}
                         title="Remove from Wishlist"
                       />
@@ -150,7 +160,7 @@ const ProductCardDetails = ({ data, setOpen }) => {
                       <AiOutlineHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={() => addToWishlistHandler(data)}
+                        onClick={addToWishlistHandler}
                         color={click ? "red" : "#333"}
                         title="Add to Wishlist"
                       />
@@ -169,7 +179,7 @@ const ProductCardDetails = ({ data, setOpen }) => {
             </div>
           </div>
         </div>
-      ) : null}
+      )}
     </div>
   );
 };

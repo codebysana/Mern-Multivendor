@@ -18,9 +18,11 @@ const ShopProfileData = ({ isOwner }) => {
   const { seller } = useSelector((state) => state.seller);
 
   useEffect(() => {
-    dispatch(getAllProductsShop(id));
-    dispatch(getAllEventsShop(seller._id));
-  }, [dispatch]);
+    if (id) {
+      dispatch(getAllProductsShop(id));
+      dispatch(getAllEventsShop(id));
+    }
+  }, [dispatch, id]);
 
   const allReviews =
     products && products.map((product) => product.reviews).flat();
@@ -73,35 +75,40 @@ const ShopProfileData = ({ isOwner }) => {
       {active === 1 && (
         <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
           {products &&
-            products.map((item, index) => (
-              <ProductCard data={item} key={index} isShop={true} />
+            products.map((i, index) => (
+              <ProductCard data={i} key={index} isShop={true} />
             ))}
         </div>
       )}
 
       {active === 2 && (
         <div className="w-full">
-          <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
-            {events &&
-              events.map((item, index) => (
+          {events && events.length > 0 ? (
+            <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
+              {events.map((i, index) => (
                 <ProductCard
-                  data={item}
+                  data={i}
                   key={index}
                   isShop={true}
                   isEvent={true}
                 />
               ))}
-          </div>
+            </div>
+          ) : (
+            <h5 className="w-full text-center py-5 text-[18px]">
+              No Events for this shop!
+            </h5>
+          )}
         </div>
       )}
 
       {active === 3 && (
         <div className="w-full">
-          {allReviews &&
+          {allReviews && allReviews.length > 0 ? (
             allReviews.map((item, index) => (
               <div className="w-full flex my-4">
                 <img
-                  src={`${backend_url}/${item.user.avatar}`}
+                  src={item.user.avatar?.url}
                   className="w-[50px] h-[50px] rounded-full"
                   alt=""
                 />
@@ -112,7 +119,12 @@ const ShopProfileData = ({ isOwner }) => {
                   <p className="text-[#000000a7] text-[14px]">{"2 days ago"}</p>
                 </div>
               </div>
-            ))}
+            ))
+          ) : (
+            <h5 className="w-full text-center py-5 text-[18px]">
+              No Reviews Yet!
+            </h5>
+          )}
         </div>
       )}
 

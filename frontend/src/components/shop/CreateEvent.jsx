@@ -22,22 +22,6 @@ const CreateEvent = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
-  const handleStartDateChange = (e) => {
-    const startDate = new Date(e.target.value);
-    const minEndDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
-    setStartDate(startDate);
-    setEndDate(null);
-    document.getElementById("end-date").min = minEndDate.toISOString.slice(
-      0,
-      10
-    );
-  };
-
-  const handleEndDateChange = (e) => {
-    const endDate = new Date(e.target.value);
-    setEndDate(endDate);
-  };
-
   const today = new Date().toISOString().slice(0, 10);
 
   const minEndDate = startDate
@@ -46,6 +30,21 @@ const CreateEvent = () => {
         .slice(0, 10)
     : today;
 
+  const handleStartDateChange = (e) => {
+    const startDate = new Date(e.target.value);
+    const minEndDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
+    setStartDate(startDate);
+    setEndDate(null);
+    document.getElementById("end-date").min = minEndDate
+      .toISOString()
+      .slice(0, 10);
+  };
+
+  const handleEndDateChange = (e) => {
+    const endDate = new Date(e.target.value);
+    setEndDate(endDate);
+  };
+
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -53,9 +52,9 @@ const CreateEvent = () => {
     if (success) {
       toast.success("Event Created Successfully!");
       navigate("/dashboard-events");
-      window.location.reload();
+      // window.location.reload();
     }
-  }, [error, dispatch, success]);
+  }, [error, dispatch, success, navigate, seller?._id]);
 
   const handleImageChange = (e) => {
     e.preventDefault();
@@ -126,13 +125,13 @@ const CreateEvent = () => {
           <select
             className="w-full mt-2 border h-[35px] rounded-[5px]"
             value={category}
-            onClick={(e) => setCategory(e.target.value)}
+            onChange={(e) => setCategory(e.target.value)}
           >
             <option value="Choose a Category">Choose a Category</option>
             {categoriesData &&
-              categoriesData?.map((item) => (
-                <option value={item.title} key={item.title}>
-                  {item.title}
+              categoriesData?.map((i) => (
+                <option value={i.title} key={i.title}>
+                  {i.title}
                 </option>
               ))}
           </select>
@@ -167,7 +166,7 @@ const CreateEvent = () => {
             Price (with Discount) <span className="text-red-500">*</span>
           </label>
           <input
-            type="text"
+            type="number"
             name="price"
             value={discountPrice}
             className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
@@ -239,10 +238,10 @@ const CreateEvent = () => {
               <AiOutlinePlusCircle size={30} className="mt-3" color="#555" />
             </label>
             {images &&
-              images.map((item) => (
+              images.map((i) => (
                 <img
-                  src={URL.createObjectURL(item)}
-                  key={item}
+                  src={i}
+                  key={i}
                   alt=""
                   className="h-[120px] w-[120px] object-cover m-2 "
                 />

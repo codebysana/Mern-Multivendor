@@ -13,11 +13,15 @@ const AllEvents = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllEventsShop(seller._id));
-  }, [dispatch]);
+    if (seller && seller?._id) {
+      dispatch(getAllEventsShop(seller._id));
+    }
+  }, [dispatch, seller]);
 
   const handleDelete = (id) => {
-    dispatch(deleteEvent(id));
+    dispatch(deleteEvent(id)).then(() => {
+      dispatch(getAllEventsShop(seller._id));
+    });
     window.location.reload();
   };
 
@@ -51,7 +55,7 @@ const AllEvents = () => {
         const product_name = data?.replace(/\s+/g, "-");
         return (
           <>
-            <Link to={`/product/${product_name}`}>
+            <Link to={`/event/${params.id}`}>
               <Button>
                 <AiOutlineEye size={20} />
               </Button>
@@ -99,7 +103,7 @@ const AllEvents = () => {
           <DataGrid
             rows={row}
             columns={columns}
-            pageSizeOptions={10}
+            pageSizeOptions={[10]}
             disableRowSelectionOnClick
           />
         </div>

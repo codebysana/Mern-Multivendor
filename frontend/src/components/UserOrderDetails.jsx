@@ -23,7 +23,7 @@ const UserOrderDetails = () => {
 
   useEffect(() => {
     dispatch(getAllOrdersOfUser(user._id));
-  }, [dispatch]);
+  }, [dispatch, user._id]);
 
   const data = orders && orders.find((item) => item._id === id);
 
@@ -54,11 +54,16 @@ const UserOrderDetails = () => {
 
   const refundHandler = async () => {
     await axios
-      .put(`${server}/order/order-refund/${id}`, {
-        status: "Processing Refund",
-      })
+      .put(
+        `${server}/order/order-refund/${id}`,
+        {
+          status: "Processing Refund",
+        },
+        { withCredentials: true }
+      )
       .then((res) => {
         toast.success(res.data?.success);
+         dispatch(getAllOrdersOfUser(user._id));
       })
       .catch((error) => {
         toast.error(error.response.data?.message);
@@ -89,7 +94,7 @@ const UserOrderDetails = () => {
         data?.cart.map((item, index) => (
           <div className="w-full items-start mb-5">
             <img
-              src={`${backend_url}/${item.images[0]}`}
+              src={`${item.images[0]?.url}`}
               alt=""
               className="w-[80px] h-[80px]"
             />
@@ -99,7 +104,7 @@ const UserOrderDetails = () => {
                 US${item.discountPrice} x {item.qty}
               </h5>
             </div>
-            {!item?.isReviewed && data?.status !== "delivered" ? null : (
+            {!item?.isReviewed && data?.status !== "Delivered" ? null : (
               <div
                 className={`${styles.button} text-[#fff]`}
                 onClick={() => setOpen(true) || setSelectedItem(item)}
@@ -126,7 +131,7 @@ const UserOrderDetails = () => {
             <br />
             <div className="w-full flex">
               <img
-                src={`${backend_url}/${selectedItem?.images[0]}`}
+                src={`${selectedItem?.images[0]?.url}`}
                 alt=""
                 className="w-[80px] h-[80px]"
               />
