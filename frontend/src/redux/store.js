@@ -7,7 +7,7 @@ import { cartReducer } from "./reducers/cartReducer";
 import { wishlistReducer } from "./reducers/wishlistReducer";
 import { orderReducer } from "./reducers/orderReducer";
 
-const Store = configureStore({
+const store = configureStore({
   reducer: {
     user: userReducer,
     seller: sellerReducer,
@@ -19,4 +19,4 @@ const Store = configureStore({
   },
 });
 
-export default Store;
+export default store;
