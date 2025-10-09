@@ -1,7 +1,13 @@
 import { createReducer } from "@reduxjs/toolkit";
+import { eventDataStatic } from "../../static/data";
 
 const initialState = {
-  isLoading: true,
+  isLoading: false,
+  allEvents: [],
+  events: [],
+  event: null,
+  error: null,
+  success: false,
 };
 
 export const eventReducer = createReducer(initialState, (builder) => {
@@ -38,11 +44,15 @@ export const eventReducer = createReducer(initialState, (builder) => {
     })
     .addCase("getAllEventsSuccess", (state, action) => {
       state.isLoading = false;
-      state.allEvents = action.payload;
+      state.allEvents =
+        action.payload && action.payload.length > 0
+          ? action.payload
+          : eventDataStatic;
     })
     .addCase("getAllEventsFail", (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+      state.allEvents = eventDataStatic;
     })
 
     // delete event of a shop

@@ -27,7 +27,7 @@ export const loadSeller = () => async (dispatch) => {
     });
     dispatch({
       type: "LoadSellerSuccess",
-      payload: data?.user,
+      payload: data?.seller,
     });
   } catch (error) {
     dispatch({
@@ -99,7 +99,7 @@ export const deleteUserAddress = (id) => async (dispatch) => {
   try {
     dispatch({ type: "deleteUserAddressRequest" });
     const { data } = await axios.delete(
-      `${server}/user/delete-user-address/:${id}`,
+      `${server}/user/delete-user-address/${id}`,
       {
         withCredentials: true,
       }
@@ -126,10 +126,35 @@ export const getAllUsers = () => async (dispatch) => {
     const { data } = await axios.get(`${server}/user/admin-all-users`, {
       withCredentials: true,
     });
+    dispatch({ type: "getAllUsersSuccess", payload: data?.users });
   } catch (error) {
     dispatch({
       type: "getAllUsersFail",
       payload: error.response?.data?.message || "Unable to delete user",
+    });
+  }
+};
+
+// Logout user
+export const logoutUser = () => async (dispatch) => {
+  try {
+    dispatch({ type: "logoutRequest" });
+
+    const { data } = await axios.get(`${server}/user/logout`, {
+      withCredentials: true,
+    });
+
+    // Clear localStorage
+    localStorage.removeItem("user");
+
+    dispatch({
+      type: "logoutSuccess",
+      payload: data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "logoutFail",
+      payload: error.response?.data?.message || "Logout failed",
     });
   }
 };

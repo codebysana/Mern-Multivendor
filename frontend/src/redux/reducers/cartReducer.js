@@ -12,21 +12,14 @@ export const cartReducer = createReducer(initialState, (builder) => {
       const item = action.payload;
       const isItemExist = state.cart.find((i) => i._id === item._id);
       if (isItemExist) {
-        return {
-          ...state,
-          cart: state.cart.map((i) => (i._id === isItemExist._id ? item : i)),
-        };
+        state.cart = state.cart.map((i) =>
+          i._id === isItemExist._id ? { ...i, qty: item.qty } : i
+        );
       } else {
-        return {
-          ...state,
-          cart: [...state.cart, item],
-        };
+        state.cart.push(item);
       }
     })
     .addCase("removeFromCart", (state, action) => {
-      return {
-        ...state,
-        cart: state.cart.filter((i) => i._id !== action.payload),
-      };
+      state.cart = state.cart.filter((i) => i._id !== action.payload);
     });
 });

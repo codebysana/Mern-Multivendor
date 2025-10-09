@@ -5,6 +5,7 @@ const initialState = {
   seller: null,
   error: null,
   isSeller: false,
+  sellers: [],
   isLoading: true,
 };
 
@@ -16,11 +17,11 @@ export const sellerReducer = createReducer(initialState, (builder) => {
     .addCase("LoadSellerSuccess", (state, action) => {
       state.isSeller = true;
       state.isLoading = false;
-      state.seller = action?.payload;
+      state.seller = action.payload;
     })
     .addCase("LoadSellerFail", (state, action) => {
       state.isLoading = false;
-      state.error = action?.payload || "An error occurred";
+      state.error = action.payload || "An error occurred";
       state.isSeller = false;
     })
     // get all sellers -- admin
@@ -29,12 +30,18 @@ export const sellerReducer = createReducer(initialState, (builder) => {
     })
     .addCase("getAllSellersSuccess", (state, action) => {
       state.isLoading = false;
-      state.sellers = action?.payload;
+      state.sellers = action.payload;
     })
     .addCase("getAllSellersFail", (state, action) => {
       state.isLoading = false;
-      state.error = action?.payload || "An error occurred";
-      
+      state.error = action.payload || "An error occurred";
+    }) 
+    // seller logout
+    .addCase("sellerLogout", (state) => {
+      state.isLoading = false;
+      state.isSeller = false;
+      state.seller = null;
+      state.error = null;
     })
     .addCase("clearErrors", (state) => {
       state.error = null;

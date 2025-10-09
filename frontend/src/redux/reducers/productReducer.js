@@ -1,20 +1,27 @@
 import { createReducer } from "@reduxjs/toolkit";
+import { productData } from "../../static/data";
 
 const initialState = {
   isLoading: true,
+  products: [],
+  allProducts: [],
+  error: null,
+  success: false,
+  product: null,
+  message: "",
 };
 
 export const productReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase("ProductCreationRequest", (state) => {
+    .addCase("createProductRequest", (state) => {
       state.isLoading = true;
     })
-    .addCase("ProductCreationSuccess", (state, action) => {
+    .addCase("createProductSuccess", (state, action) => {
       state.isLoading = false;
       state.product = action.payload;
       state.success = true;
     })
-    .addCase("ProductCreationFail", (state, action) => {
+    .addCase("createProductFail", (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
       state.success = false;
@@ -43,15 +50,32 @@ export const productReducer = createReducer(initialState, (builder) => {
       state.isLoading = false;
       state.error = action.payload;
     })
-    // get all products
+    // get all products admin
     .addCase("getAllProductsRequest", (state) => {
       state.isLoading = true;
     })
     .addCase("getAllProductsSuccess", (state, action) => {
       state.isLoading = false;
-      state.allProducts = action.payload;
+      state.allProducts =
+        action.payload && action.payload.length > 0
+          ? action.payload
+          : productData;
     })
-    .addCase("getAllProductsFailed", (state, action) => {
+    .addCase("getAllProductsFail", (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+      state.allProducts = productData;
+    })
+    // --- Get Single Product ---
+    .addCase("getProductRequest", (state) => {
+      state.isLoading = true;
+      state.product = null; // reset before loading new
+    })
+    .addCase("getProductSuccess", (state, action) => {
+      state.isLoading = false;
+      state.product = action.payload;
+    })
+    .addCase("getProductFail", (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     })

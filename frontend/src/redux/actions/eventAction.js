@@ -3,31 +3,39 @@ const { server } = require("../../server");
 
 export const createEvent = (formData) => async (dispatch) => {
   try {
-    dispatch({ type: "EventCreationRequest" });
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
-    const { data } = await axios.post(`${server}/event/create-event`, {
+    dispatch({ type: "eventCreationRequest" });
+    const config = {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    };
+    const { data } = await axios.post(
+      `${server}/event/create-event`,
       formData,
-      config,
-    });
+      config
+    );
     dispatch({
-      type: "EventCreationSuccess",
+      type: "eventCreationSuccess",
       payload: data?.event,
     });
   } catch (error) {
     dispatch({
-      type: "EventCreationFail",
+      type: "eventCreationFail",
       payload: error.response?.data?.message || "Unable to load user",
     });
   }
 };
 
 // get all Events of a shop
-export const getAllEventsShop = (id) => async (dispatch) => {
+export const getAllEventsShop = (shopId) => async (dispatch) => {
   try {
+    if (!shopId) return;
+
     dispatch({
       type: "getAllEventsShopRequest",
     });
-    const { data } = await axios.get(`${server}/event/get-all-events/${id}`);
+    const { data } = await axios.get(
+      `${server}/event/get-all-events/${shopId}`
+    );
     dispatch({
       type: "getAllEventsShopSuccess",
       payload: data?.events,

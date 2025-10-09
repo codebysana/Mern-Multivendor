@@ -22,3 +22,28 @@ export const getAllSellers = (userId) => async (dispatch) => {
     });
   }
 };
+
+// load seller data --> Login
+export const loadSeller = () => async (dispatch) => {
+  try {
+    dispatch({ type: "LoadSellerRequest" });
+
+    const { data } = await axios.get(`${server}/shop/get-seller`, {
+      withCredentials: true,
+    });
+
+    if (!data.seller) {
+      throw new Error("No seller data received");
+    }
+
+    dispatch({
+      type: "LoadSellerSuccess",
+      payload: data.seller,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LoadSellerFail",
+      payload: error.response?.data?.message || error.message,
+    });
+  }
+};

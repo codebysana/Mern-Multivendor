@@ -1,21 +1,22 @@
 const { default: axios } = require("axios");
 const { server } = require("../../server");
 
-export const createProduct = (formData) => async (dispatch) => {
+export const createProduct = (productData) => async (dispatch) => {
   try {
-    dispatch({ type: "ProductCreationRequest" });
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
-    const { data } = await axios.post(`${server}/product/create-product`, {
-      formData,
-      config,
-    });
+    dispatch({ type: "createProductRequest" });
+
+    const { data } = await axios.post(
+      `${server}/product/create-product`,
+      productData,
+      { withCredentials: true }
+    );
     dispatch({
-      type: "ProductCreationSuccess",
-      payload: data?.product,
+      type: "createProductSuccess",
+      payload: data.product,
     });
   } catch (error) {
     dispatch({
-      type: "ProductCreationFail",
+      type: "createProductFail",
       payload: error.response?.data?.message || "Unable to load user",
     });
   }
@@ -28,7 +29,8 @@ export const getAllProductsShop = (id) => async (dispatch) => {
       type: "getAllProductsShopRequest",
     });
     const { data } = await axios.get(
-      `${server}/product/get-all-products-shop/${id}`
+      `${server}/product/get-all-products-shop/${id}`,
+      { withCredentials: true }
     );
     dispatch({
       type: "getAllProductsShopSuccess",
@@ -74,6 +76,7 @@ export const getAllProducts = () => async (dispatch) => {
     });
 
     const { data } = await axios.get(`${server}/product/get-all-products`);
+
     dispatch({
       type: "getAllProductsSuccess",
       payload: data?.products,
@@ -81,6 +84,24 @@ export const getAllProducts = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "getAllProductsFail",
+      payload: error.response?.data?.message,
+    });
+  }
+};
+
+export const getProductById = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: "getProductRequest" });
+
+    const { data } = await axios.get(`${server}/product/get-product/${id}`);
+
+    dispatch({
+      type: "getProductSuccess",
+      payload: data.product,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getProductFail",
       payload: error.response?.data?.message,
     });
   }
