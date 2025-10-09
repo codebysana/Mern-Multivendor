@@ -26,7 +26,7 @@ const isSellerAuthenticated = catchAsyncErrors(async (req, res, next) => {
   next();
 });
 
-exports.isAdmin = (...roles) => {
+const isAdmin = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       return next(
@@ -37,4 +37,4 @@ exports.isAdmin = (...roles) => {
   };
 };
 
-module.exports = { isAuthenticated, isSellerAuthenticated };
+module.exports = { isAuthenticated, isSellerAuthenticated, isAdmin };
