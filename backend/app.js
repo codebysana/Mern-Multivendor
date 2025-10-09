@@ -14,21 +14,30 @@ const order = require("./controllers/orderController");
 const conversation = require("./controllers/conversationController");
 const message = require("./controllers/messageController");
 const withdraw = require("./controllers/withdrawController");
+require("dotenv").config();
+const path = require("path");
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 app.use(
   cors({
     origin: "http://localhost:3000", // your frontend
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
-app.use("/", express.static("uploads"));
-app.use("/", (req, res) => {
-  res.send("Hello World!");
+
+// serve static files
+app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
+
+app.get("/", (req, res) => {
+  res.send("Backend is running!");
 });
+
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
 // config
