@@ -1,21 +1,21 @@
 const express = require("express");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
+const router = express.Router();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-const router = express.Router();
 router.post(
   "/process",
   catchAsyncErrors(async (req, res, next) => {
     const stripePayment = await stripe.paymentIntents.create({
       amount: req.body.amount,
-      currency: "PKR",
+      currency: "USD",
       metadata: {
-        company: "Becodemy",
+        company: "OmniMart",
       },
     });
     res.status(200).json({
       success: true,
-      clientSecret: stripePayment.clientSecret,
+      client_secret: stripePayment.client_secret,
     });
   })
 );

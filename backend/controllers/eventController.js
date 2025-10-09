@@ -11,30 +11,53 @@ const {
 const { upload } = require("../multer");
 const fs = require("fs");
 const router = express.Router();
+const mongoose = require("mongoose");
+const cloudinary = require("cloudinary");
 
 // create event
 router.post(
   "/create-event",
-  upload.array("images"),
+  isSellerAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const shopId = req.body.shopId;
+      const shopId = req.seller;
       const shop = await Shop.findById(shopId);
       if (!shop) {
         return next(new ErrorHandler("Invalid Shop Id!", 400));
-      } else {
-        const files = req.files;
-        const imageUrls = files.map((file) => `${file.filename}`);
-        const eventData = req.body;
-        eventData.images = imageUrls;
-        eventData.shop = shop;
+      }
 
-        const event = await Event.create(eventData);
-        res.status(201).json({
-          success: true,
-          event,
+      let images = [];
+      if (typeof req.body.images === "string") {
+        images.push(req.body.images);
+      } else {
+        images = req.body.images;
+      }
+
+      const imagesLinks = [];
+
+      for (let i = 0; i < images.length; i++) {
+        const result = await cloudinary.uploader.upload(images[i], {
+          folder: "products",
+        });
+
+        imagesLinks.push({
+          public_id: result.public_id,
+          url: result.secure_url,
         });
       }
+
+      const eventData = {
+        ...req.body,
+        shopId: shop._id,
+        shop: shop,
+        images: imagesLinks,
+      };
+
+      const event = await Event.create(eventData);
+      res.status(201).json({
+        success: true,
+        event,
+      });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
     }
@@ -45,7 +68,7 @@ router.post(
 router.get("/get-all-events", async (req, res, next) => {
   try {
     const events = await Event.find();
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       events,
     });
@@ -60,7 +83,7 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const events = await Event.find({ shopId: req.params.id });
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         events,
       });
@@ -76,18 +99,20 @@ router.delete(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const eventId = req.params.id;
+      // Validate ID
+      if (!eventId || !mongoose.Types.ObjectId.isValid(eventId)) {
+        return next(new ErrorHandler("Invalid or missing event ID", 404));
+      }
+
       const eventData = await Event.findById(eventId);
 
-      eventData.images.forEach((imageUrl) => {
-        const filename = imageUrl;
-        const filePath = `uploads/${filename}`;
-
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-      });
+      for (const img of event.images) {
+        try {
+          await cloudinary.uploader.destroy(img.public_id);
+        } catch (err) {
+          console.warn(" Failed to delete image:", img.public_id);
+        }
+      }
 
       const event = await Event.findByIdAndDelete(eventId);
 
@@ -95,7 +120,7 @@ router.delete(
         return next(new ErrorHandler("Event not found with this id", 500));
       }
 
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         message: "Event deleted successfully",
       });
@@ -115,7 +140,7 @@ router.get(
       const events = await Event.find().sort({
         createdAt: -1,
       });
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         events,
       });

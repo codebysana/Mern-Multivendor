@@ -19,15 +19,17 @@ router.post(
       const { cart, shippingAddress, user, totalPrice, paymentInfo } = req.body;
       // group cart items by shopId
       const shopItemMap = new Map();
+
       for (const item of cart) {
-        const shopId = item.shopId;
+        const shopId = item.shopId.toString();
         if (!shopItemMap.has(shopId)) {
           shopItemMap.set(shopId, []);
         }
-        shopItemMap.get(shopId).push(item);
+        shopItemMap.get(shopId).push({ ...item, shopId });
       }
       // create an order for each shop
       const orders = [];
+
       for (const [shopId, items] of shopItemMap) {
         const order = await Order.create({
           cart: items,
@@ -72,7 +74,11 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const orders = await Order.find({
-        "cart.shopId": req.params.shopId,
+        cart: {
+          $elemMatch: {
+            shopId: req.params.shopId,
+          },
+        },
       }).sort({
         createdAt: -1,
       });
@@ -91,11 +97,11 @@ router.put(
     try {
       const order = await Order.findById(req.params.id);
       if (!order) {
-        return next(new ErrorHandler("Order not found with this id", 400));
+        return next(new ErrorHandler("Order not found with this id", 404));
       }
       if (req.body.status === "Transferred to delivery partner") {
         order.cart.forEach(async (e) => {
-          await updateOrder(e._id, e.qty);
+          await updateProductOrderStock(e.productId, e.qty);
         });
       }
 
@@ -104,22 +110,25 @@ router.put(
         order.deliveredAt = Date.now();
         order.paymentInfo.status = "Succeeded";
         const serviceCharge = order.totalPrice * 0.1;
-        await updateSellerInfo(order.totalPrice - serviceCharge);
+        await updateSellerBalanceInfo(
+          req.seller.id,
+          order.totalPrice - serviceCharge
+        );
       }
       await order.save({ validateBeforeSave: false });
       res.status(200).json({
         success: true,
         order,
       });
-      async function updateOrder(id, qty) {
-        const product = await Product.findById(id);
-        product.stock -= qty;
-        product.soldOut += qty;
+      async function updateProductOrderStock(productId, qty) {
+        const product = await Product.findById(productId);
+        product.stock += qty;
+        product.soldOut -= qty;
 
         await product.save({ validateBeforeSave: false });
       }
-      async function updateSellerInfo(amount) {
-        const seller = await Shop.findById(req.seller.id);
+      async function updateSellerBalanceInfo(sellerId, amount) {
+        const seller = await Shop.findById(sellerId);
         seller.availableBalance = amount;
         await seller.save();
       }
@@ -167,6 +176,7 @@ router.put(
       order.status = req.body.status;
 
       await order.save();
+
       res.status().json({
         success: true,
         message: "Order refund successfully!",
@@ -174,12 +184,12 @@ router.put(
 
       if (req.body.status === "Redund Success") {
         order.cart.forEach(async (e) => {
-          await updateOrder(e._id, e.qty);
+          await updateProductOrderStock(e.productId, e.qty);
         });
       }
 
-      async function updateOrder(id, qty) {
-        const product = await Product.findById(id);
+      async function updateProductOrderStock(productId, qty) {
+        const product = await Product.findById(productId);
 
         product.stock += qty;
         product.soldOut -= qty;
@@ -211,6 +221,27 @@ router.get(
       return next(new ErrorHandler(error.message, 500));
     }
   })
+);
+
+// Delete an order (Admin only)
+router.delete(
+  "/admin-delete-order/:id",
+  isAuthenticated,
+  isAdmin("admin"),
+  async (req, res) => {
+    try {
+      const order = await Order.findById(req.params.id);
+
+      await Order.findByIdAndDelete(req.params.id);
+
+      res.status(200).json({
+        success: true,
+        message: "Order deleted successfully",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
 );
 
 module.exports = router;

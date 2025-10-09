@@ -3,34 +3,35 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/errorHandler");
 const router = express.Router();
 const Message = require("../models/messageModel");
-const { upload } = require("../multer");
-const path = require("path");
+const cloudinary = require("cloudinary");
 
 // create new message
 router.post(
   "/create-new-message",
-  upload.single("images"),
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const messageData = req.body;
+      const { sender, text, conversationId, images } = req.body;
+      let imageData;
 
-      if (req.file) {
-        const filename = req.file.filename;
-        const fileUrl = path.join(filename);
-        messageData.images = fileUrl;
+      if (images) {
+        const uploaded = await cloudinary.uploader.upload(images, {
+          folder: "messages",
+        });
+
+        imageData = {
+          public_id: uploaded.public_id,
+          url: uploaded.secure_url,
+        };
       }
 
-      messageData.conversationId = req.body.conversationId;
-      messageData.sender = req.body.sender;
-      messageData.text = req.body.text;
-
       const message = new Message({
-        conversationId: messageData.conversationId,
-        text: messageData.text,
-        sender: messageData.sender,
-        images: messageData.images ? messageData.images : undefined,
+        conversationId,
+        text: text || undefined,
+        sender,
+        images: imageData || undefined,
       });
       await message.save();
+
       res.status(201).json({
         success: true,
         message,
@@ -48,7 +49,7 @@ router.get(
     try {
       const messages = await Message.find({
         conversationId: req.params.id,
-      });
+      }).sort({ createdAt: 1 });
       res.status(201).json({
         success: true,
         messages,

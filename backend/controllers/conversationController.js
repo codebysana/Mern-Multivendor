@@ -3,15 +3,20 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/errorHandler");
 const router = express.Router();
 const Conversation = require("../models/conversationModel");
-const { isSellerAuthenticated, isAuthenticated } = require("../middleware/auth");
+const {
+  isSellerAuthenticated,
+  isAuthenticated,
+} = require("../middleware/auth");
 
 // create a new conversation
 router.post(
   "/create-new-conversation",
-  catchAsyncErrors(async (req, resizeBy, next) => {
+  catchAsyncErrors(async (req, res, next) => {
     try {
       const { groupTitle, userId, sellerId } = req.body;
+
       const isConversationExists = await Conversation.findOne({ groupTitle });
+
       if (isConversationExists) {
         const conversation = isConversationExists;
         res.status(201).json({
@@ -84,10 +89,14 @@ router.put(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const { lastMessage, lastMessageId } = req.body;
-      const conversation = await Conversation.findByIdAndUpdate(req.params.id, {
-        lastMessage,
-        lastMessageId,
-      });
+      const conversation = await Conversation.findByIdAndUpdate(
+        req.params.id,
+        {
+          lastMessage,
+          lastMessageId,
+        },
+        { new: true }
+      );
       res.status(201).json({
         success: true,
         conversation,

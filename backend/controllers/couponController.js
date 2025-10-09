@@ -12,7 +12,7 @@ router.post(
   isSellerAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const isCouponExists = await Coupon.find({ name: req.body.name });
+      const isCouponExists = await Coupon.findOne({ name: req.body.name });
       if (isCouponExists) {
         return next(new ErrorHandler("Coupon code already exists!", 400));
       }
@@ -30,8 +30,8 @@ router.post(
 // get all coupons code of a shop
 router.get("/get-coupon/:id", async (req, res, next) => {
   try {
-    const couponCode = await Coupon.find({ id: req.params.id });
-    res.status(201).json({
+    const couponCode = await Coupon.find({ shopId: req.params.id });
+    res.status(200).json({
       success: true,
       couponCode,
     });
@@ -40,7 +40,7 @@ router.get("/get-coupon/:id", async (req, res, next) => {
   }
 });
 
-// get coupon code value bu its name
+// get coupon code value by its name
 router.get(
   "/get-coupon-value/:name",
   catchAsyncErrors(async (req, res, next) => {
@@ -55,5 +55,20 @@ router.get(
     }
   })
 );
+
+router.delete("/delete-coupon/:id", isSellerAuthenticated, async (req, res) => {
+  try {
+    const coupon = await CouponCode.findById(req.params.id);
+
+    await coupon.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: "Coupon code deleted successfully!",
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
 
 module.exports = router;
