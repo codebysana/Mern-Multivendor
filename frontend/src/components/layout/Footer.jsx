@@ -36,11 +36,7 @@ const Footer = () => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:px-8 px-5 py-16 sm:text-center">
         <ul className="px-5 text-center sm:text-start flex sm:block flex-col items-center">
-          <img
-            src="https://shopo.quomodothemes.website/assets/images/logo.svg"
-            alt="logo"
-            style={{ filter: "brightness[0] invert(1)" }}
-          />
+           <h1 className="text-[30px] font-[600] font-Poppins tracking-wider">OmniMart</h1>
           <br />
           <p>The home and elements needed to create beautiful products.</p>
           <div className="flex items-center mt-[15px]">

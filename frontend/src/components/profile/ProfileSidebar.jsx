@@ -17,8 +17,8 @@ import { useSelector } from "react-redux";
 const ProfileSidebar = ({ active, setActive }) => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
-  const logoutHandler = () => {
-    axios
+  const logoutHandler = async () => {
+    await axios
       .get(`${server}/user/logout`, { withCredentials: true })
       .then((res) => {
         toast.success(res.data.message);

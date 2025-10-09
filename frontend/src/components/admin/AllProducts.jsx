@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteProduct,
-  getAllProductsShop,
-} from "../../redux/actions/productAction";
 import { Link } from "react-router-dom";
-import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
+import { AiOutlineEye } from "react-icons/ai";
 import { Button } from "@mui/material";
-import Loader from "../layout/Loader";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { server } from "../../server";
@@ -73,7 +67,7 @@ const AllProducts = () => {
         name: item.name,
         price: "US$ " + item.discountPrice,
         stock: item.stock,
-        sold: 10,
+        sold: item?.soldOut,
       });
     });
   return (
