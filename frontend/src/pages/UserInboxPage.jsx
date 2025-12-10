@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
 import styles from "../styles/style";
 import { RiGalleryFill } from "react-icons/ri";
-const ENDPOINT = "https://multivendor-socket-nu.vercel.app/";
+const ENDPOINT = "https://multivendor-socket-production.up.railway.app";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 const UserInboxPage = () => {
