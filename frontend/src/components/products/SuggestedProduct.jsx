@@ -27,7 +27,7 @@ const SuggestedProduct = ({ data }) => {
           <div className="grid grid-cols-1 gap-[20px] mmd:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl:gap-[30px]">
             {productData &&
               productData.map((i, index) => {
-                <ProductCard data={i} key={index} />;
+                <ProductCard data={i} key={i?._id || i?.id} />;
               })}
           </div>
         </div>

@@ -28,7 +28,7 @@ const BestDeals = () => {
             <p>{error}</p>
           ) : data.length !== 0 ? (
             data.map((i, index) => (
-              <ProductCard data={i} key={index} />
+              <ProductCard data={i} key={i?._id || i?.id} />
             ))
           ) : (
             <p>No products available</p>
