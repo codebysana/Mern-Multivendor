@@ -6,18 +6,18 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 function ActivationPage() {
-  const { activationToken } = useParams();
+  const { token } = useParams();
   const [error, setError] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (activationToken) {
+    if (token) {
       const activationEmail = async () => {
         try {
           const res = await axios.post(
             `${server}/user/activation`,
             {
-              activationToken,
+              token,
             },
             { withCredentials: true }
           );
@@ -34,7 +34,7 @@ function ActivationPage() {
       activationEmail();
       //   sendRequest();
     }
-  }, [activationToken, navigate]);
+  }, [token, navigate]);
   return (
     <div
       style={{
