@@ -19,8 +19,8 @@ export const navItems = [
     url: "/events",
   },
   {
-    title: "FAQ",
-    url: "/faq",
+    title: "FAQs",
+    url: "/faqs",
   },
 ];
 
@@ -557,8 +557,8 @@ export const footerCompanyLinks = [
 
 export const footerSupportLinks = [
   {
-    name: "FAQ",
-    link: "/faq",
+    name: "FAQs",
+    link: "/faqs",
   },
   {
     name: "Reviews",
