@@ -1,4 +1,4 @@
-const { default: axios } = require("axios");
+import axios from "axios";
 const { server } = require("../../server");
 
 export const loadUser = () => async (dispatch) => {
@@ -22,8 +22,11 @@ export const loadUser = () => async (dispatch) => {
 export const loadSeller = () => async (dispatch) => {
   try {
     dispatch({ type: "LoadSellerRequest" });
+    const token = localStorage.getItem("shop_token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
     const { data } = await axios.get(`${server}/shop/get-seller`, {
       withCredentials: true,
+      headers,
     });
     dispatch({
       type: "LoadSellerSuccess",
@@ -52,7 +55,7 @@ export const updateUserInformation =
         },
         {
           withCredentials: true,
-        }
+        },
       );
       dispatch({
         type: "updateUserInfoSuccess",
@@ -77,7 +80,7 @@ export const updateUserAddress =
         { country, city, address1, address2, zipCode, addressType },
         {
           withCredentials: true,
-        }
+        },
       );
       dispatch({
         type: "updateUserAddressSuccess",
@@ -102,7 +105,7 @@ export const deleteUserAddress = (id) => async (dispatch) => {
       `${server}/user/delete-user-address/${id}`,
       {
         withCredentials: true,
-      }
+      },
     );
     dispatch({
       type: "deleteUserAddressSuccess",

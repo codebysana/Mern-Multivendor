@@ -2,7 +2,9 @@ import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
   data: [],
-  seller: null,
+  seller: localStorage.getItem("seller")
+    ? JSON.parse(localStorage.getItem("seller"))
+    : null,
   error: null,
   isSeller: false,
   sellers: [],
