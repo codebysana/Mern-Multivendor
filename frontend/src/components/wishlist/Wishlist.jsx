@@ -13,7 +13,8 @@ const Wishlist = ({ setOpenWishlist }) => {
   const dispatch = useDispatch();
 
   const removeFromWishlistHandler = (data) => {
-    dispatch(removeFromWishlistAsync(data));
+    const id = data?._id || data?.id;
+    dispatch(removeFromWishlistAsync(id));
   };
 
   const addToCartHandler = (data) => {
