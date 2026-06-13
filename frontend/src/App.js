@@ -97,7 +97,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/sign-up" element={<SignupPage />} />
         <Route
-          path="/activation/:activationToken"
+          path="/activation/:token"
           element={<ActivationPage />}
         />
         <Route
