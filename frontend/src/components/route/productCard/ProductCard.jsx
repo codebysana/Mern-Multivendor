@@ -10,8 +10,8 @@ import {
 import ProductCardDetails from "../productCardDetails/ProductCardDetails";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addToWishlist,
-  removeFromWishlist,
+  addToWishlistAsync,
+  removeFromWishlistAsync,
 } from "../../../redux/actions/wishlistAction";
 import { toast } from "react-toastify";
 import { addToCart } from "../../../redux/actions/cartAction";
@@ -27,35 +27,42 @@ const ProductCard = ({ data, isEvent }) => {
   console.log(data);
 
   useEffect(() => {
-    if (
+    if (!data) return;
+
+    const exists =
       wishlist &&
-      wishlist.find((i) => i._id === data?._id || i.id === data.id)
-    ) {
-      setClick(true);
-    } else {
+      wishlist.find(
+        (i) => (i._id && data._id && i._id === data._id) || (i.id && data.id && i.id === data.id)
+      );
+
+    setClick(Boolean(exists));
+  }, [wishlist, data]);
+
+  const toggleWishlistHandler = (data) => {
+    const id = data?._id || data?.id;
+    const exists = wishlist && wishlist.find((i) => (i._id || i.id) === id);
+    if (exists) {
+      dispatch(removeFromWishlistAsync(id));
       setClick(false);
+    } else {
+      dispatch(addToWishlistAsync(data));
+      setClick(true);
     }
-  }, [wishlist]);
-
-  const removeFromWishlistHandler = (data) => {
-    setClick(false);
-    dispatch(removeFromWishlist(data));
-  };
-
-  const addToWishlistHandler = (data) => {
-    setClick(true);
-    dispatch(addToWishlist(data));
   };
 
   const addToCartHandler = (id) => {
-    const isItemExists = cart && cart.find((i) => i._id === id);
+    const isItemExists = cart && cart.find((i) => i._id === id || i.id === id);
     if (isItemExists) {
-      toast.error("Item already in cart!");
+      // increase quantity by 1
+      const updatedQty = (isItemExists.qty || 1) + 1;
+      const cartData = { ...isItemExists, qty: updatedQty };
+      dispatch(addToCart(cartData));
+      toast.success("Item quantity updated in cart!");
     } else {
       if (data?.stock < 1) {
         toast.error("Product stock limited!");
       } else {
-        const cartData = { ...data, qty: 1 };
+        const cartData = { ...data, qty: 1, _id: data?._id || data?.id };
         dispatch(addToCart(cartData));
         toast.success("Item added to cart successfully!");
       }
@@ -120,16 +127,16 @@ const ProductCard = ({ data, isEvent }) => {
             <AiFillHeart
               size={22}
               className="cursor-pointer absolute right-2 top-5"
-              onClick={() => removeFromWishlistHandler(data)}
-              color={click ? "red" : "#333"}
+              onClick={() => toggleWishlistHandler(data)}
+              color={"red"}
               title="Remove from Wishlist"
             />
           ) : (
             <AiOutlineHeart
               size={22}
               className="cursor-pointer absolute right-2 top-5"
-              onClick={() => addToWishlistHandler(data)}
-              color={click ? "red" : "#333"}
+              onClick={() => toggleWishlistHandler(data)}
+              color={"#333"}
               title="Add to Wishlist"
             />
           )}

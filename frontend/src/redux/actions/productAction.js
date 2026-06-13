@@ -1,14 +1,17 @@
-const { default: axios } = require("axios");
+import axios from "axios";
 const { server } = require("../../server");
 
 export const createProduct = (productData) => async (dispatch) => {
   try {
     dispatch({ type: "createProductRequest" });
 
+    const token = localStorage.getItem("shop_token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const config = { withCredentials: true, headers };
     const { data } = await axios.post(
       `${server}/product/create-product`,
       productData,
-      { withCredentials: true }
+      config,
     );
     dispatch({
       type: "createProductSuccess",
@@ -28,18 +31,25 @@ export const getAllProductsShop = (id) => async (dispatch) => {
     dispatch({
       type: "getAllProductsShopRequest",
     });
+    const token = localStorage.getItem("shop_token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
     const { data } = await axios.get(
       `${server}/product/get-all-products-shop/${id}`,
-      { withCredentials: true }
+      { withCredentials: true, headers },
     );
     dispatch({
       type: "getAllProductsShopSuccess",
       payload: data?.products,
     });
+    console.log("GET ALL PRODUCTS RESPONSE:", data);
   } catch (error) {
+    console.log("FULL ERROR:", error);
+    console.log("RESPONSE:", error.response);
+    console.log("MESSAGE:", error.message);
     dispatch({
       type: "getAllProductsShopFail",
       payload: error.response?.data?.message || "Unable to load user",
+      error: error.response?.data,
     });
   }
 };
@@ -50,11 +60,14 @@ export const deleteProduct = (id) => async (dispatch) => {
     dispatch({
       type: "deleteProductRequest",
     });
+    const token = localStorage.getItem("shop_token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
     const { data } = await axios.delete(
       `${server}/product/delete-shop-product/${id}`,
       {
         withCredentials: true,
-      }
+        headers,
+      },
     );
     dispatch({
       type: "deleteProductSuccess",

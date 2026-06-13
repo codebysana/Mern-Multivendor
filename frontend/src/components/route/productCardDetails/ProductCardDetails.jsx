@@ -12,8 +12,8 @@ import { toast } from "react-toastify";
 import { addToCart } from "../../../redux/actions/cartAction";
 import { useDispatch } from "react-redux";
 import {
-  addToWishlist,
-  removeFromWishlist,
+  addToWishlistAsync,
+  removeFromWishlistAsync,
 } from "../../../redux/actions/wishlistAction";
 import { Link } from "react-router-dom";
 
@@ -54,21 +54,24 @@ const ProductCardDetails = ({ data, setOpen }) => {
   };
 
   useEffect(() => {
+    if (!data) return;
     if (wishlist.find((i) => (i._id || i.id) === (data?._id || data?.id))) {
       setClick(true);
     } else {
       setClick(false);
     }
-  }, [wishlist]);
+  }, [wishlist, data]);
 
-  const removeFromWishlistHandler = () => {
-    setClick(false);
-    dispatch(removeFromWishlist(data));
-  };
-
-  const addToWishlistHandler = () => {
-    setClick(true);
-    dispatch(addToWishlist(data));
+  const toggleWishlistHandler = () => {
+    const id = data?._id || data?.id;
+    const exists = wishlist && wishlist.find((i) => (i._id || i.id) === id);
+    if (exists) {
+      dispatch(removeFromWishlistAsync(id));
+      setClick(false);
+    } else {
+      dispatch(addToWishlistAsync(data));
+      setClick(true);
+    }
   };
 
   return (
@@ -152,16 +155,16 @@ const ProductCardDetails = ({ data, setOpen }) => {
                       <AiFillHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={removeFromWishlistHandler}
-                        color={click ? "red" : "#333"}
+                        onClick={toggleWishlistHandler}
+                        color={"red"}
                         title="Remove from Wishlist"
                       />
                     ) : (
                       <AiOutlineHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={addToWishlistHandler}
-                        color={click ? "red" : "#333"}
+                        onClick={toggleWishlistHandler}
+                        color={"#333"}
                         title="Add to Wishlist"
                       />
                     )}

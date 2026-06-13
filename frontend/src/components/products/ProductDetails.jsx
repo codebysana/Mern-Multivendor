@@ -11,8 +11,8 @@ import { backend_url, server } from "../../server";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsShop } from "../../redux/actions/productAction";
 import {
-  addToWishlist,
-  removeFromWishlist,
+  addToWishlistAsync,
+  removeFromWishlistAsync,
 } from "../../redux/actions/wishlistAction";
 import { toast } from "react-toastify";
 import { addToCart } from "../../redux/actions/cartAction";
@@ -72,14 +72,16 @@ const ProductDetails = ({ data }) => {
     }
   };
 
-  const removeFromWishlistHandler = (data) => {
-    setClick(!click);
-    dispatch(removeFromWishlist(data));
-  };
-
-  const addToWishlistHandler = (data) => {
-    setClick(!click);
-    dispatch(addToWishlist(data));
+  const toggleWishlistHandler = (data) => {
+    const id = data?._id || data?.id;
+    const exists = wishlist && wishlist.find((i) => (i._id || i.id) === id);
+    if (exists) {
+      dispatch(removeFromWishlistAsync(id));
+      setClick(false);
+    } else {
+      dispatch(addToWishlistAsync(data));
+      setClick(true);
+    }
   };
 
   const addToCartHandler = (id) => {
@@ -198,16 +200,16 @@ const ProductDetails = ({ data }) => {
                         <AiFillHeart
                           size={30}
                           className="cursor-pointer"
-                          onClick={() => removeFromWishlistHandler(data)}
-                          color={click ? "red" : "#333"}
+                          onClick={() => toggleWishlistHandler(data)}
+                          color={"red"}
                           title="Remove from Wishlist"
                         />
                       ) : (
                         <AiOutlineHeart
                           size={30}
                           className="cursor-pointer"
-                          onClick={() => addToWishlistHandler(data)}
-                          color={click ? "red" : "#333"}
+                          onClick={() => toggleWishlistHandler(data)}
+                          color={"#333"}
                           title="Add to Wishlist"
                         />
                       )}
