@@ -46,7 +46,7 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const couponCode = await Coupon.findOne({ name: req.params.name });
-      req.status(200).json({
+      res.status(200).json({
         success: true,
         couponCode,
       });
@@ -58,7 +58,7 @@ router.get(
 
 router.delete("/delete-coupon/:id", isSellerAuthenticated, async (req, res) => {
   try {
-    const coupon = await CouponCode.findById(req.params.id);
+    const coupon = await Coupon.findById(req.params.id);
 
     await coupon.deleteOne();
 
