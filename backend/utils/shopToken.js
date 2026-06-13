@@ -7,11 +7,15 @@ const sendShopToken = (user, statusCode, res) => {
     expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
   };
 
-  res.status(statusCode).cookie("seller_token", token.options).json({
-    success: true,
-    user,
-    token,
-  });
+  // set cookie value to the token string and apply cookie options
+  res
+    .status(statusCode)
+    .cookie("seller_token", token, { httpOnly: true, ...options })
+    .json({
+      success: true,
+      user,
+      token,
+    });
 };
 
 module.exports = sendShopToken;

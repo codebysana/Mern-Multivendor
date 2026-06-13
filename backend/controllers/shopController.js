@@ -13,13 +13,21 @@ const {
 const ErrorHandler = require("../utils/errorHandler");
 const Shop = require("../models/shopModel");
 const cloudinary = require("cloudinary");
+const { upload } = require("../multer");
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink);
 const sendShopToken = require("../utils/shopToken");
 
 //create shop
-router.post("/create-shop", async (req, res, next) => {
-  try {
-    const { shopName, email, password, avatar, address, phoneNumber, zipCode } =
-      req.body;
+router.post("/create-shop", upload.single("file"), async (req, res, next) => {
+    try {
+      // support both JSON body (avatar as base64) and multipart/form-data (file)
+      const shopName = req.body.shopName || req.body.name;
+      const email = (req.body.email || "").toLowerCase();
+    const password = req.body.password;
+    const address = req.body.address;
+    const phoneNumber = req.body.phoneNumber;
+    const zipCode = req.body.zipCode;
 
     if (!shopName || !email || !password) {
       return res
@@ -33,7 +41,16 @@ router.post("/create-shop", async (req, res, next) => {
       return next(new ErrorHandler("Seller already exists", 400));
     }
 
-    const cloudinaryImage = await cloudinary.uploader.upload(avatar, {
+    // determine avatar source
+    let avatarSource = req.body.avatar; // could be base64 string
+    let tempFilePath;
+    if (!avatarSource && req.file && req.file.path) {
+      // multer saved a temp file at req.file.path
+      tempFilePath = req.file.path;
+      avatarSource = tempFilePath;
+    }
+
+    const cloudinaryImage = await cloudinary.uploader.upload(avatarSource, {
       folder: "shopAvatars",
     });
 
@@ -58,6 +75,14 @@ router.post("/create-shop", async (req, res, next) => {
         subject: "Activate your shop",
         message: `Hello ${seller.shopName}, please click on the link to activate your shop: ${activationUrl}`,
       });
+      // cleanup temp upload if present
+      if (tempFilePath) {
+        try {
+          await unlinkFile(tempFilePath);
+        } catch (err) {
+          console.warn("Failed to remove temp file:", tempFilePath, err.message);
+        }
+      }
 
       return res.status(201).json({
         success: true,
@@ -89,10 +114,10 @@ router.post(
           .json({ success: false, message: "No activation token provided" });
       }
 
-      const newSeller = jwt.verify(
-        activationToken,
-        process.env.ACTIVATION_SECRET
-      );
+        const newSeller = jwt.verify(
+          activationToken,
+          process.env.ACTIVATION_SECRET
+        );
 
       if (!newSeller) {
         return next(new ErrorHandler("Invalid Token", 400));
@@ -101,12 +126,13 @@ router.post(
       // const { shopName, email, password, avatar, zipCode, address, phoneNumber } =
       //   newSeller;
 
-      let isSellerExists = await Shop.findOne({ email: newSeller.email });
+      // normalize email before checking/creating
+      let isSellerExists = await Shop.findOne({ email: (newSeller.email || "").toLowerCase() });
 
       if (isSellerExists) {
         return next(new ErrorHandler("Seller already exists", 400));
       }
-      const savedSeller = await Shop.create(newSeller);
+      const savedSeller = await Shop.create({ ...newSeller, email: (newSeller.email || "").toLowerCase() });
       await savedSeller.save();
 
       console.log("✅ User saved:", savedSeller);
@@ -127,9 +153,11 @@ router.post(
       if (!email || !password) {
         return next(new ErrorHandler("Please provide all the fields", 400));
       }
-      const shop = await Shop.findOne({ email }).select("+password");
+      const emailLower = (email || "").toLowerCase();
+      const shop = await Shop.findOne({ email: emailLower }).select("+password");
 
       if (!shop) {
+        console.warn(`Login attempt: shop not found for email=${emailLower}`);
         return next(new ErrorHandler("Shop doesn't exists", 400));
       }
       const isPasswordValid = await shop.comparePassword(password);
