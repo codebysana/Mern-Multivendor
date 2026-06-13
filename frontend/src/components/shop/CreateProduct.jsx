@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { categoriesData } from "../../static/data";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { createProduct } from "../../redux/actions/productAction";
+import { createProduct, getAllProductsShop } from "../../redux/actions/productAction";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { server } from "../../server";
@@ -37,35 +37,8 @@ const CreateProduct = () => {
   const handleImageChange = async (e) => {
     e.preventDefault();
     const files = Array.from(e.target.files);
-
-    const uploadedImages = [];
-
-    for (let file of files) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "your_upload_preset"); // replace with Cloudinary preset
-      formData.append("cloud_name", "your_cloud_name"); // replace with Cloudinary cloud name
-
-      try {
-        const res = await fetch(
-          "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-
-        const data = await res.json();
-        uploadedImages.push({
-          public_id: data.public_id,
-          url: data.secure_url,
-        });
-      } catch (err) {
-        console.error("Cloudinary Upload Error:", err);
-      }
-    }
-
-    setImages(uploadedImages);
+    // keep File objects and upload server-side
+    setImages(files);
   };
 
   const handleSubmit = async (e) => {
@@ -89,6 +62,38 @@ const CreateProduct = () => {
       return;
     }
 
+    // if images contain File objects, send as multipart/form-data so server handles uploads
+    let useFormData = images && images.length > 0 && images[0] instanceof File;
+
+    const token = localStorage.getItem("shop_token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+    if (useFormData) {
+      const formData = new FormData();
+      images.forEach((image) => formData.append("images", image));
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("category", category);
+      formData.append("tags", tags);
+      formData.append("originalPrice", originalPrice);
+      formData.append("discountPrice", discountPrice);
+      formData.append("stock", stock);
+      formData.append("shopId", seller._id);
+
+      try {
+        const res = await axios.post(`${server}/product/create-product`, formData, {
+          withCredentials: true,
+          headers,
+        });
+        toast.success(res.data?.message || "Product created successfully");
+        if (seller?._id) dispatch(getAllProductsShop(seller._id));
+        navigate("/dashboard");
+      } catch (err) {
+        toast.error(err.response?.data?.message || "Failed to create product");
+      }
+      return;
+    }
+
     const productData = {
       name,
       description,
@@ -98,11 +103,23 @@ const CreateProduct = () => {
       discountPrice,
       stock,
       shopId: seller._id,
-      images, // base64 array
+      images, // objects with url/public_id
     };
-    await axios.post(`${server}/product/create-product`, productData, {
-      withCredentials: true,
-    });
+    try {
+      const res = await axios.post(`${server}/product/create-product`, productData, {
+        withCredentials: true,
+        headers,
+      });
+      toast.success(res.data?.message || "Product created successfully");
+      // refresh seller products so dashboard shows the new product
+      if (seller?._id) {
+        dispatch(getAllProductsShop(seller._id));
+      }
+      navigate("/dashboard");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to create product");
+      return;
+    }
    
   };
 
@@ -150,7 +167,7 @@ const CreateProduct = () => {
           <select
             className="w-full mt-2 border h-[35px] rounded-[5px]"
             value={category}
-            onClick={(e) => setCategory(e.target.value)}
+            onChange={(e) => setCategory(e.target.value)}
           >
             <option value="Choose a Category">Choose a Category</option>
             {categoriesData &&
@@ -233,8 +250,8 @@ const CreateProduct = () => {
             {images &&
               images.map((i) => (
                 <img
-                  src={i}
-                  key={i}
+                  src={i.url || i}
+                  key={i.public_id || i.url || Math.random()}
                   alt=""
                   className="h-[120px] w-[120px] object-cover m-2 "
                 />

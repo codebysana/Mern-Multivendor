@@ -15,6 +15,8 @@ const AllProducts = () => {
   const { seller } = useSelector((state) => state.seller);
   const dispatch = useDispatch();
 
+  console.log("AllProducts - Redux products:", products);
+
   useEffect(() => {
     if (seller && seller?._id) {
       dispatch(getAllProductsShop(seller._id));
@@ -105,6 +107,10 @@ const AllProducts = () => {
             pageSizeOptions={[10]}
             disableRowSelectionOnClick
           />
+          {/* Debug: show raw products JSON when empty for troubleshooting */}
+          {products && products.length === 0 && (
+            <pre className="p-2 text-xs">{JSON.stringify(products, null, 2)}</pre>
+          )}
         </div>
       )}
     </>
