@@ -64,6 +64,14 @@ const CreateEvent = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!seller?._id) {
+      toast.error("Seller not authenticated!");
+      return;
+    }
+    if (!startDate || !endDate) {
+      toast.error("Please select start and end dates");
+      return;
+    }
     const formData = new FormData();
     images.forEach((image) => {
       formData.append("images", image);
