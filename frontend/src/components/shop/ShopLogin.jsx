@@ -47,10 +47,15 @@ const ShopLogin = () => {
 
       toast.success("Login Successfully");
 
-      // ✅ update redux
+      // store seller token for API requests (used when cookies aren't available)
+      if (res.data && res.data.token) {
+        localStorage.setItem("shop_token", res.data.token);
+      }
+
+      // dispatch LoadSellerSuccess locally and then ensure state by fetching from server
       dispatch({
         type: "LoadSellerSuccess",
-        payload: res.data.seller, // adjust based on backend response
+        payload: res.data.seller || res.data.user || null,
       });
 
       // no need to manually navigate here, ShopLoginPage useEffect will do it
