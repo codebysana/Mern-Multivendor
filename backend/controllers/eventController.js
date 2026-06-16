@@ -15,35 +15,71 @@ const mongoose = require("mongoose");
 const cloudinary = require("cloudinary");
 
 // create event
+// create event
 router.post(
   "/create-event",
   isSellerAuthenticated,
+  upload.array("images"),
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const shopId = req.seller;
+      const shopId = req.seller._id;
       const shop = await Shop.findById(shopId);
       if (!shop) {
         return next(new ErrorHandler("Invalid Shop Id!", 400));
       }
 
-      let images = [];
-      if (typeof req.body.images === "string") {
-        images.push(req.body.images);
-      } else {
-        images = req.body.images;
+      // collect images from multipart files and/or request body
+      let imagesFromBody = [];
+      if (req.body && req.body.images) {
+        try {
+          imagesFromBody = typeof req.body.images === "string" ? JSON.parse(req.body.images) : req.body.images;
+        } catch (e) {
+          imagesFromBody = req.body.images;
+        }
       }
+
+      const files = req.files || [];
 
       const imagesLinks = [];
 
-      for (let i = 0; i < images.length; i++) {
-        const result = await cloudinary.uploader.upload(images[i], {
-          folder: "products",
-        });
+      // handle files uploaded via multipart/form-data
+      if (files && files.length) {
+        for (const file of files) {
+          try {
+            const result = await cloudinary.uploader.upload(file.path, { folder: "products" });
+            imagesLinks.push({ public_id: result.public_id, url: result.secure_url });
+          } catch (uploadErr) {
+            console.error("Cloudinary upload failed for file:", uploadErr.message || uploadErr);
+          } finally {
+            try {
+              fs.unlinkSync(file.path);
+            } catch (e) {
+              // ignore
+            }
+          }
+        }
+      }
 
-        imagesLinks.push({
-          public_id: result.public_id,
-          url: result.secure_url,
-        });
+      // handle images sent in the request body (base64 strings, urls, or already-uploaded objects)
+      if (imagesFromBody && Array.isArray(imagesFromBody)) {
+        for (const img of imagesFromBody) {
+          try {
+            if (!img) continue;
+            if (typeof img === "object" && img.public_id && img.url) {
+              imagesLinks.push({ public_id: img.public_id, url: img.url });
+              continue;
+            }
+            if (typeof img === "string") {
+              const result = await cloudinary.uploader.upload(img, { folder: "products" });
+              imagesLinks.push({ public_id: result.public_id, url: result.secure_url });
+              continue;
+            }
+            // skip invalid entries
+            console.warn("Skipping invalid image entry for event:", img);
+          } catch (uploadErr) {
+            console.error("Cloudinary upload failed for image:", uploadErr.message || uploadErr);
+          }
+        }
       }
 
       const eventData = {
@@ -59,21 +95,31 @@ router.post(
         event,
       });
     } catch (error) {
-      return next(new ErrorHandler(error, 400));
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
+
+// debug
+router.get("/debug-events", async (req, res) => {
+  const events = await Event.find({});
+  console.log("TOTAL EVENTS:", events.length);
+  console.log("SAMPLE EVENT:", events[0]);
+
+  res.json({ events });
+});
 
 // get all events
 router.get("/get-all-events", async (req, res, next) => {
   try {
     const events = await Event.find();
+    console.log("ALL EVENTS:", events);
     res.status(200).json({
       success: true,
       events,
     });
   } catch (error) {
-    return next(new ErrorHandler(error, 400));
+    return next(new ErrorHandler(error.message, 500));
   }
 });
 
@@ -83,12 +129,13 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const events = await Event.find({ shopId: req.params.id });
+      console.log("SHOP EVENTS:", events);
       res.status(200).json({
         success: true,
         events,
       });
     } catch (error) {
-      return next(new ErrorHandler(error, 400));
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
@@ -105,8 +152,12 @@ router.delete(
       }
 
       const eventData = await Event.findById(eventId);
+      if (!eventData) {
+        return next(new ErrorHandler("Event not found", 404));
+      }
 
-      for (const img of event.images) {
+      // delete images safely
+      for (const img of eventData.images) {
         try {
           await cloudinary.uploader.destroy(img.public_id);
         } catch (err) {
@@ -125,7 +176,7 @@ router.delete(
         message: "Event deleted successfully",
       });
     } catch (error) {
-      return next(new ErrorHandler(error, 400));
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );

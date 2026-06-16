@@ -52,9 +52,10 @@ const eventSchema = new mongoose.Schema({
     },
   ],
   shopId: {
-    type: String,
-    required: true,
-  },
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Shop",
+  required: true,
+},
   shop: { type: Object, required: true },
   soldOut: {
     type: Number,

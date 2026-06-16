@@ -1,18 +1,17 @@
-const { default: axios } = require("axios");
+import axios from "axios";
 const { server } = require("../../server");
 
 export const createEvent = (formData) => async (dispatch) => {
   try {
     dispatch({ type: "eventCreationRequest" });
+    const token = localStorage.getItem("shop_token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
     const config = {
-      headers: { "Content-Type": "application/json" },
+      // let axios set Content-Type for FormData (includes boundary)
+      headers,
       withCredentials: true,
     };
-    const { data } = await axios.post(
-      `${server}/event/create-event`,
-      formData,
-      config
-    );
+    const { data } = await axios.post(`${server}/event/create-event`, formData, config);
     dispatch({
       type: "eventCreationSuccess",
       payload: data?.event,
@@ -54,12 +53,12 @@ export const deleteEvent = (id) => async (dispatch) => {
     dispatch({
       type: "deleteEventRequest",
     });
-    const { data } = await axios.delete(
-      `${server}/event/delete-shop-event/${id}`,
-      {
-        withCredentials: true,
-      }
-    );
+    const token = localStorage.getItem("shop_token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const { data } = await axios.delete(`${server}/event/delete-shop-event/${id}`, {
+      withCredentials: true,
+      headers,
+    });
     dispatch({
       type: "deleteEventSuccess",
       payload: data?.message,
