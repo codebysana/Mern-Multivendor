@@ -131,9 +131,9 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
             <HiOutlineMinus size={16} color="#7d879c" />
           </div>
         </div>
-        <img
-          src={`${data?.imageUrl[0]?.url}`}
-          alt=""
+              <img
+                src={data?.images?.[0]?.url || data?.imageUrl?.[0]?.url || null}
+          alt={data?.name || ""}
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
         />
         <div className="pl-[5px] ">

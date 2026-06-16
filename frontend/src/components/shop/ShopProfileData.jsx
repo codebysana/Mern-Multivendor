@@ -75,8 +75,8 @@ const ShopProfileData = ({ isOwner }) => {
       {active === 1 && (
         <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
           {products &&
-            products.map((i, index) => (
-              <ProductCard data={i} key={index} isShop={true} />
+            products.map((i) => (
+              <ProductCard data={i} key={i?._id || i?.id} isShop={true} />
             ))}
         </div>
       )}
@@ -85,10 +85,10 @@ const ShopProfileData = ({ isOwner }) => {
         <div className="w-full">
           {events && events.length > 0 ? (
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
-              {events.map((i, index) => (
+              {events.map((i) => (
                 <ProductCard
                   data={i}
-                  key={index}
+                  key={i?._id || i?.id}
                   isShop={true}
                   isEvent={true}
                 />
