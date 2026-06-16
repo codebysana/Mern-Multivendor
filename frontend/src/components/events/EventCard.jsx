@@ -39,13 +39,13 @@ const EventCard = ({ active, data }) => {
       className={`w-full block bg-white rounded-lg px-16 py-16 ${active ? "" : "mb-12"}
        lg:flex p-2`}
     >
-      <div className="w-full lg:w-[50%] m-auto">
+      <div className="w-[full] lg:w-[40%] m-auto">
         <img
           src={data?.images?.[0]?.url || "/placeholder.png"}
           alt={data?.name || "Event"}
         />
       </div>
-      <div className="w-full lg:w-[50%] flex flex-col justify-center">
+      <div className="w-full lg:w-[50%] flex flex-col justify-start">
         <h2 className={`${styles.productTitle}`}>{data?.name}</h2>
         <p>{data?.description}</p>
         <div className="flex py-2 justify-between">
@@ -53,11 +53,11 @@ const EventCard = ({ active, data }) => {
             <h5 className="font-[500] text-[10px] text-[#d55b45] pr-3 line-through">
               {data?.originalPrice}$
             </h5>
-            <h5 className="font-bold text-[20px] tex-[#333] font-Roboto">
+            <h5 className="font-bold text-[20px] text-[#152942] font-Roboto">
               {data?.discountPrice}$
             </h5>
           </div>
-          <span className="pr-3 font-[400] text-[17px] text-[#44a55e]">
+          <span className="pr-3 font-[400] text-[17px] text-[#40B884]">
             {data?.soldOut} Sold
           </span>
         </div>

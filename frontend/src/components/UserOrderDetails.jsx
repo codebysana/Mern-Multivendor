@@ -80,10 +80,10 @@ const UserOrderDetails = () => {
       </div>
 
       <div className="w-full flex items-center justify-between pt-6">
-        <h5 className="text-[#00000084]">
+        <h5 className="text-[#152942]">
           Order Id: <span>{data?._id?.slice(0, 8)}</span>
         </h5>
-        <h5 className="text-[#00000084]">
+        <h5 className="text-[#152942]">
           Placed on: <span>{data?.createdAt?.slice(0, 10)}</span>
         </h5>
       </div>
@@ -100,7 +100,7 @@ const UserOrderDetails = () => {
             />
             <div className="w-full">
               <h5 className="pl-3 text-[20px]">{item.name}</h5>
-              <h5 className="pl-3 text-[20px] text-[#00000091]">
+              <h5 className="pl-3 text-[20px] text-[#3e3e3eba]">
                 US${item.discountPrice} x {item.qty}
               </h5>
             </div>
@@ -116,7 +116,7 @@ const UserOrderDetails = () => {
         ))}
       {/* review popup */}
       {open && (
-        <div className="w-full fixed top-0 left-0 h-screen bg-[#0005] z-50 flex items-center justify-center">
+        <div className="w-full fixed top-0 left-0 h-screen bg-[#152942] z-50 flex items-center justify-center">
           <div className="w-[50%] h-min bg-[#fff] shadow rounded-md p-3">
             <div className="w-full flex justify-end p-3">
               <RxCross1
@@ -166,7 +166,7 @@ const UserOrderDetails = () => {
                     size={25}
                     onClick={() => setRating(i)}
                   />
-                )
+                ),
               )}
             </div>
             <br />
@@ -174,7 +174,7 @@ const UserOrderDetails = () => {
               <label className="block text-[20px] font-[500] ">
                 Write a Comment
               </label>
-              <span className="ml-1 font-[400] text-[16px] text-[#00000052]">
+              <span className="ml-1 font-[400] text-[16px] text-[#3e3e3eba]">
                 (optional)
               </span>
               <textarea

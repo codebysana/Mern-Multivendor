@@ -22,7 +22,7 @@ const Faqs = () => {
 
   return (
     <div className={`${styles.section} my-8`}>
-      <h2 className="text-3xl font-bold text-gray-900 mb-8">FAQs</h2>
+      <h2 className="text-3xl font-bold text-[#152942] mb-8">FAQs</h2>
       <div className="mx-auto space-y-4">
         {/* Single Faq */}
         <div className="border-b border-gray-200 pb-4">
@@ -30,12 +30,12 @@ const Faqs = () => {
             className="flex items-center justify-between w-full"
             onClick={() => toggleTab(1)}
           >
-            <span className="text-lg font-medium text-gray-900">
+            <span className="text-lg font-medium text-[#152942]">
               What is your return policy?
             </span>
             {activeTab === 1 ? (
               <svg
-                className="h-6 w-6 text-gray-500"
+                className="h-6 w-6 text-[#40B884]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -49,7 +49,7 @@ const Faqs = () => {
               </svg>
             ) : (
               <svg
-                className="h-6 w-6 text-gray-500"
+                className="h-6 w-6 text-[#152942]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -65,11 +65,11 @@ const Faqs = () => {
           </button>
           {activeTab === 1 && (
             <div className="mt-4">
-              <p className="text-base text-gray-500">
+              <p className="text-base text-[#3e3e3eba]">
                 If you're not satisfied with your purchase, we accept returns
                 within 30 days of delivery. To initiate a return, please email
-                us at support@myecommercestore.com with your order number and
-                a brief explanation of why you're returning the item.
+                us at support@myecommercestore.com with your order number and a
+                brief explanation of why you're returning the item.
               </p>
             </div>
           )}
@@ -80,12 +80,12 @@ const Faqs = () => {
             className="flex items-center justify-between w-full"
             onClick={() => toggleTab(2)}
           >
-            <span className="text-lg font-medium text-gray-900">
+            <span className="text-lg font-medium text-[#152942]">
               How do i track my order?
             </span>
             {activeTab === 2 ? (
               <svg
-                className="h-6 w-6 text-gray-500"
+                className="h-6 w-6 text-[#40B884]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -99,7 +99,7 @@ const Faqs = () => {
               </svg>
             ) : (
               <svg
-                className="h-6 w-6 text-gray-500"
+                className="h-6 w-6 text-[#152942]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -115,10 +115,10 @@ const Faqs = () => {
           </button>
           {activeTab === 2 && (
             <div className="mt-4">
-              <p className="text-base text-gray-500">
+              <p className="text-base text-[#3e3e3eba]">
                 You can track your order by clicking the tracking link in your
-                shipping confirmation email, or by logging into your account
-                on our website and viewing the order details.
+                shipping confirmation email, or by logging into your account on
+                our website and viewing the order details.
               </p>
             </div>
           )}
@@ -129,12 +129,12 @@ const Faqs = () => {
             className="flex items-center justify-between w-full"
             onClick={() => toggleTab(3)}
           >
-            <span className="text-lg font-medium text-gray-900">
+            <span className="text-lg font-medium text-[#152942]">
               How do I contact customer support?
             </span>
             {activeTab === 3 ? (
               <svg
-                className="h-6 w-6 text-gray-500"
+                className="h-6 w-6 text-[#40B884]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -148,7 +148,7 @@ const Faqs = () => {
               </svg>
             ) : (
               <svg
-                className="h-6 w-6 text-gray-500"
+                className="h-6 w-6 text-[#152942]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -164,10 +164,10 @@ const Faqs = () => {
           </button>
           {activeTab === 3 && (
             <div className="mt-4">
-              <p className="text-base text-gray-500">
+              <p className="text-base text-[#3e3e3eba]">
                 You can contact our customer support team by emailing us at
-                support@eshop.com, or by calling us at (555) 555-555 between
-                the hours of 9am and 5pm EST, Monday to Friday.
+                support@eshop.com, or by calling us at (555) 555-555 between the
+                hours of 9am and 5pm EST, Monday to Friday.
               </p>
             </div>
           )}
@@ -178,12 +178,12 @@ const Faqs = () => {
             className="flex items-center justify-between w-full"
             onClick={() => toggleTab(4)}
           >
-            <span className="text-lg font-medium text-gray-900">
+            <span className="text-lg font-medium text-[#152942]">
               Can I change or cancel my order?
             </span>
             {activeTab === 4 ? (
               <svg
-                className="h-6 w-6 text-gray-500"
+                className="h-6 w-6 text-[#40B884]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -197,7 +197,7 @@ const Faqs = () => {
               </svg>
             ) : (
               <svg
-                className="h-6 w-6 text-gray-500"
+                className="h-6 w-6 text-[#152942]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -213,11 +213,11 @@ const Faqs = () => {
           </button>
           {activeTab === 4 && (
             <div className="mt-4">
-              <p className="text-base text-gray-500">
-                Unfortunately, once an order has been placed, we are not able
-                to make changes or cancellations. If you no longer want the
-                items you've ordered, you can return them for a refund within
-                30 days of delivery.
+              <p className="text-base text-[#3e3e3eba]">
+                Unfortunately, once an order has been placed, we are not able to
+                make changes or cancellations. If you no longer want the items
+                you've ordered, you can return them for a refund within 30 days
+                of delivery.
               </p>
             </div>
           )}
@@ -228,12 +228,12 @@ const Faqs = () => {
             className="flex items-center justify-between w-full"
             onClick={() => toggleTab(5)}
           >
-            <span className="text-lg font-medium text-gray-900">
+            <span className="text-lg font-medium text-[#152942]">
               Do you offer international shipping?
             </span>
             {activeTab === 5 ? (
               <svg
-                className="h-6 w-6 text-gray-500"
+                className="h-6 w-6 text-[#40B884]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -247,7 +247,7 @@ const Faqs = () => {
               </svg>
             ) : (
               <svg
-                className="h-6 w-6 text-gray-500"
+                className="h-6 w-6 text-[#152942]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -263,7 +263,7 @@ const Faqs = () => {
           </button>
           {activeTab === 5 && (
             <div className="mt-4">
-              <p className="text-base text-gray-500">
+              <p className="text-base text-[#3e3e3eba]">
                 Currently, we only offer shipping within the United States.
               </p>
             </div>
@@ -275,12 +275,12 @@ const Faqs = () => {
             className="flex items-center justify-between w-full"
             onClick={() => toggleTab(6)}
           >
-            <span className="text-lg font-medium text-gray-900">
+            <span className="text-lg font-medium text-[#152942]">
               What payment methods do you accept?
             </span>
             {activeTab === 6 ? (
               <svg
-                className="h-6 w-6 text-gray-500"
+                className="h-6 w-6 text-[#40B884]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -294,7 +294,7 @@ const Faqs = () => {
               </svg>
             ) : (
               <svg
-                className="h-6 w-6 text-gray-500"
+                className="h-6 w-6 text-[#152942]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -310,7 +310,7 @@ const Faqs = () => {
           </button>
           {activeTab === 6 && (
             <div className="mt-4">
-              <p className="text-base text-gray-500">
+              <p className="text-base text-[#3e3e3eba]">
                 We accept Visa, MasterCard, PayPal payment methods. Also, we
                 have a cash on delivery system.
               </p>

@@ -45,8 +45,8 @@ const Navbar = ({ active }) => {
                 to={item.url}
                 className={`${
                   active === index + 1
-                    ? "text-[#17dd1f]"
-                    : "text-black 800px:text-[#fff] pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer "
+                    ? "text-[#40B884]"
+                    : "text-[#152942] 800px:text-[#fff] pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer "
                 }`}
               >
                 {item.title}

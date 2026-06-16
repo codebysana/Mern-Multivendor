@@ -51,7 +51,7 @@ const Categories = () => {
                     className="w-[120px] object-cover"
                   />{" "}
                   {/* <h5 className={`text-[18px] leading-[1.3] `}>{i.title}</h5> */}
-                  <h5 className="text-lg font-medium text-gray-700">
+                  <h5 className="text-base font-medium text-[#152942]">
                     {i.title}
                   </h5>
                 </div>
