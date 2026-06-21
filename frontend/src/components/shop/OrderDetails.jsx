@@ -72,10 +72,10 @@ const OrderDetails = () => {
       </div>
 
       <div className="w-full flex items-center justify-between pt-6">
-        <h5 className="text-[#00000084]">
+        <h5 className="text-[#3e3e3eba]">
           Order Id: <span>{data?._id?.slice(0, 8)}</span>
         </h5>
-        <h5 className="text-[#00000084]">
+        <h5 className="text-[#3e3e3eba]">
           Placed on: <span>{data?.createdAt?.slice(0, 10)}</span>
         </h5>
       </div>
@@ -92,7 +92,7 @@ const OrderDetails = () => {
             />
             <div className="w-full">
               <h5 className="pl-3 text-[20px]">{item.name}</h5>
-              <h5 className="pl-3 text-[20px] text-[#00000091]">
+              <h5 className="pl-3 text-[20px] text-[#3e3e3eba]">
                 US${item.discountPrice} x {item.qty}
               </h5>
             </div>

@@ -76,31 +76,31 @@ const ShopInfo = ({ isOwner }) => {
               />
             </div>
             <h3 className="text-center py-2 text-[20px]">{data?.shopName}</h3>
-            <p className="text-[16px] text-[#000000a6] p-[10px] flex items-center">
+            <p className="text-[16px] text-[#3e3e3eba] p-[10px] flex items-center">
               {data?.description}
             </p>
           </div>
           <div className="p-3">
             <h5 className="font-[600]">Address</h5>
-            <h4 className="text-[#000000a6] ">{data?.address}</h4>
+            <h4 className="text-[#3e3e3eba] ">{data?.address}</h4>
           </div>
           <div className="p-3">
             <h5 className="font-[600]">Phone Number</h5>
-            <h4 className="text-[#000000a6] ">{data?.phoneNumber}</h4>
+            <h4 className="text-[#3e3e3eba] ">{data?.phoneNumber}</h4>
           </div>
           <div className="p-3">
             <h5 className="font-[600]">Total Products</h5>
-            <h4 className="text-[#000000a6] ">
+            <h4 className="text-[#3e3e3eba] ">
               {products && products?.length}
             </h4>
           </div>
           <div className="p-3">
             <h5 className="font-[600]">Shop Ratings</h5>
-            <h4 className="text-[#000000a6] ">{averageRating}/5</h4>
+            <h4 className="text-[#3e3e3eba] ">{averageRating}/5</h4>
           </div>
           <div className="p-3">
             <h5 className="font-[600]">Joined On</h5>
-            <h4 className="text-[#000000a6] ">
+            <h4 className="text-[#3e3e3eba] ">
               {data?.createdAt?.slice(0, 10)}
             </h4>
           </div>

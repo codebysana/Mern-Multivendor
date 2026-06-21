@@ -34,7 +34,7 @@ const ShopProfileData = ({ isOwner }) => {
           <div className="flex items-center" onClick={() => setActive(1)}>
             <h5
               className={`font-[600] text-[20px] ${
-                active === 1 ? "text-red-500" : "text-[#333]"
+                active === 1 ? "text-red-500" : "text-[#3e3e3eba]"
               } cursor-pointer pr-[20px]`}
             >
               Shop Products
@@ -43,7 +43,7 @@ const ShopProfileData = ({ isOwner }) => {
           <div className="flex items-center" onClick={() => setActive(2)}>
             <h5
               className={`font-[600] text-[20px] ${
-                active === 2 ? "text-red-500" : "text-[#333]"
+                active === 2 ? "text-red-500" : "text-[#3e3e3eba]"
               } cursor-pointer pr-[20px]`}
             >
               Running Events
@@ -52,7 +52,7 @@ const ShopProfileData = ({ isOwner }) => {
           <div className="flex items-center" onClick={() => setActive(3)}>
             <h5
               className={`font-[600] text-[20px] ${
-                active === 3 ? "text-red-500" : "text-[#333]"
+                active === 3 ? "text-red-500" : "text-[#3e3e3eba]"
               } cursor-pointer pr-[20px]`}
             >
               Shop Reviews
@@ -115,8 +115,8 @@ const ShopProfileData = ({ isOwner }) => {
                 <div className=" w-full  pl-3">
                   <h1 className="font-[600] pr-2">{item.user.name}</h1>
                   <Ratings rating={item.rating} />
-                  <p className="font-[400] text-[#000000a7]">{item?.comment}</p>
-                  <p className="text-[#000000a7] text-[14px]">{"2 days ago"}</p>
+                  <p className="font-[400] text-[#3e3e3eba]">{item?.comment}</p>
+                  <p className="text-[#3e3e3eba] text-[14px]">{"2 days ago"}</p>
                 </div>
               </div>
             ))

@@ -74,7 +74,7 @@ const ShopSettings = () => {
             <img
               src={seller?.avatar?.url || "/default-avatar.png"}
               alt=""
-              className="w-[200px] h-[200px] rounded-full cursor-pointer"
+              className="w-[200px] h-[200px] rounded-full object-cover object-top border-2 border-[#40B884] cursor-pointer"
             />
             <div className="w-[30px] h-[30px] bg-[#e3e9ee] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[10px] right-[15px]">
               <input
@@ -101,7 +101,7 @@ const ShopSettings = () => {
             </div>
             <input
               type="name"
-              placeholder={`${seller?.name}`}
+              placeholder={`${seller?.shopName}`}
               value={name}
               onChange={(e) => setName(e.target.value)}
               className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
@@ -169,11 +169,11 @@ const ShopSettings = () => {
             />
           </div>
 
-          <div className=" w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
+          <div className=" w-[100%] flex items-center flex-col 800px:w-[50%] mt-5 ">
             <input
               type="submit"
               value="Update Shop"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+              className={`${styles.input} !w-[95%] mb-4 800px:mb-0 bg-[#40B884] text-[#fff] p-2`}
               required
               readOnly
             />

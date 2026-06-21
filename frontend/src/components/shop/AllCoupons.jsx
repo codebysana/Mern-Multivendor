@@ -160,7 +160,7 @@ const AllCoupons = () => {
                       name="name"
                       required
                       value={name}
-                      className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                      className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-[#40B884] sm:text-sm"
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Enter your Coupon code...."
                     />
@@ -176,7 +176,7 @@ const AllCoupons = () => {
                       name="value"
                       value={value}
                       required
-                      className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                      className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-[#40B884] sm:text-sm"
                       onChange={(e) => setValue(e.target.value)}
                       placeholder="Enter Coupon Code Value"
                     />
@@ -188,7 +188,7 @@ const AllCoupons = () => {
                       type="number"
                       name="min-amount"
                       value={minAmount}
-                      className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                      className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-[#40B884] sm:text-sm"
                       onChange={(e) => setMinAmount(e.target.value)}
                       placeholder="Enter Coupon Min Amount"
                     />
@@ -200,7 +200,7 @@ const AllCoupons = () => {
                       type="number"
                       name="max-amount"
                       value={maxAmount}
-                      className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                      className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-[#40B884] sm:text-sm"
                       onChange={(e) => setMaxAmount(e.target.value)}
                       placeholder="Enter Coupon Max Amount"
                     />
@@ -211,7 +211,7 @@ const AllCoupons = () => {
                     <select
                       className="w-full mt-2 border h-[35px] rounded-[5px]"
                       value={selectedProduct}
-                      onClick={(e) => setSelectedProduct(e.target.value)}
+                      onChange={(e) => setSelectedProduct(e.target.value)}
                     >
                       <option value="Choose your Selected Products">
                         Choose a Selected Product
@@ -229,7 +229,7 @@ const AllCoupons = () => {
                     <input
                       type="submit"
                       value="Create"
-                      className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                      className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-[#40B884] sm:text-sm"
                     />
                     Create Coupon
                   </div>

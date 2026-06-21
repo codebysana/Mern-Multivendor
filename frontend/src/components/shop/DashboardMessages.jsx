@@ -304,7 +304,7 @@ const MessageList = ({
       </div>
       <div className="pl-3">
         <h1 className="pl-3 text-[18px]">{user.name}</h1>
-        <p className="text-[16px] text-[#000c]">
+        <p className="text-[16px] text-[#3e3e3eba]">
           {data?.lastMessageId !== user._id ? "You: " : user.name.split(" ")[0]}{" "}
           + ": "{data?.lastMessage}
         </p>
@@ -374,7 +374,7 @@ const SellerInbox = ({
                     <div className="w-max rounded bg-[#38c776] text-white h-min p-2">
                       <p>{item.text}</p>
                     </div>
-                    <p className="text-[12px] text-[#000000d3] pt-1">
+                    <p className="text-[12px] text-[#3e3e3eba] pt-1">
                       {format(item.createdAt)}
                     </p>
                   </div>

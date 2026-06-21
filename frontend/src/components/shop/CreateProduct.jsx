@@ -137,7 +137,7 @@ const CreateProduct = () => {
             type="text"
             name="name"
             value={name}
-            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
+            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-[#40B884] sm:text-sm"
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter Product Name"
           />
@@ -154,7 +154,7 @@ const CreateProduct = () => {
             type="text"
             name="description"
             value={description}
-            className="mt-2 appearance-none block w-full pt-2 px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
+            className="mt-2 appearance-none block w-full pt-2 px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-[#40B884] sm:text-sm"
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter Description"
           ></textarea>
@@ -185,7 +185,7 @@ const CreateProduct = () => {
             type="text"
             name="tags"
             value={tags}
-            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
+            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-[#40B884] sm:text-sm"
             onChange={(e) => setTags(e.target.value)}
             placeholder="Enter Product Tags"
           />
@@ -197,7 +197,7 @@ const CreateProduct = () => {
             type="number"
             name="price"
             value={originalPrice}
-            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
+            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-[#40B884] sm:text-sm"
             onChange={(e) => setOriginalPrice(e.target.value)}
             placeholder="Enter Product Price"
           />
@@ -211,7 +211,7 @@ const CreateProduct = () => {
             type="text"
             name="price"
             value={discountPrice}
-            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
+            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-[#40B884] sm:text-sm"
             onChange={(e) => setDiscountPrice(e.target.value)}
             placeholder="Enter Product Price with Discount..."
           />
@@ -225,7 +225,7 @@ const CreateProduct = () => {
             type="text"
             name="stock"
             value={stock}
-            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
+            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-[#40B884] sm:text-sm"
             onChange={(e) => setStock(e.target.value)}
             placeholder="Enter Product Stock"
           />
@@ -262,7 +262,7 @@ const CreateProduct = () => {
             <input
               type="submit"
               value="Create"
-              className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
+              className="mt-2 bg-[#40B884] text-white appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-[#40B884] sm:text-sm"
             />
             Create Product
           </div>
