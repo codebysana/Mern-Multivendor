@@ -15,7 +15,7 @@ const DashboardHeader = () => {
   }
   return (
     <div className="w-full h-[80px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
-      <div>
+      <div className="font-500 text-[#152942]">
         <Link to="/">
           <h1>OmniMart</h1>
         </Link>
@@ -24,7 +24,7 @@ const DashboardHeader = () => {
         <div className="flex items-center mr-4">
           <Link to="/dashboard-coupons" className="800px:block hidden">
             <AiOutlineGift
-              color="#555"
+              color="#40B884"
               size={30}
               className="mx-5 cursor-pointer "
             />
@@ -32,7 +32,7 @@ const DashboardHeader = () => {
 
           <Link to="/dashboard-events" className="800px:block hidden">
             <MdOutlineLocalOffer
-              color="#555"
+              color="#40B884"
               size={30}
               className="mx-5 cursor-pointer "
             />
@@ -40,7 +40,7 @@ const DashboardHeader = () => {
 
           <Link to="/dashboard-products" className="800px:block hidden">
             <FiShoppingBag
-              color="#555"
+              color="#40B884"
               size={30}
               className="mx-5 cursor-pointer "
             />
@@ -48,7 +48,7 @@ const DashboardHeader = () => {
 
           <Link to="/dashboard-orders" className="800px:block hidden">
             <FiPackage
-              color="#555"
+              color="#40B884"
               size={30}
               className="mx-5 cursor-pointer "
             />
@@ -56,7 +56,7 @@ const DashboardHeader = () => {
 
           <Link to="/dashboard-messages" className="800px:block hidden">
             <BiMessageSquareDetail
-              color="#555"
+              color="#40B884"
               size={30}
               className="mx-5 cursor-pointer "
             />
@@ -64,7 +64,7 @@ const DashboardHeader = () => {
           <Link to={`/shop/${seller?._id}`}>
             <img
               src={seller.avatar?.url}
-              className="w-[50px] h-[50px] rounded-full object-cover"
+              className="w-[50px] h-[50px] rounded-full object-contain border-2 border-[#40B884] cursor-pointer"
               alt=""
             />
           </Link>
