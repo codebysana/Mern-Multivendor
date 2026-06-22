@@ -23,7 +23,7 @@ const Wishlist = ({ setOpenWishlist }) => {
     setOpenWishlist(false);
   };
   return (
-    <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
+    <div className="fixed top-0 left-0 w-full bg-[#0000004B] h-screen z-10">
       <div className="fixed top-0 right-0 h-full w-[80%] overflow-y-scroll 800px:w-[25%] bg-white flex flex-col justify-between shadow-sm">
         {wishlist && wishlist.length === 0 ? (
           <div className="w-full h-screen flex items-center justify-center">
@@ -100,14 +100,14 @@ const WishlistSingle = ({
           onClick={() => removeFromWishlistHandler(data)}
         />
         <img
-          src={`${data?.imageUrl[0]?.url}`}
+          src={data?.images?.[0]?.url || data?.imageUrl?.[0]?.url || null}
           alt=""
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
         />
 
         <div className="pl-[5px] ">
           <h1>{data?.name}</h1>
-          <h4 className="font-[600] pt-3 800px:pt-[3px] text-[17px] text-[#d02222] font-Roboto">
+          <h4 className="font-[600] pt-3 800px:pt-[3px] text-[17px] text-[#40B884] font-Roboto">
             US${totalPrice}
           </h4>
         </div>
