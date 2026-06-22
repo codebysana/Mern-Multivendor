@@ -329,6 +329,8 @@ const App = () => {
             </AdminProtectedRoute>
           }
         />
+        {/* fallback for unmatched client routes to avoid 'No routes matched location' warnings */}
+        <Route path="*" element={<HomePage />} />
       </Routes>
 
       <ToastContainer
