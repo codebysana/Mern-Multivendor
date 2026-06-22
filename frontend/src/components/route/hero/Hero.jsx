@@ -5,25 +5,29 @@ import { Link } from "react-router-dom";
 const Hero = () => {
   return (
     <div
-      className={`relative min-h-[100vh] 800px:min-h-[100vh] 800px:bg-center w-full bg-no-repeat bg-center ${styles.normalFlex}`}
+      className={`relative min-h-[100vh] 800px:min-h-[100vh] 800px:bg-center bg-[#f4f4f4] w-full bg-no-repeat bg-center ${styles.normalFlex}`}
       style={{
-        backgroundImage: "url(bg-image-1.png)",
-        width: "100%",
+        backgroundImage: "url('/hero-bg-image.jpeg')",
+       backgroundSize: "cover",
+       backgroundPosition: "center",
+       backgroundRepeat: "no-repeat",
+      backgroundColor: "rgba(0, 0, 0, 0.1)", 
+      backgroundBlendMode: "overlay",
       }}
     >
       <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
         <h1
-          className={`text-[35px] leading-[1.2] 800px:text-[60px] text-[#3d3a3a] font-[600] captilize`}
+          className={`text-[35px] leading-[1.2] 800px:text-[60px] text-[#152942] font-[600] captilize`}
         >
           Best Collection for <br /> Home Decoration
         </h1>
-        <p className="pt-5 text-[16px] font-Poppins leading-7 tracking-wider font-[400] text-[#000000ba] w-[60%]">
+        <p className="pt-5 text-[16px] font-Poppins leading-7 tracking-wider font-[400] text-[#3e3e3eba] w-[60%]">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis quis
           eveniet officia velit veritatis quo ducimus expedita assumenda non,
           laudantium nisi rerum recusandae in excepturi blanditiis architecto
           rem. Libero?
         </p>{" "}
-        <p className="pt-5 text-[16px] font-Poppins leading-7 tracking-wider font-[400] text-[#000000ba] w-[60%]">
+        <p className="pt-5 text-[16px] font-Poppins leading-7 tracking-wider font-[400] text-[#3e3e3eba] w-[60%]">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis quis
           eveniet officia velit veritatis quo ducimus expedita assumenda non,
           laudantium nisi rerum recusandae in excepturi blanditiis architecto
